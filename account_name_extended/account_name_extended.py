@@ -378,7 +378,7 @@ class account_fiscalyear(osv.osv):
     _inherit = 'account.fiscalyear'
     
     _columns = {
-        'code': fields.char('Code', size=16, required=True, help="The code will be used to generate the numbers of the journal entries of this journal."),
+        'code': fields.char('Code', size=32, required=True, help="The code will be used to generate the numbers of the journal entries of this journal."),
     }
 
 class account_period(osv.osv):
