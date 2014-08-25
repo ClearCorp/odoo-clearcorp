@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_project_issue_helpdesk_form" model="ir.ui.view">
+            <field name="name">view.project.issue.helpdesk.form</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
+            <field name="arch" type="xml">
+            	<xpath expr="/form/sheet[@string='Issue']/group/group[1]" position="inside">
+                  <field name="issue_type" />  
+                  <field name="warranty" />     
+                </xpath>           
+            </field>
+        </record>
+    </data>
+</openerp>
