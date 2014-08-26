@@ -32,7 +32,7 @@ Extends Project Issue Helpdesk
 ===============================================
 
 """,
-    'depends': ['project_issue'],
+    'depends': ['project_issue','project_issue_sheet','stock'],
     'init_xml': [],
     'demo_xml': [],
     'data': ['view/project_issue_helpdesk_view.xml'

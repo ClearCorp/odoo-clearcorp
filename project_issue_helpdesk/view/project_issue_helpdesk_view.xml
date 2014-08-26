@@ -9,8 +9,26 @@
             	<xpath expr="/form/sheet[@string='Issue']/group/group[1]" position="inside">
                   <field name="issue_type" />  
                   <field name="warranty" />     
-                </xpath>           
+                </xpath>          
             </field>
         </record>
-    </data>
+        <record id="view_project_issue_sheet_helpdesk_form" model="ir.ui.view">
+            <field name="name">view.project.issue.sheet.helpdesk.form</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue_sheet.project_issue_form_view"/>
+            <field name="arch" type="xml">
+            	<xpath expr="/form/sheet/notebook/page[@string='Worklogs']/field[@name='timesheet_ids']/tree[@string='Timesheets']/field[@name='name']"   position="before"> 
+					<field name="ticket_number"/> 
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[@string='Worklogs']/field[@name='timesheet_ids']/tree[@string='Timesheets']/field[@name='date']"   position="after"> 
+                    <field name="start_time" widget="float_time"/> 
+                    <field name="end_time" widget="float_time"/>
+                </xpath> 
+                <xpath expr="/form/sheet/notebook/page[@string='Worklogs']/field[@name='timesheet_ids']/tree[@string='Timesheets']/field[@name='user_id']"   position="before"> 
+					<field name="service_type"/>   
+                </xpath>             
+            </field>
+        </record>
+	</data>
 </openerp>
+
