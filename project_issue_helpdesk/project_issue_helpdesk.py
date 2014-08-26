@@ -26,15 +26,18 @@ import math
 
 class ProjectIssue(osv.Model):
     _inherit = 'project.issue'
+    
     _columns = {
                 'issue_type': fields.selection([('support','Support'),('preventive check','Preventive Check'),
                                               ('workshop repair','Workshop Repair'),('installation','Installation')],
                                              required=True,string="Issue Type"),
-                'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty")                                 
+                'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty"),                                 
+                'backorder_ids': fields.one2many('stock.picking.out','issue_id')
                 }
 
 class HrAnaliticTimeSheet(osv.Model):
     _inherit = 'hr.analytic.timesheet'
+    
     _columns = {
                 'ticket_number': fields.char(required=True,string="Ticket Number"),
                 'start_time': fields.float(required=True,string="Start Time"),
@@ -65,3 +68,18 @@ class HrAnaliticTimeSheet(osv.Model):
          ),
          (_check_end_time,'Format End Time incorrect',['end_time']
          )]
+    
+
+class StockPicking(orm.Model):
+    _inherit = 'stock.picking'
+
+    _columns = {
+         'issue_id': fields.many2one('project.issue',required=True)
+    }
+
+class StockPickingOut(orm.Model):
+    _inherit = 'stock.picking.out'
+
+    def __init__(self, pool, cr):
+        super(StockPickingOut, self).__init__(pool, cr)
+        self._columns['issue_id'] = self.pool['stock.picking']._columns['issue_id']

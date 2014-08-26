@@ -9,6 +9,11 @@
             	<xpath expr="/form/sheet[@string='Issue']/group/group[1]" position="inside">
                   <field name="issue_type" />  
                   <field name="warranty" />     
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[@string='Extra Info']" position="before">
+ 					    <page string="Delivery Orders">
+                        	<field name="backorder_ids"/> 
+                        </page>
                 </xpath>          
             </field>
         </record>
