@@ -7,8 +7,9 @@
             <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
             <field name="arch" type="xml">
             	<xpath expr="/form/sheet[@string='Issue']/group/group[1]" position="inside">
-                  <field name="issue_type" />  
-                  <field name="warranty" />     
+                  <field name="issue_type"/>
+                  <field name="origin_id"/>  
+                  <field name="warranty"/>     
                 </xpath>
                 <xpath expr="/form/sheet/notebook/page[@string='Extra Info']" position="before">
  					    <page string="Delivery Orders">
@@ -67,6 +68,47 @@
                 <field name="is_company"  position="attributes"> 
                 	<attribute name="invisible">True</attribute>
                 </field>
+            </field>
+        </record>
+        
+         <record id="view_project_issue_origin_helpdesk_form" model="ir.ui.view">
+            <field name="name">view.project.issue.origin.helpdesk.form</field>
+            <field name="model">project.issue.origin</field>
+            <field name="type">form</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <form string="Issue Origin" version="7.0">
+                    <sheet>
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                        <label for="description" class="oe_edit_only"/>
+                        <field name="description"/>
+                 </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- tree -->
+        <record id="view_project_issue_origin_helpdesk_tree" model="ir.ui.view">
+            <field name="name">view.project.issue.origin.helpdesk.tree</field>
+            <field name="model">project.issue.origin</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree string="Issue Origin">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- ACTIONS -->
+        <!-- project_issue_origin -->
+        <record model="ir.actions.act_window" id="action_project_issue_origin_helpdesk">
+            <field name="name">Issue Origin</field>
+            <field name="res_model">project.issue.origin</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create new issue origin</p>
             </field>
         </record>
 	</data>

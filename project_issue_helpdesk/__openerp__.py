@@ -35,7 +35,8 @@ Extends Project Issue Helpdesk
     'depends': ['base','project_issue','project_issue_sheet','stock'],
     'init_xml': [],
     'demo_xml': [],
-    'data': ['view/project_issue_helpdesk_view.xml'
+    'data': ['view/project_issue_helpdesk_view.xml',
+             'view/project_issue_helpdesk_menu.xml',
              ],
     'license': 'AGPL-3',
     'installable': True,

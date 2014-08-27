@@ -32,7 +32,16 @@ class ProjectIssue(osv.Model):
                                               ('workshop repair','Workshop Repair'),('installation','Installation')],
                                              required=True,string="Issue Type"),
                 'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty"),                                 
-                'backorder_ids': fields.one2many('stock.picking.out','issue_id')
+                'backorder_ids': fields.one2many('stock.picking.out','issue_id'),
+                'origin_id':fields.many2one('project.issue.origin',string="Origin")
+                }
+    
+class ProjectIssueOrigin(osv.Model):
+    _name = 'project.issue.origin'
+    
+    _columns = {
+                'name': fields.char(required=True,string="Name"),
+                'description': fields.text(string="Description")
                 }
 
 class HrAnaliticTimeSheet(osv.Model):
