@@ -74,7 +74,7 @@ class StockPicking(orm.Model):
     _inherit = 'stock.picking'
 
     _columns = {
-         'issue_id': fields.many2one('project.issue',required=True)
+         'issue_id': fields.many2one('project.issue')
     }
 
 class StockPickingOut(orm.Model):
@@ -83,3 +83,23 @@ class StockPickingOut(orm.Model):
     def __init__(self, pool, cr):
         super(StockPickingOut, self).__init__(pool, cr)
         self._columns['issue_id'] = self.pool['stock.picking']._columns['issue_id']
+        
+class ResPartner(orm.Model):
+    _inherit = 'res.partner'
+
+    _columns = {
+        'partner_type': fields.selection([('company','Company'),('branch','Branch'),('customer','Customer')],required=True,string="Partner Type")
+
+    }
+    
+    def onchange_partner_type(self, cr, uid, ids,partner_type,context={}):
+        res={}
+        
+        if partner_type=='company':
+            res['is_company'] = True
+        elif partner_type=='branch':
+            res['is_company'] = True
+        elif partner_type=='customer':
+            res['is_company'] = False
+        return {'value': res}
+

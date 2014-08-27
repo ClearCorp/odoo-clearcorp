@@ -34,6 +34,41 @@
                 </xpath>             
             </field>
         </record>
+        
+       <record id="view_partner_simple_form" model="ir.ui.view">
+            <field name="name">view.partner.simple.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_simple_form"/>
+            <field name="arch" type="xml">
+            	 <label for="name" position="before">
+					<label for="partner_type"/>
+					<field name="partner_type" on_change="onchange_partner_type(partner_type, is_company)"/> 
+                </label>
+                <label for="is_company" position="attributes">
+                	<attribute name="invisible">True</attribute>
+                </label>
+                <field name="is_company"  position="attributes"> 
+                	<attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">view.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+            	 <label for="name" position="before">
+					<label for="partner_type"/>
+					<field name="partner_type" on_change="onchange_partner_type(partner_type, is_company)"/> 
+                </label>
+                <label for="is_company" position="attributes">
+                	<attribute name="invisible">True</attribute>
+                </label>
+                <field name="is_company"  position="attributes"> 
+                	<attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
 	</data>
 </openerp>
 
