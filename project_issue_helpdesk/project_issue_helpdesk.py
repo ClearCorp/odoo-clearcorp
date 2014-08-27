@@ -34,9 +34,37 @@ class ProjectIssue(osv.Model):
                 'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty"),                                 
                 'backorder_ids': fields.one2many('stock.picking.out','issue_id'),
                 'origin_id':fields.many2one('project.issue.origin',string="Origin"),
-                'partner_type':fields.related('partner_id','partner_type',relation='res.partner',string="Parter Type")
-
+                'partner_type':fields.related('partner_id','partner_type',relation='res.partner',string="Parter Type"),
+                'categ_id':fields.many2one('product.category',required=True,string="Category Product"),
+                'product_id':fields.many2one('product.product',string="Product"),
+                'prodlot_id':fields.many2one('stock.production.lot',string="Serial Number"),
                 }
+    
+    def onchange_product_id(self, cr, uid, ids, product_id,context={}):
+        data = {}
+        if product_id:
+            product = self.pool.get('product.product').browse(cr, uid, product_id, context)
+            data.update({'categ_id': product.categ_id.id})
+
+            prodlot_obj=self.pool.get('stock.production.lot')
+            prodlot=prodlot_obj.search(cr, uid,[('product_id','=',product_id)])
+            
+            if not prodlot:
+                data.update({'prodlot_id': False})
+        return {'value': data}
+    
+    def onchange_categ_id(self, cr, uid,categ_id,ids,context={}):
+            data={}
+            
+            product_obj=self.pool.get('product.product')
+            product=product_obj.search(cr, uid,[('categ_id','=',categ_id)])
+
+            if not product:
+                data.update({'product_id': False})
+                data.update({'prodlot_id': False})
+                
+            return {'value': data}
+
     
 class ProjectIssueOrigin(osv.Model):
     _name = 'project.issue.origin'
@@ -79,7 +107,7 @@ class HrAnaliticTimeSheet(osv.Model):
          ),
          (_check_end_time,'Format End Time incorrect',['end_time']
          )]
-    
+     
 
 class StockPicking(orm.Model):
     _inherit = 'stock.picking'
