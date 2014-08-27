@@ -101,6 +101,23 @@
             </field>
         </record>
         
+        <record id="view_project_issue_helpdesk_filter" model="ir.ui.view">
+            <field name="name">view.project.issue.helpdesk.filter</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.view_project_issue_filter"/>
+            <field name="arch" type="xml">
+            	<xpath expr="/search/filter[@string='To Do']" position="after"> 
+					<filter string="Company" domain="[('partner_type','=','company')]" help="Company" icon="terp-check"/>                   
+                </xpath>
+                <xpath expr="/search/filter[@string='Company']" position="after"> 
+					<filter string="Branch" domain="[('partner_type','=','branch')]" help="Branch" icon="terp-check"/>                   
+                </xpath>
+                <xpath expr="/search/filter[@string='Company']" position="after"> 
+					<filter string="Customer" domain="[('partner_type','=','customer')]" help="Customer" icon="terp-check"/>                   
+                </xpath>             
+            </field>
+        </record>
+        
         <!-- ACTIONS -->
         <!-- project_issue_origin -->
         <record model="ir.actions.act_window" id="action_project_issue_origin_helpdesk">

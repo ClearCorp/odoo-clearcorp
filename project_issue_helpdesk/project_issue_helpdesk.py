@@ -33,7 +33,9 @@ class ProjectIssue(osv.Model):
                                              required=True,string="Issue Type"),
                 'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty"),                                 
                 'backorder_ids': fields.one2many('stock.picking.out','issue_id'),
-                'origin_id':fields.many2one('project.issue.origin',string="Origin")
+                'origin_id':fields.many2one('project.issue.origin',string="Origin"),
+                'partner_type':fields.related('partner_id','partner_type',relation='res.partner',string="Parter Type")
+
                 }
     
 class ProjectIssueOrigin(osv.Model):
