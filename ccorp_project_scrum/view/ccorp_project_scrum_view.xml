@@ -785,7 +785,7 @@
                     <field name="name"/>
                 </tree>
             </field>
-        </record>
+        </record>project_id
         
         <!-- actions -->
         <!-- project.scrum.product.backlog -->

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-		<record id="view_project_issue_helpdesk_form" model="ir.ui.view">
-            <field name="name">view.project.issue.helpdesk.form</field>
+    	<!--Form View Inherit project issue-->
+		<record id="view_project_issue_form" model="ir.ui.view">
+            <field name="name">view.project.issue.form</field>
             <field name="model">project.issue</field>
             <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
             <field name="arch" type="xml">
@@ -27,8 +28,9 @@
                 </field>             
             </field>
         </record>
-        <record id="view_project_issue_sheet_helpdesk_form" model="ir.ui.view">
-            <field name="name">view.project.issue.sheet.helpdesk.form</field>
+        <!--Form View Inherit project issue sheet-->
+        <record id="view_project_issue_sheet_form" model="ir.ui.view">
+            <field name="name">view.project.issue.sheet.form</field>
             <field name="model">project.issue</field>
             <field name="inherit_id" ref="project_issue_sheet.project_issue_form_view"/>
             <field name="arch" type="xml">
@@ -44,7 +46,25 @@
                 </xpath>             
             </field>
         </record>
+        <!--Form Search issue origin-->
+        <record id="view_project_issue_filter" model="ir.ui.view">
+            <field name="name">view.project.issue.filter</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.view_project_issue_filter"/>
+            <field name="arch" type="xml">
+            	<xpath expr="/search/filter[@string='To Do']" position="after"> 
+					<filter string="Company" domain="[('partner_type','=','company')]" help="Company" icon="terp-check"/>                   
+                </xpath>
+                <xpath expr="/search/filter[@string='Company']" position="after"> 
+					<filter string="Branch" domain="[('partner_type','=','branch')]" help="Branch" icon="terp-check"/>                   
+                </xpath>
+                <xpath expr="/search/filter[@string='Company']" position="after"> 
+					<filter string="Customer" domain="[('partner_type','=','customer')]" help="Customer" icon="terp-check"/>                   
+                </xpath>             
+            </field>
+        </record>
         
+       <!--Form View Inherit res partner simple(base)--> 
        <record id="view_partner_simple_form" model="ir.ui.view">
             <field name="name">view.partner.simple.form</field>
             <field name="model">res.partner</field>
@@ -62,6 +82,7 @@
                 </field>
             </field>
         </record>
+        <!--Form View Inherit res partner (base)-->
         <record id="view_partner_form" model="ir.ui.view">
             <field name="name">view.partner.form</field>
             <field name="model">res.partner</field>
@@ -82,9 +103,9 @@
                 </field> 
             </field>
         </record>
-        
-         <record id="view_project_issue_origin_helpdesk_form" model="ir.ui.view">
-            <field name="name">view.project.issue.origin.helpdesk.form</field>
+          <!--Form View issue origin-->
+         <record id="view_project_issue_origin_form" model="ir.ui.view">
+            <field name="name">view.project.issue.origin.form</field>
             <field name="model">project.issue.origin</field>
             <field name="type">form</field>
             <field name="priority" eval="16"/>
@@ -99,9 +120,9 @@
                 </form>
             </field>
         </record>
-        <!-- tree -->
-        <record id="view_project_issue_origin_helpdesk_tree" model="ir.ui.view">
-            <field name="name">view.project.issue.origin.helpdesk.tree</field>
+        <!--Tree View issue origin-->
+        <record id="view_project_issue_origin_tree" model="ir.ui.view">
+            <field name="name">view.project.issue.origin.tree</field>
             <field name="model">project.issue.origin</field>
             <field name="type">tree</field>
             <field name="priority" eval="16"/>
@@ -112,32 +133,129 @@
                 </tree>
             </field>
         </record>
-        
-        <record id="view_project_issue_helpdesk_filter" model="ir.ui.view">
-            <field name="name">view.project.issue.helpdesk.filter</field>
-            <field name="model">project.issue</field>
-            <field name="inherit_id" ref="project_issue.view_project_issue_filter"/>
+        <!--Form View Holiday Calendar-->
+        <record id="view_holiday_calendar_form" model="ir.ui.view">
+            <field name="name">view.holiday.calendar.form</field>
+            <field name="model">holiday.calendar</field>
+            <field name="type">form</field>
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
-            	<xpath expr="/search/filter[@string='To Do']" position="after"> 
-					<filter string="Company" domain="[('partner_type','=','company')]" help="Company" icon="terp-check"/>                   
-                </xpath>
-                <xpath expr="/search/filter[@string='Company']" position="after"> 
-					<filter string="Branch" domain="[('partner_type','=','branch')]" help="Branch" icon="terp-check"/>                   
-                </xpath>
-                <xpath expr="/search/filter[@string='Company']" position="after"> 
-					<filter string="Customer" domain="[('partner_type','=','customer')]" help="Customer" icon="terp-check"/>                   
-                </xpath>             
+                <form string="Holiday Calendar" version="7.0">
+                    <sheet>
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                        <group>
+                        	<field name="date"/>
+                        	<field name="notes" placeholder="Add a notes..."/>
+                 		</group>
+                 </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!--Tree View Holiday Calendar-->
+        <record id="view_holiday_calendar_tree" model="ir.ui.view">
+            <field name="name">view.holiday.calendar.tree</field>
+            <field name="model">holiday.calendar</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree string="Holiday Calendar">
+                    <field name="name"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+        
+         <!--Calendar View Holiday Calendar-->
+        <record id="view_holiday_calendar_calendar" model="ir.ui.view" >
+        	<field name="name">view.holiday.calendar.calendar</field>
+        	<field name="model">holiday.calendar</field>
+        	<field name="priority" eval="16"/>
+        	<field name="arch" type="xml">
+        		<calendar string="Holidays Calendar" color="name" date_start="date">
+        			<field name="name"/>
+        			<field name="date"/>
+        		</calendar>
+        	</field>
+        </record>
+        
+        <!--Tree View Holiday Contract Pricelist-->
+        <record id="view_contract_pricelist_tree" model="ir.ui.view">
+            <field name="name">view.contract_pricelist.tree</field>
+            <field name="model">contract.pricelist</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree string="Holiday Calendar">
+                    <field name="name"/>
+                    <field name="account_analytic_id"/>
+                    <field name="partner_id"/>
+                </tree>
+            </field>
+        </record>
+        <!--Form View Holiday Contract Pricelist-->
+        <record id="view_contract_pricelist_form" model="ir.ui.view">
+            <field name="name">view.contract.pricelist.form</field>
+            <field name="model">contract.pricelist</field>
+            <field name="type">form</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <form string="Contract Pricelist" version="7.0">
+					<sheet string="Contract Pricelist">
+                    	<label for="name" class="oe_edit_only"/>
+                    	<h1><field name="name"/></h1>
+                    	<group>
+                            <field name="account_analytic_id"/>
+                            <field name="partner_id"/>
+                            <field name="calendar_id"/>
+                        </group>
+                        <notebook>
+                        	<page string="Pricelist Lines">
+                            	<field name="line_ids" colspan="4" nolabel="1">
+                            		<tree editable="top" string="Pricelist Lines">
+                            			<field name="pricelist_line_type" on_change="onchange_pricelist_line_type(pricelist_line_type)"/>
+                            			<field name="categ_id" attrs="{'invisible':[('pricelist_line_type', '!=', 'category')]}"/>
+										<field name="product_id" attrs="{'invisible':[('pricelist_line_type', '!=', 'product')]}"/>
+ 										<field name="technical_rate"/>
+                            			<field name="assistant_rate"/>
+                            			<field name="overtime_multiplier"/>
+                            			<field name="holiday_multiplier"/>
+									</tree>
+								</field>
+                        	</page>
+                    	</notebook>
+                	</sheet>
+                </form>
             </field>
         </record>
         
         <!-- ACTIONS -->
-        <!-- project_issue_origin -->
-        <record model="ir.actions.act_window" id="action_project_issue_origin_helpdesk">
+        <!-- Action project_issue_origin -->
+        <record model="ir.actions.act_window" id="action_project_issue_origin">
             <field name="name">Issue Origin</field>
             <field name="res_model">project.issue.origin</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Create new issue origin</p>
+            </field>
+        </record>
+        <!-- Action holiday.calendar -->
+         <record model="ir.actions.act_window" id="action_holiday_calendar">
+            <field name="name">Holidays Schedule</field>
+            <field name="res_model">holiday.calendar</field>
+            <field name="view_mode">calendar</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create new holiday schedule</p>
+            </field>
+        </record>
+        <!-- Action contract.pricelist -->
+        <record model="ir.actions.act_window" id="action_contract_pricelist">
+            <field name="name">Contract Pricelist</field>
+            <field name="res_model">contract.pricelist</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create new contract pricelist</p>
             </field>
         </record>
 	</data>

@@ -27,19 +27,6 @@ import math
 class ProjectIssue(osv.Model):
     _inherit = 'project.issue'
     
-    _columns = {
-                'issue_type': fields.selection([('support','Support'),('preventive check','Preventive Check'),
-                                              ('workshop repair','Workshop Repair'),('installation','Installation')],
-                                             required=True,string="Issue Type"),
-                'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty"),                                 
-                'backorder_ids': fields.one2many('stock.picking.out','issue_id'),
-                'origin_id':fields.many2one('project.issue.origin',string="Origin"),
-                'partner_type':fields.related('partner_id','partner_type',relation='res.partner',string="Partner Type"),
-                'categ_id':fields.many2one('product.category',required=True,string="Category Product"),
-                'product_id':fields.many2one('product.product',string="Product"),
-                'prodlot_id':fields.many2one('stock.production.lot',string="Serial Number"),
-                }
-    
     def onchange_product_id(self, cr, uid, ids, product_id,context={}):
         data = {}
         if product_id:
@@ -64,7 +51,18 @@ class ProjectIssue(osv.Model):
                 data.update({'prodlot_id': False})
                 
             return {'value': data}
-
+    _columns = {
+                'issue_type': fields.selection([('support','Support'),('preventive check','Preventive Check'),
+                                              ('workshop repair','Workshop Repair'),('installation','Installation')],
+                                             required=True,string="Issue Type"),
+                'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty"),                                 
+                'backorder_ids': fields.one2many('stock.picking.out','issue_id'),
+                'origin_id':fields.many2one('project.issue.origin',string="Origin"),
+                'partner_type':fields.related('partner_id','partner_type',relation='res.partner',string="Partner Type"),
+                'categ_id':fields.many2one('product.category',required=True,string="Category Product"),
+                'product_id':fields.many2one('product.product',string="Product"),
+                'prodlot_id':fields.many2one('stock.production.lot',string="Serial Number"),
+                }
     
 class ProjectIssueOrigin(osv.Model):
     _name = 'project.issue.origin'
@@ -77,13 +75,6 @@ class ProjectIssueOrigin(osv.Model):
 class HrAnaliticTimeSheet(osv.Model):
     _inherit = 'hr.analytic.timesheet'
     
-    _columns = {
-                'ticket_number': fields.char(required=True,string="Ticket Number"),
-                'start_time': fields.float(required=True,string="Start Time"),
-                'end_time': fields.float(required=True,string="End Time"),
-                'service_type': fields.selection([('expert','Expert'),('assistant','Assistant')],required=True,string="Service Type")
-                          
-                }
     def _check_start_time(self, cr, uid, ids, context={}):
         for timesheet_obj in self.browse(cr, uid, ids, context=context):
             if timesheet_obj.start_time:
@@ -101,6 +92,14 @@ class HrAnaliticTimeSheet(osv.Model):
             if (hour not in range(0,24) or min not in range(0,60)):
                 return False
         return True
+    
+    _columns = {
+                'ticket_number': fields.char(required=True,string="Ticket Number"),
+                'start_time': fields.float(required=True,string="Start Time"),
+                'end_time': fields.float(required=True,string="End Time"),
+                'service_type': fields.selection([('expert','Expert'),('assistant','Assistant')],required=True,string="Service Type")
+                          
+                }
     
     _constraints = [
         (_check_start_time,'Format Start Time incorrect',['start_time']
@@ -125,14 +124,6 @@ class StockPickingOut(orm.Model):
         
 class ResPartner(orm.Model):
     _inherit = 'res.partner'
-
-    _columns = {
-        'partner_type': fields.selection([('company','Company'),('branch','Branch'),('customer','Customer')],required=True,string="Partner Type"),
-        'provision_amount':fields.float(digits=(16,2),string="Provision Amount")
-     }
-    _defaults={
-        'provision_amount':0.0
-        }
     
     def onchange_partner_type(self, cr, uid, ids,partner_type,context={}):
         res={}
@@ -144,16 +135,27 @@ class ResPartner(orm.Model):
         elif partner_type=='customer':
             res['is_company'] = False
         return {'value': res}
+    
+    _columns = {
+        'partner_type': fields.selection([('company','Company'),('branch','Branch'),('customer','Customer')],required=True,string="Partner Type"),
+        'provision_amount':fields.float(digits=(16,2),string="Provision Amount")
+     }
+    _defaults={
+        'provision_amount':0.0
+        }
+    
+    
 
 class ContractPricelist(orm.Model):
     _name = 'contract.pricelist'
 
     _columns = {
-        'name':fields.char(size=256,string="Name"),
-        'account_analytic_id':fields.many2one('account.analytic.account',string="Account Analytic"),
-        'partner_id':fields.related('account_analytic_id','partner_id',relation='res.partner',string="Partner"),
-        'calendar_id':fields.many2one('resource.calendar',string="Calendar"),
-        'line_ids': fields.one2many('contract.pricelist.line,','contract_pricelist_id')
+        'is_scrum': fields.boolean('Scrum'),
+        'name':fields.char(size=256,required=True,string="Name"),
+        'account_analytic_id':fields.many2one('account.analytic.account',required=True,string="Account Analytic"),
+        'partner_id':fields.related('account_analytic_id','partner_id',relation='res.partner',type='many2one',string="Partner"),
+        'calendar_id':fields.many2one('resource.calendar',required=True,string="Calendar"),
+        'line_ids': fields.one2many('contract.pricelist.line','contract_pricelist_id')
         }
     _sql_constraints = [
         ('account_analytic_unique',
@@ -161,13 +163,43 @@ class ContractPricelist(orm.Model):
         'Account Analytic already exist ')
                         ]
     
+    
 class ContractPriceLine(orm.Model):
     _name = 'contract.pricelist.line'
 
+
+    def onchange_pricelist_line_type(self, cr, uid, ids, pricelist_line_type, context=None):
+        res={}
+        
+        if pricelist_line_type:
+            if pricelist_line_type=='category':
+                res['product_id'] = False
+                res['categ_id'] = pricelist_line_type
+            elif pricelist_line_type=='product':
+                res['categ_id'] = False
+                res['produc_id'] = pricelist_line_type
+        elif not pricelist_line_type:
+           res['categ_id'] = False
+           res['product_id'] = False
+        return res
+           
+
+    def _check_rates(self, cr, uid, ids, context={}):
+        for rates in self.browse(cr, uid, ids, context=context):
+            if (rates.technical_rate<1.0 or rates.assistant_rate<1.0):
+                return False
+        return True
+    
+    def _check_multipliers(self, cr, uid, ids, context={}):
+        for multipliers in self.browse(cr, uid, ids, context=context):
+            if (multipliers.overtime_multiplier<1.0 or multipliers.holiday_multiplier<1.0):
+                return False
+        return True
+    
     _columns = {
         'contract_pricelist_id':fields.many2one('contract.pricelist',string="Contract Pricelist"),
         'pricelist_line_type': fields.selection([('category','Category'),('product','Product')],string="Pricelist Type"),                                 
-        'categ_id':fields.many2one('product.category',string="Product Category"),
+        'categ_id':fields.many2one('product.category',string="Category Product"),
         'product_id':fields.many2one('product.product',string="Product"),
         'technical_rate':fields.float(digits=(16,2),required=True,string="Technical Rate"),
         'assistant_rate':fields.float(digits=(16,2),required=True,string="Assistant Rate"),
@@ -180,17 +212,7 @@ class ContractPriceLine(orm.Model):
         'assistant_rate':0.0,
         'overtime_multiplier':1.0
         }
-    def _check_rates(self, cr, uid, ids, context={}):
-        for rates in self.browse(cr, uid, ids, context=context):
-            if (rates.technical_rate<1.0 or rates.assistant_rate<1.0):
-                return False
-        return True
-    
-    def _check_multipliers(self, cr, uid, ids, context={}):
-        for multipliers in self.browse(cr, uid, ids, context=context):
-            if (multipliers.overtime_multiplier<1.0 or multipliers.holiday_multiplier<1.0):
-                return False
-        return True
+             
     _constraints = [
         (_check_rates,'Rates must be greater or equal to one',['technical_rate','assistant_rate']
          ),
@@ -207,7 +229,7 @@ class HolidayCalendar(orm.Model):
     _name = 'holiday.calendar'
 
     _columns = {
-        'name':fields.char(size=256,string="Name"),
+        'name':fields.char(size=256,required=True,string="Name"),
         'date':fields.date(required=True,string="Date"),
         'notes':fields.text(string="Notes")
         }
