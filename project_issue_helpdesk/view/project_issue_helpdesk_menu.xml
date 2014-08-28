@@ -2,7 +2,7 @@
 
 <openerp>
     <data>
-         <menuitem id="menu_project_issue_origin_act"
+		<menuitem id="menu_project_issue_origin_act"
             parent="project_issue.menu_project_confi"
             name="Origins"
             action="action_project_issue_origin_helpdesk"/>
