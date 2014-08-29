@@ -97,8 +97,7 @@ class HrAnaliticTimeSheet(osv.Model):
                 'ticket_number': fields.char(required=True,string="Ticket Number"),
                 'start_time': fields.float(required=True,string="Start Time"),
                 'end_time': fields.float(required=True,string="End Time"),
-                'service_type': fields.selection([('expert','Expert'),('assistant','Assistant')],required=True,string="Service Type")
-                          
+                'service_type': fields.selection([('expert','Expert'),('assistant','Assistant')],required=True,string="Service Type")                       
                 }
     
     _constraints = [
@@ -167,22 +166,37 @@ class ContractPricelist(orm.Model):
 class ContractPriceLine(orm.Model):
     _name = 'contract.pricelist.line'
 
-
-    def onchange_pricelist_line_type(self, cr, uid, ids, pricelist_line_type, context=None):
+    def onchange_pricelist_line_type(self, cr, uid, ids,pricelist_line_type,context={}):
         res={}
         
         if pricelist_line_type:
             if pricelist_line_type=='category':
-                res['product_id'] = False
-                res['categ_id'] = pricelist_line_type
+                res['product_id'] = ""
             elif pricelist_line_type=='product':
-                res['categ_id'] = False
-                res['produc_id'] = pricelist_line_type
+                res['categ_id'] = ""
         elif not pricelist_line_type:
-           res['categ_id'] = False
-           res['product_id'] = False
-        return res
+             res['product_id'] = ""
+             res['categ_id'] = ""
+        return {'value': res}
+
            
+       
+        
+           
+           
+    def _check_lines(self, cr, uid, ids, context={}):
+        if context is None:   
+            context = {}
+        for lines in self.browse(cr, uid, ids, context=context):
+            if lines.pricelist_line_type=='category':
+                exist_category = self.search(cr, uid, [('categ_id','=', lines.categ_id.id),('contract_pricelist_id','=', lines.contract_pricelist_id.id)])
+                if len(exist_category)>1:
+                    return False
+            elif lines.pricelist_line_type=='product':
+                exist_product = self.search(cr, uid, [('product_id','=', lines.product_id.id),('contract_pricelist_id','=', lines.contract_pricelist_id.id)])
+                if len(exist_product)>1:
+                    return False
+        return True
 
     def _check_rates(self, cr, uid, ids, context={}):
         for rates in self.browse(cr, uid, ids, context=context):
@@ -214,16 +228,18 @@ class ContractPriceLine(orm.Model):
         }
              
     _constraints = [
-        (_check_rates,'Rates must be greater or equal to one',['technical_rate','assistant_rate']
-         ),
-        (_check_multipliers,'Multipliers must be greater or equal to one',['overtime_multiplier','holiday_multiplier']
-         ) 
+        (_check_lines,'Contract only allow a line to a single product o category',['categ_id','product_id']),
+        (_check_rates,'Rates must be greater or equal to one',['technical_rate','assistant_rate']),
+        (_check_multipliers,'Multipliers must be greater or equal to one',['overtime_multiplier','holiday_multiplier']) 
                 ]
-    _sql_constraints = [
-        ('contract_line_unique',
-        'UNIQUE(categ_id,product_id,contract_pricelist_id)',
-        'Contract only allow a line to a single category or product')     
-    ]
+    #_sql_constraints = [
+    #    ('contract_line_unique_category',
+    #    'UNIQUE(contract_pricelist_id,category_id)',
+    #    'Contract only allow a line to a single category'),
+    #    ('contract_line_unique',
+    #    'UNIQUE(contract_pricelist_id,product_id)',
+    #    'Contract only allow a line to a single product')
+    #]
 
 class HolidayCalendar(orm.Model):
     _name = 'holiday.calendar'
