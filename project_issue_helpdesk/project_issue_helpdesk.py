@@ -143,8 +143,6 @@ class ResPartner(orm.Model):
         'provision_amount':0.0
         }
     
-    
-
 class ContractPricelist(orm.Model):
     _name = 'contract.pricelist'
 
@@ -162,7 +160,6 @@ class ContractPricelist(orm.Model):
         'Account Analytic already exist ')
                         ]
     
-    
 class ContractPriceLine(orm.Model):
     _name = 'contract.pricelist.line'
 
@@ -178,11 +175,6 @@ class ContractPriceLine(orm.Model):
              res['product_id'] = ""
              res['categ_id'] = ""
         return {'value': res}
-
-           
-       
-        
-           
            
     def _check_lines(self, cr, uid, ids, context={}):
         if context is None:   
@@ -250,8 +242,57 @@ class HolidayCalendar(orm.Model):
         'notes':fields.text(string="Notes")
         }
                         
-                 
+class SaleOrder(osv.Model):
+    _inherit = 'sale.order'
+    
+    def _project_exists(self, cursor, user, ids, name, arg, context=None):
+        res = {}
+        for sale in self.browse(cursor, user, ids, context=context):
+            res[sale.id] = False
+            if sale.project_id:
+                res[sale.id] = True
+        return res
 
+    def action_button_create_project(self, cr, uid, ids, context=None):  
+              
+        context.update({'sale_order': ids})
+        return {'type': 'ir.actions.act_window',
+                'res_model': 'project.project',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'nodestroy': True,
+                'target': 'current',  
+                'flags': {'form': {'action_buttons': True}}
+                }
+       
+    def action_button_view_project(self, cr, uid, ids, context=None):
+        sale_order = self.browse(cr, uid, ids[0], context=context)
+        return {'type': 'ir.actions.act_window',
+                'res_model': 'project.project',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_id': sale_order.project_id.id,
+                'nodestroy': True,
+                'target': 'current',  
+                'flags': {'form': {'action_buttons': False}}   
+                }
+    
+    _columns = {
+        'project_id':fields.many2one('project.project',string="Project"),
+        'project_exists': fields.function(_project_exists, string='Project', type='boolean', help="It indicates that sales order has at least one project."),
+
+        }
+    
+class Project(orm.Model):
+    _inherit = 'project.project'
+    
+    def create(self, cr, uid, vals, context=None):
+            new_project= super(Project, self).create(cr, uid, vals, context=context)
+            if context.get('active_id'):
+                sale_order_obj = self.pool.get('sale.order')
+                sale_order_obj.write(cr, uid,[context.get('active_id')],{'project_id':new_project}, context=context)
+            return new_project
+         
 
 
                         
