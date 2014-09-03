@@ -76,6 +76,8 @@ class HrAnaliticTimeSheet(osv.Model):
     _inherit = 'hr.analytic.timesheet'
     
     def _check_start_time(self, cr, uid, ids, context={}):
+        hour=0.0
+        min=0.0
         for timesheet_obj in self.browse(cr, uid, ids, context=context):
             if timesheet_obj.start_time:
                 hour = math.floor(timesheet_obj.start_time)
@@ -85,6 +87,8 @@ class HrAnaliticTimeSheet(osv.Model):
         return True
     
     def _check_end_time(self, cr, uid, ids, context={}):
+        hour=0.0
+        min=0.0
         for timesheet_obj in self.browse(cr, uid, ids, context=context):
             if timesheet_obj.end_time:
                 hour = math.floor(timesheet_obj.end_time)
@@ -93,11 +97,18 @@ class HrAnaliticTimeSheet(osv.Model):
                 return False
         return True
     
+    def _compute_duration(self, cr, uid, ids, field, arg, context=None):
+        res = {}
+        for timesheet_obj in self.browse(cr, uid, ids, context=context):
+                res[timesheet_obj.id] = timesheet_obj.end_time-timesheet_obj.start_time
+        return res
+    
     _columns = {
                 'ticket_number': fields.char(required=True,string="Ticket Number"),
                 'start_time': fields.float(required=True,string="Start Time"),
                 'end_time': fields.float(required=True,string="End Time"),
-                'service_type': fields.selection([('expert','Expert'),('assistant','Assistant')],required=True,string="Service Type")                       
+                'service_type': fields.selection([('expert','Expert'),('assistant','Assistant')],required=True,string="Service Type"),                       
+                'unit_amount':fields.function(_compute_duration, type='float', string='Quantify',required=True,store=True)
                 }
     
     _constraints = [
@@ -245,9 +256,9 @@ class HolidayCalendar(orm.Model):
 class SaleOrder(osv.Model):
     _inherit = 'sale.order'
     
-    def _project_exists(self, cursor, user, ids, name, arg, context=None):
+    def _project_exists(self, cr, user, ids, name, arg, context=None):
         res = {}
-        for sale in self.browse(cursor, user, ids, context=context):
+        for sale in self.browse(cr, user, ids, context=context):
             res[sale.id] = False
             if sale.project_id:
                 res[sale.id] = True
