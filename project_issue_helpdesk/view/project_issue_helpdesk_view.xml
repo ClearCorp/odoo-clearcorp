@@ -10,7 +10,7 @@
             	<xpath expr="/form/sheet[@string='Issue']/group/group[1]" position="inside">
                   <field name="issue_type"/>
                   <field name="origin_id"/>  
-                  <field name="warranty"/>     
+                  <field name="warranty"/>   
                 </xpath>
                 <xpath expr="/form/sheet/notebook/page[@string='Extra Info']" position="before">
  					    <page string="Delivery Orders">
@@ -25,7 +25,11 @@
                 </field> 
                 <field name="product_id"  position="after"> 
                 	<field name="prodlot_id"  domain="[('product_id','=',product_id)]" /> 
-                </field>             
+                </field>
+                <field name="partner_id"  position="after"> 
+                	<field name="branch_id" domain="[('parent_id','=',partner_id),('partner_type','=','branch')]" attrs="{'invisible':[('have_branch', '=', False)]}"/>
+                	<field name="have_branch" invisible="1"/> 
+                </field>              
             </field>
         </record>
         <!--Form View Inherit project issue sheet-->

@@ -27,6 +27,38 @@ import math
 class ProjectIssue(osv.Model):
     _inherit = 'project.issue'
     
+    def onchange_partner_id(self, cr, uid, ids, partner_id, context=None):
+        list_branch={}
+        result = super(ProjectIssue, self).onchange_partner_id(cr, uid, ids, partner_id)
+        if partner_id:
+            partner_obj=self.pool.get('res.partner')
+            partner_ids=partner_obj.search(cr, uid,[('parent_id','=',partner_id),('partner_type','=','branch')])
+            
+            if not partner_ids:
+                 result.update({'have_branch': False})
+                 result.update({'branch_id':False})
+            
+            if partner_ids:                    
+                 result.update({'have_branch': True})
+        
+        
+        
+        return {'value': result}
+    
+    #def _get_branch_id(self, cr, uid, ids,partner_id, arg, context=None):
+    #    res={}
+    #    partner_list=[]
+    #    partner_obj=self.pool.get('res.partner')
+    #    for issue in self.browse(cr, uid, ids, context=context):
+    #        partner_ids=partner_obj.search(cr, uid,[('parent_id','=',issue.partner_id.id),('partner_type','=','branch')])
+    #        if partner_ids:
+    #            res[issue.id]=partner_ids
+    #        else:
+    #            res[issue.id]=None
+    #    
+    #    return res 
+
+    
     def onchange_product_id(self, cr, uid, ids, product_id,context={}):
         data = {}
         if product_id:
@@ -40,7 +72,7 @@ class ProjectIssue(osv.Model):
                 data.update({'prodlot_id': False})
         return {'value': data}
     
-    def onchange_categ_id(self, cr, uid,categ_id,ids,context={}):
+    def onchange_categ_id(self, cr, uid,ids,categ_id,context={}):
             data={}
             
             product_obj=self.pool.get('product.product')
@@ -51,6 +83,7 @@ class ProjectIssue(osv.Model):
                 data.update({'prodlot_id': False})
                 
             return {'value': data}
+    
     _columns = {
                 'issue_type': fields.selection([('support','Support'),('preventive check','Preventive Check'),
                                               ('workshop repair','Workshop Repair'),('installation','Installation')],
@@ -62,6 +95,8 @@ class ProjectIssue(osv.Model):
                 'categ_id':fields.many2one('product.category',required=True,string="Category Product"),
                 'product_id':fields.many2one('product.product',string="Product"),
                 'prodlot_id':fields.many2one('stock.production.lot',string="Serial Number"),
+                'branch_id':fields.many2one('res.partner', type='many2one', string='Branch'),
+                'have_branch':fields.boolean(string="Have Branch")
                 }
     
 class ProjectIssueOrigin(osv.Model):
@@ -141,7 +176,7 @@ class ResPartner(orm.Model):
         if partner_type=='company':
             res['is_company'] = True
         elif partner_type=='branch':
-            res['is_company'] = True
+            res['is_company'] = False
         elif partner_type=='customer':
             res['is_company'] = False
         return {'value': res}
@@ -158,7 +193,6 @@ class ContractPricelist(orm.Model):
     _name = 'contract.pricelist'
 
     _columns = {
-        'is_scrum': fields.boolean('Scrum'),
         'name':fields.char(size=256,required=True,string="Name"),
         'account_analytic_id':fields.many2one('account.analytic.account',required=True,string="Account Analytic"),
         'partner_id':fields.related('account_analytic_id','partner_id',relation='res.partner',type='many2one',string="Partner"),
