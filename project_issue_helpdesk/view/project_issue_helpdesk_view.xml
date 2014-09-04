@@ -42,8 +42,8 @@
 					<field name="ticket_number"/> 
                 </xpath>
                 <xpath expr="/form/sheet/notebook/page[@string='Worklogs']/field[@name='timesheet_ids']/tree[@string='Timesheets']/field[@name='date']"   position="after"> 
-                    <field name="start_time" widget="float_time"/> 
-                    <field name="end_time" widget="float_time"/>
+                    <field name="start_time" widget="float_time" on_change="onchange_start_time(start_time,end_time)"/> 
+                    <field name="end_time" widget="float_time" on_change="onchange_end_time(start_time,end_time)"/>
                 </xpath> 
                 <xpath expr="/form/sheet/notebook/page[@string='Worklogs']/field[@name='timesheet_ids']/tree[@string='Timesheets']/field[@name='user_id']"   position="before"> 
 					<field name="service_type"/>   

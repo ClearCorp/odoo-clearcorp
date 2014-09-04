@@ -40,24 +40,8 @@ class ProjectIssue(osv.Model):
             
             if partner_ids:                    
                  result.update({'have_branch': True})
-        
-        
-        
-        return {'value': result}
-    
-    #def _get_branch_id(self, cr, uid, ids,partner_id, arg, context=None):
-    #    res={}
-    #    partner_list=[]
-    #    partner_obj=self.pool.get('res.partner')
-    #    for issue in self.browse(cr, uid, ids, context=context):
-    #        partner_ids=partner_obj.search(cr, uid,[('parent_id','=',issue.partner_id.id),('partner_type','=','branch')])
-    #        if partner_ids:
-    #            res[issue.id]=partner_ids
-    #        else:
-    #            res[issue.id]=None
-    #    
-    #    return res 
 
+        return {'value': result}
     
     def onchange_product_id(self, cr, uid, ids, product_id,context={}):
         data = {}
@@ -77,7 +61,7 @@ class ProjectIssue(osv.Model):
         if branch_id:
             branch = self.pool.get('res.partner').browse(cr, uid, branch_id, context)
             data.update({'partner_id': branch.parent_id.id})
-
+        
         return {'value': data}
     
     def onchange_categ_id(self, cr, uid,ids,categ_id,context={}):
@@ -145,6 +129,14 @@ class HrAnaliticTimeSheet(osv.Model):
         for timesheet_obj in self.browse(cr, uid, ids, context=context):
                 res[timesheet_obj.id] = timesheet_obj.end_time-timesheet_obj.start_time
         return res
+    
+    def onchange_start_time(self, cr, uid, ids, start_time, end_time):
+        duration=end_time-start_time
+        return {'value': {'unit_amount': duration}}
+    
+    def onchange_end_time(self, cr, uid, ids, start_time, end_time):
+        duration=end_time-start_time
+        return {'value': {'unit_amount': duration}}
     
     _columns = {
                 'ticket_number': fields.char(required=True,string="Ticket Number"),
@@ -277,14 +269,7 @@ class ContractPriceLine(orm.Model):
         (_check_rates,'Rates must be greater or equal to one',['technical_rate','assistant_rate']),
         (_check_multipliers,'Multipliers must be greater or equal to one',['overtime_multiplier','holiday_multiplier']) 
                 ]
-    #_sql_constraints = [
-    #    ('contract_line_unique_category',
-    #    'UNIQUE(contract_pricelist_id,category_id)',
-    #    'Contract only allow a line to a single category'),
-    #    ('contract_line_unique',
-    #    'UNIQUE(contract_pricelist_id,product_id)',
-    #    'Contract only allow a line to a single product')
-    #]
+
 
 class HolidayCalendar(orm.Model):
     _name = 'holiday.calendar'
