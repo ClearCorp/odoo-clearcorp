@@ -143,7 +143,7 @@ class HrAnaliticTimeSheet(osv.Model):
                 'start_time': fields.float(required=True,string="Start Time"),
                 'end_time': fields.float(required=True,string="End Time"),
                 'service_type': fields.selection([('expert','Expert'),('assistant','Assistant')],required=True,string="Service Type"),                       
-                'unit_amount':fields.function(_compute_duration, type='float', string='Quantify',required=True,store=True)
+                'unit_amount':fields.function(_compute_duration, type='float', string='Quantify',store=True)
                 }
     
     _constraints = [
@@ -178,7 +178,7 @@ class ResPartner(orm.Model):
         elif partner_type=='branch':
             res['is_company'] = False
         elif partner_type=='customer':
-            res['is_company'] = False
+            res['is_company'] = True
         return {'value': res}
     
     _columns = {

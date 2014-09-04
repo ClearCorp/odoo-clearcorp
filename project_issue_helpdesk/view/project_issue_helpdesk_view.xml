@@ -233,19 +233,7 @@
                 </form>
             </field>
         </record>
-        <!--Form View sale order (base)-->
-        <record id="view_order_form" model="ir.ui.view">
-            <field name="name">view.order.form</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-            	<xpath expr="/form/header/button[@string='Create Invoice']"   position="after">
-            		<button string="Create Project" name="action_button_create_project" type="object" class="oe_highlight" attrs="{'invisible':['|',('project_exists', '=', True),('state','in', ('draft', 'cancel'))]}"/> 
-            		<button string="View Project" name="action_button_view_project" type="object" attrs="{'invisible':[('project_exists', '=', False)]}"/> 
-                	<field name="project_exists" invisible="1"/>
-                </xpath>
-            </field>
-        </record>
+
         
 
         <!-- ACTIONS -->
