@@ -72,6 +72,14 @@ class ProjectIssue(osv.Model):
                 data.update({'prodlot_id': False})
         return {'value': data}
     
+    def onchange_branch_id(self, cr, uid, ids, branch_id,context={}):
+        data = {}
+        if branch_id:
+            branch = self.pool.get('res.partner').browse(cr, uid, branch_id, context)
+            data.update({'partner_id': branch.parent_id.id})
+
+        return {'value': data}
+    
     def onchange_categ_id(self, cr, uid,ids,categ_id,context={}):
             data={}
             

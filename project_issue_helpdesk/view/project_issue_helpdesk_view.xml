@@ -27,7 +27,7 @@
                 	<field name="prodlot_id"  domain="[('product_id','=',product_id)]" /> 
                 </field>
                 <field name="partner_id"  position="after"> 
-                	<field name="branch_id" domain="[('parent_id','=',partner_id),('partner_type','=','branch')]" attrs="{'invisible':[('have_branch', '=', False)]}"/>
+                	<field name="branch_id" on_change="onchange_branch_id(branch_id)" domain="[('parent_id','=',partner_id),('partner_type','=','branch')]" attrs="{'invisible':[('have_branch', '=', False)]}"/>
                 	<field name="have_branch" invisible="1"/> 
                 </field>              
             </field>
