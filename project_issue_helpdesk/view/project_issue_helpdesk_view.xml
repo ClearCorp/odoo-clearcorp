@@ -235,7 +235,7 @@
         </record>
         
 
-        <!--product.product_normal_form_view-->
+        <!--inherit product.product_normal_form_view-->
         <record id="view_product_normal_form" model="ir.ui.view">
             <field name="name">view.product.normal.form</field>
             <field name="model">product.product</field>
@@ -245,9 +245,26 @@
                 	<separator string="Compatibles Products"/>
                 	<field name="compatible_product_ids"/>  
                 </field>
+                <xpath expr="/form/sheet/notebook/page[@string='Sales']/group" position="before">
+							<separator string="Supply Type"/>
+                          	<field name="supply_type"/>
+                </xpath>
             </field>
         </record>
 
+        <!--inherit product.product_category_form_view-->
+        <record id="view_product_category_form" model="ir.ui.view">
+            <field name="name">view.product.category.form</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">        
+                <field name="type"  position="after"> 
+                	<field name="supply_type"/>  
+                </field>
+            </field>
+        </record>
+        
+        
         <!-- ACTIONS -->
         <!-- Action project_issue_origin -->
         <record model="ir.actions.act_window" id="action_project_issue_origin">

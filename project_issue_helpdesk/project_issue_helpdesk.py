@@ -295,7 +295,18 @@ class Product(orm.Model):
     _inherit = 'product.product'
     
     _columns = {
-        'compatible_product_ids':fields.many2many('product.product','prod_id','prod_id',string="Compatible Products")
+        'compatible_product_ids':fields.many2many('product.product','prod_id','prod_id',string="Compatible Products"),
+        'supply_type':fields.selection([('equipment','Equipment'),('replacement','Replacement'),('supply','Supply'),
+                                              ('input','Input')],string="Supply Type")
+        
+        }
+
+class ProductCategory(orm.Model):
+    _inherit = 'product.category'
+    
+    _columns = {
+        'supply_type':fields.selection([('equipment','Equipment'),('replacement','Replacement'),('supply','Supply'),
+                                              ('input','Input')],string="Supply Type")
         }
     
          
