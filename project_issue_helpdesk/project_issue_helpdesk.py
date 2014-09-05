@@ -290,6 +290,14 @@ class Project(orm.Model):
                 sale_order_obj = self.pool.get('sale.order')
                 sale_order_obj.write(cr, uid,[context.get('active_id')],{'project_id':new_project}, context=context)
             return new_project
+        
+class Product(orm.Model):
+    _inherit = 'product.product'
+    
+    _columns = {
+        'compatible_product_ids':fields.many2many('product.product','prod_id','prod_id',string="Compatible Products")
+        }
+    
          
 
 

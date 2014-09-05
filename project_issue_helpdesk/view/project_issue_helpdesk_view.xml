@@ -233,8 +233,20 @@
                 </form>
             </field>
         </record>
-
         
+
+        <!--product.product_normal_form_view-->
+        <record id="view_product_normal_form" model="ir.ui.view">
+            <field name="name">view.product.normal.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">        
+                <field name="description_purchase"  position="after"> 
+                	<separator string="Compatibles Products"/>
+                	<field name="compatible_product_ids"/>  
+                </field>
+            </field>
+        </record>
 
         <!-- ACTIONS -->
         <!-- Action project_issue_origin -->
@@ -265,7 +277,6 @@
             </field>
         </record>
         
-        <!-- Action contract.pricelist -->
 
 	</data>
 </openerp>
