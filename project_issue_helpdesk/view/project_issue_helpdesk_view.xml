@@ -241,10 +241,13 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">        
-                <field name="description_purchase"  position="after"> 
-                	<separator string="Compatibles Products"/>
-                	<field name="compatible_product_ids"/>  
-                </field>
+                <xpath expr="/form/sheet/notebook/page[@string='Procurements']" position="after">
+				 	<page string="Compatibles Products">
+	                    <group>
+	                        <field name="compatible_product_ids" attrs="{'invisible':[('supply_type', 'not in', ('equipment','supply','replacement'))]}"/>  
+	                    </group>
+	                 </page>
+                </xpath>
                 <xpath expr="/form/sheet/notebook/page[@string='Sales']/group" position="before">
 							<separator string="Supply Type"/>
                           	<field name="supply_type"/>
