@@ -294,6 +294,33 @@ class Project(orm.Model):
 class Product(orm.Model):
     _inherit = 'product.product'
     
+    def create(self, cr, uid, vals, context=None):
+        new_product=super(Product, self).create(cr, uid, vals, context=context)
+        
+        compatible_product_ids = vals.get('compatible_product_ids', False)
+        
+        if compatible_product_ids:
+            for products in compatible_product_ids:
+                for product in products[2]:
+                    super(Product, self).write(cr, uid,product, {
+               'compatible_product_ids':  [(6,0,[new_product])] 
+            }, context=context)
+               
+        return new_product
+    
+    def write(self, cr, uid, ids, vals, context=None):
+        res = super(Product, self).write(cr, uid, ids, vals, context=context)
+        compatible_product_ids = vals.get('compatible_product_ids', False)
+        if compatible_product_ids:
+            for products in compatible_product_ids:
+                for product in products[2]:
+                    super(Product, self).write(cr, uid,product, {
+               'compatible_product_ids':  [(6,0,ids)] 
+            }, context=context)
+        return res
+    
+
+    
     _columns = {
         'compatible_product_ids':fields.many2many('product.product','product_compatible_rel','prod_id',string="Compatible Products"),
         'supply_type':fields.selection([('equipment','Equipment'),('replacement','Replacement'),('supply','Supply'),
