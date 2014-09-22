@@ -243,14 +243,19 @@
             <field name="arch" type="xml">        
                 <xpath expr="/form/sheet/notebook/page[@string='Procurements']" position="after">
 				 	<page string="Compatibles Products">
-	                    <group>
 	                        <field name="compatible_product_ids" attrs="{'invisible':[('supply_type', 'not in', ('equipment','supply','replacement'))]}"/>  
-	                    </group>
 	                 </page>
                 </xpath>
                 <xpath expr="/form/sheet/notebook/page[@string='Sales']/group" position="before">
 							<separator string="Supply Type"/>
-                          	<field name="supply_type"/>
+                          	<field name="supply_type" on_change="onchange_supply_type(supply_type)"/>
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[@string='Compatibles Products']" position="after">
+				 	<page string="Associated Products">
+				 			<field name="init_onchange_call" invisible="1" />
+	                        <field name="associated_product_ids" domain="[('id','in',init_onchange_call[0][2])]" attrs="{'invisible':[('supply_type', 'not in', ('equipment','supply','replacement'))]}" />  
+	                 		
+	                 </page>
                 </xpath>
             </field>
         </record>

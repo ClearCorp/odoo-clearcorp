@@ -298,6 +298,7 @@ class Product(orm.Model):
         new_product=super(Product, self).create(cr, uid, vals, context=context)
         
         compatible_product_ids = vals.get('compatible_product_ids', False)
+        associated_product_ids = vals.get('associated_product_ids', False)
         
         if compatible_product_ids:
             for products in compatible_product_ids:
@@ -305,27 +306,80 @@ class Product(orm.Model):
                     super(Product, self).write(cr, uid,product, {
                'compatible_product_ids':  [(6,0,[new_product])] 
             }, context=context)
+        
+        if associated_product_ids:
+            for products in associated_product_ids:
+                for product in products[2]:
+                    super(Product, self).write(cr, uid,product, {
+               'associated_product_ids':  [(6,0,[new_product])] 
+            }, context=context)
                
         return new_product
     
     def write(self, cr, uid, ids, vals, context=None):
         res = super(Product, self).write(cr, uid, ids, vals, context=context)
         compatible_product_ids = vals.get('compatible_product_ids', False)
+        associated_product_ids = vals.get('associated_product_ids', False)
+        
         if compatible_product_ids:
             for products in compatible_product_ids:
                 for product in products[2]:
                     super(Product, self).write(cr, uid,product, {
                'compatible_product_ids':  [(6,0,ids)] 
             }, context=context)
+        
+        if associated_product_ids:
+            for products in associated_product_ids:
+                for product in products[2]:
+                    super(Product, self).write(cr, uid,product, {
+               'associated_product_ids':  [(6,0,ids)] 
+            }, context=context)
+
         return res
     
+    def onchange_supply_type(self, cr, uid, ids, supply_type, context=None):
+        product_ids=[]
+        domain=[]
+        if supply_type:
+            if supply_type=='equipment':
+                domain.append(('supply_type', 'in', ('supply','replacement')))
+            elif supply_type=='supply':
+                domain.append(('supply_type', '=', 'equipment'))
+            elif supply_type=='replacement':
+                domain.append(('supply_type', '=', 'equipment'))
+                
+            product_ids=self.search(cr, uid,domain)
+            
+        return{'domain':{'associated_product_ids':[('id','in',product_ids)]}}
 
+    def get_products_associated(self, cr, uid,ids,field_name,arg,context=None ):
+        product_ids=[]
+        domain=[]
+        res={}
+        #product_obj = self.pool.get('product.product')
+        for product in self.browse(cr, uid, ids, context=context):
+            if product.supply_type:
+                if product.supply_type=='equipment':
+                    domain.append(('supply_type', 'in', ('supply','replacement')))
+                elif product.supply_type=='supply':
+                    domain.append(('supply_type', '=', 'equipment'))
+                elif product.supply_type=='replacement':
+                    domain.append(('supply_type', '=', 'equipment'))
+                associated_product_ids=self.search(cr, uid,domain)
+                for associated_product in self.browse(cr, uid, associated_product_ids, context=context):
+                    product_ids.append(associated_product.id)
+                res[product.id]=product_ids   
+        return res
+                
+  
     
     _columns = {
-        'compatible_product_ids':fields.many2many('product.product','product_compatible_rel','prod_id',string="Compatible Products"),
+        'compatible_product_ids':fields.many2many('product.product','product_compatible_rel','compatible_prod_id',string="Compatible Products"),
         'supply_type':fields.selection([('equipment','Equipment'),('replacement','Replacement'),('supply','Supply'),
-                                              ('input','Input')],string="Supply Type")
-        
+                                              ('input','Input')],string="Supply Type"),
+        'associated_product_ids':fields.many2many('product.product','product_associated_rel','associated_prod_id',string="Compatible Products"),
+        'init_onchange_call': fields.function(get_products_associated, method=True, type='many2many', relation='product.product',string='Nothing Display', help='field at view init'),
+
         }
 
 class ProductCategory(orm.Model):
@@ -335,8 +389,3 @@ class ProductCategory(orm.Model):
         'supply_type':fields.selection([('equipment','Equipment'),('replacement','Replacement'),('supply','Supply'),
                                               ('input','Input')],string="Supply Type")
         }
-    
-         
-
-
-                        
