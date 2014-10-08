@@ -34,7 +34,7 @@ This module permits print the product invoice report.
     'complexity': 'normal',
     'images' : [],
     'depends': [
-                'account_accountant',
+                'account',
                 'sale',
                 'report',
                 ],
