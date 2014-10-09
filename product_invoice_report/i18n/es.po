@@ -136,7 +136,7 @@ msgstr "Reporte de productos vendidos"
 #: selection:product.invoice.report.wizard,sortby:0
 #: view:website:product_invoice_report.report_product_invoice
 msgid "Period"
-msgstr ""
+msgstr "Período"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice
