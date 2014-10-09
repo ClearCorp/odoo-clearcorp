@@ -27,7 +27,7 @@ Product Category Code
 This module permits encode  categories and subcategories of product and service.
     """,
     'version': '1.0',
-    'author': 'CLEARCORP',
+    'author': 'ClearCorp',
     'category': 'Product Category',
     'website': "http://clearcorp.co.cr",
     'depends': ['product'
