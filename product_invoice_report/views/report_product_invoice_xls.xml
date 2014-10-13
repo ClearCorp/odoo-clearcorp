@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="report_product_invoice_xls">
+            <div class="workbook">
+                <div class="worksheet" name="Products Invoices">
+					 <table>
+                        <thead>
+                            <tr>
+                                <th easyfx="font: height 280, bold on;align: vert center">Products Invoices Report</th>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </thead>
+                     </table>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th easyfx="font:height 240, bold on;align: vert center;borders: right medium, left medium, top medium, bottom medium;pattern: pattern fine_dots">Filter by</th>
+                                 <th easyfx="font:height 240, bold on; align: vert center;borders: right medium, left medium, top medium, bottom medium;pattern: pattern fine_dots">Group by</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                         	 <tr>
+                         	 	<td easyfx="font:height 240;align: vert center;borders: right medium, left medium, top medium, bottom medium;">
+                         	 		<tr t-foreach="get_group_lines(data,doc_ids)" t-as="group_data">
+                         	 		</tr>
+                         	 	</td>
+                         	 	<td easyfx="font:height 240;align: vert center;borders: right medium, left medium, top medium, bottom medium;">
+                         	 	</td>
+                         	 </tr>
+                         </tbody>
+                     </table>
+                </div>
+            </div>
+        </template>
+    </data>
+</openerp>
