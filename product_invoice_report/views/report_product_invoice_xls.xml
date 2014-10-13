@@ -4,10 +4,11 @@
         <template id="report_product_invoice_xls">
             <div class="workbook">
                 <div class="worksheet" name="Products Invoices">
-					 <table>
+					<div class="set_header">Hello</div>
+					<table>
                         <thead>
                             <tr>
-                                <th easyfx="font: height 280, bold on;align: vert center">Products Invoices Report</th>
+                                <th easyfx="font: height 240, bold on;align: vert center">Products Invoices Report</th>
                             </tr>
                             <tr>
                             </tr>
@@ -16,21 +17,132 @@
                      <table>
                          <thead>
                              <tr>
-                                 <th easyfx="font:height 240, bold on;align: vert center;borders: right medium, left medium, top medium, bottom medium;pattern: pattern fine_dots">Filter by</th>
-                                 <th easyfx="font:height 240, bold on; align: vert center;borders: right medium, left medium, top medium, bottom medium;pattern: pattern fine_dots">Group by</th>
+                                 <th easyfx="font:height 240, bold on;pattern: pattern fine_dots;align: vert center;">Filter by</th>
+                                 <th easyfx="font:height 240, bold on;pattern: pattern fine_dots;align: vert center;">Group by</th>
                              </tr>
                          </thead>
                          <tbody>
                          	 <tr>
-                         	 	<td easyfx="font:height 240;align: vert center;borders: right medium, left medium, top medium, bottom medium;">
-                         	 		<tr t-foreach="get_group_lines(data,doc_ids)" t-as="group_data">
-                         	 		</tr>
+                         	 	<td easyfx="font:height 240;align: vert center;">
+                         	 		<t t-if="get_filter(data) == 'filter_date'">Dates From: <span t-esc="get_date_from(data)"/> To: <span t-esc="get_date_to(data)"/></t>
+                                    <t t-if="get_filter(data) == 'filter_period'">Periods From: <span t-esc="get_start_period(data).name"/> To: <span t-esc="get_end_period(data).name"/></t>
+                                    <t t-if="get_filter(data) == 'filter_no'">No Filter</t>
+                                    <t t-if="get_filter(data) == False">No Filter</t>
                          	 	</td>
-                         	 	<td easyfx="font:height 240;align: vert center;borders: right medium, left medium, top medium, bottom medium;">
+                         	 	<td easyfx="font:height 240;align: vert center;">
+                         	 		<t t-if="get_sort(data) == False">No Sort</t>
+                                    <t t-if="get_sort(data) == 'sort_date'">Date</t>
+                                    <t t-if="get_sort(data) == 'sort_period'">Period</t>
+                                    <t t-if="get_sort(data) == 'sort_partner'">Partner</t>
+                                    <t t-if="get_sort(data) == 'sort_product'">Product</t>
+                                    <t t-if="get_sort(data) == 'sort_product_category'">Product Category</t>
                          	 	</td>
                          	 </tr>
+                         	 <tr></tr>
                          </tbody>
                      </table>
+                     <t t-foreach="get_group_lines(data,doc_ids)" t-as="group_data">
+                     	<table>
+		                    <tbody>
+		                        <tr>
+		                           	<t t-if="get_sort(data) == 'sort_date'">
+		                           		<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['date_invoice']"/></td>
+		                           	</t>
+	                               	<t t-if="get_sort(data) == 'sort_period'">
+	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['period_id']"/></td>
+	                                </t>
+	                                <t t-if="get_sort(data) == 'sort_partner'">
+	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['partner_id']"/></td>
+	                                </t>
+	                                <t t-if="get_sort(data) == 'sort_product'">
+	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['product_id']"/></td>
+	                                </t>
+	                                <t t-if="get_sort(data) == 'sort_product_category'">
+	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['categ_id']"/></td>
+	                                </t>
+	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                </td>
+	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                </td>
+	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                </td>
+	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                </td>
+	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                </td>
+	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                </td>
+	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                            </tr>
+		                    </tbody>
+						</table>
+						<table>
+	                   	    <thead>
+	                            <tr>
+	                                <t t-if="get_sort(data) != 'sort_date'">
+	                                    <th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Date</th>
+	                                        </t>
+	                                        <th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Invoice</th>
+	                                        <t t-if="get_sort(data) != 'sort_partner'">
+	                                        	<th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Customer</th>
+	                                        </t>
+	                                        <t t-if="get_sort(data) != 'sort_product_category'">
+	                                        	<th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Product Category</th>
+	                                        </t>
+	                                        <t t-if="get_sort(data) != 'sort_product'">
+	                                        	<th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Product</th>
+	                                        </t>
+	                                        <th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Quantity</th>
+	                                        <th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Unit Price</th>
+	                                        <th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Discount</th>
+	                                        <th easyfx="font:height 240, bold on;align: vert center;pattern: pattern fine_dots">Total</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody>
+		                            	<tr t-foreach="group_data" t-as="line">
+	                                    	<t t-if="get_sort(data) != 'sort_date'">
+	                                        	<td easyfx="font:height 240;align: vert left;"><span t-esc="line['date_invoice']"/></td>                                        	
+	                                        </t>
+	                                        <td easyfx="font:height 240;align: vert left;"><span t-esc="line['number']"/></td>
+	                                        <t t-if="get_sort(data) != 'sort_partner'">
+	                                        	<td easyfx="font:height 240;align: vert left;"><span t-esc="line['partner_id']"/></td>
+	                                        </t>
+	                                        <t t-if="get_sort(data) != 'sort_product_category'">
+	                                        	<td easyfx="font:height 240;align: vert left;"><span t-esc="line['categ_id']"/></td>
+	                                        </t>
+	                                        <t t-if="get_sort(data) != 'sort_product'">
+	                                        	<td easyfx="font:height 240;align: vert left;"><span t-esc="line['product_id']"/></td>
+	                                        </t>
+	                                        <td easyfx="font:height 240;align: vert right;"><span t-esc="line['quantity']"/></td>
+	                                        <td easyfx="font:height 240;align: vert right;"><span t-esc="line['price_unit']"/></td>
+	                                        <td easyfx="font:height 240;align: vert right;"><span t-esc="line['discount']"/></td>
+	                                        <td easyfx="font:height 240;align: vert right;"><span t-esc="line['subtotal']"/></td>
+	                                    </tr>
+	                                    <tr>
+	                                    	<t t-if="get_sort(data) != 'sort_date'">
+                                        		<td easyfx="font:height 240;align: vert left;"></td>
+                                        	</t>
+                                        	<td easyfx="font:height 240;align: vert left;"></td>
+                                        	<t t-if="get_sort(data) != 'sort_partner'">
+                                        		<td easyfx="font:height 240;align: vert left;"></td>
+                                        	</t>
+                                        	<t t-if="get_sort(data) != 'sort_product_category'">
+                                        		<td ceasyfx="font:height 240;align: vert left;"></td>
+                                        	</t>
+                                        	<t t-if="get_sort(data) != 'sort_product'">
+                                        		<td easyfx="font:height 240;align: vert left;"></td>
+                                        	</t>
+											<td easyfx="font:height 240, bold on;align: vert right;"><span t-esc="get_quantity_group(group_data,data)"/></td>
+                                    		<td easyfx="font:height 240;align: vert right;"></td>
+                                    		<td easyfx="font:height 240;align: vert right;"></td>
+                                    		<td easyfx="font:height 240, bold on;align: vert right;"><span t-esc="get_subtotal_group(group_data,data)"/></td>	                                    
+	                                    </tr>
+		                             </tbody>
+								</table>
+					</t>
                 </div>
             </div>
         </template>
