@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-08 15:52+0000\n"
-"PO-Revision-Date: 2014-10-08 15:52+0000\n"
+"POT-Creation-Date: 2014-10-13 15:30+0000\n"
+"PO-Revision-Date: 2014-10-13 15:30+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,24 +32,24 @@ msgstr "Creado en"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,partner_ids:0
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Customer"
 msgstr "Cliente"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,filter:0
 #: selection:product.invoice.report.wizard,sortby:0
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Date"
 msgstr "Fecha"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Dates"
 msgstr "Fechas"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Discount"
 msgstr "Descuento"
 
@@ -69,7 +69,8 @@ msgid "Filter"
 msgstr "Filtro"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
+#: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Filter by"
 msgstr "Filtro por"
 
@@ -79,23 +80,25 @@ msgid "Fiscal Year"
 msgstr "Año Fiscal"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "From:"
 msgstr "Desde"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
+#: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Group by"
 msgstr "Agrupado por"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,id:0
-#: field:report.product_invoice_report.report_product_invoice,id:0
+#: field:report.product_invoice_report.report_product_invoice_pdf,id:0
+#: field:report.product_invoice_report.report_product_invoice_xls,id:0
 msgid "ID"
 msgstr "ID"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Invoice"
 msgstr "Factura"
 
@@ -110,38 +113,44 @@ msgid "Last Updated on"
 msgstr "Ultima actualización el"
 
 #. module: product_invoice_report
+#: selection:product.invoice.report.wizard,out_format:0
+msgid "Microsoft Excel 97/2000/XP/2003"
+msgstr "Microsoft Excel 97/2000/XP/2003"
+
+#. module: product_invoice_report
 #: selection:product.invoice.report.wizard,filter:0
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "No Filter"
 msgstr "Sin Filtros"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "No Sort"
 msgstr "Sin Agrupar"
 
 #. module: product_invoice_report
+#: selection:product.invoice.report.wizard,out_format:0
 #: selection:product.invoice.report.wizard,sortby:0
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Partner"
 msgstr "Cliente"
 
 #. module: product_invoice_report
-#: model:ir.actions.report.xml,name:product_invoice_report.action_report_payment_average
-msgid "Product Invoice Report"
-msgstr "Reporte de productos vendidos"
-
-#. module: product_invoice_report
 #: selection:product.invoice.report.wizard,filter:0
 #: selection:product.invoice.report.wizard,sortby:0
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Period"
 msgstr "Período"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Periods"
 msgstr "Períodos"
+
+#. module: product_invoice_report
+#: selection:product.invoice.report.wizard,out_format:0
+msgid "Portable Document Format (.pdf)"
+msgstr "Portable Document Format (.pdf)"
 
 #. module: product_invoice_report
 #: view:product.invoice.report.wizard:product_invoice_report.view_product_invoice_wizard_form
@@ -149,19 +158,26 @@ msgid "Print"
 msgstr "Imprimir"
 
 #. module: product_invoice_report
+#: field:product.invoice.report.wizard,out_format:0
+msgid "Print Format"
+msgstr "Formato de Impresión"
+
+#. module: product_invoice_report
 #: selection:product.invoice.report.wizard,sortby:0
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Product"
 msgstr "Producto"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,sortby:0
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Product Category"
 msgstr "Categoría de Producto"
 
 #. module: product_invoice_report
 #: model:ir.actions.act_window,name:product_invoice_report.action_product_invoice_wizard
+#: model:ir.actions.report.xml,name:product_invoice_report.action_report_product_invoice_pdf
+#: model:ir.actions.report.xml,name:product_invoice_report.action_report_product_invoice_xls
 msgid "Product Invoice Report"
 msgstr "Reporte de Productos Vendidos"
 
@@ -172,12 +188,13 @@ msgstr "Productos Vendidos"
 
 #. module: product_invoice_report
 #: model:ir.ui.menu,name:product_invoice_report.menu_product_invoice_wizard
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
+#: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Products Invoices Report"
 msgstr "Reporte de Productos Vendidos"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Quantity"
 msgstr "Cantidad"
 
@@ -209,17 +226,17 @@ msgid "Start Period must be less than End Period"
 msgstr "Período Inicial debe ser menor a Período Final"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "To:"
 msgstr "Hasta:"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Total"
 msgstr "Total"
 
 #. module: product_invoice_report
-#: view:website:product_invoice_report.report_product_invoice
+#: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "Unit Price"
-msgstr "Precio Unitario"
+msgstr "Precio unidad"
 

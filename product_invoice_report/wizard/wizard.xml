@@ -11,6 +11,9 @@
             <field name="priority" eval="16"/>
             <field name="arch" type="xml">
             	<form string="Products Invoices">
+            		<group> 
+            			<field name="out_format"/>
+            		</group>
             		<group>        
                 		<field name="sortby"/>
                  		<field name="filter"/>                

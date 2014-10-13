@@ -2,12 +2,20 @@
 <openerp>
     <data>
         <report 
-            id="action_report_payment_average"
+            id="action_report_product_invoice_pdf"
             model="account.invoice.line"
             string="Product Invoice Report"
             report_type="qweb-pdf"
-            name="product_invoice_report.report_product_invoice"
-            file="product_invoice_report.report_product_invoice"
+            name="product_invoice_report.report_product_invoice_pdf"
+            file="product_invoice_report.report_product_invoice_pdf"
+            menu="False"/>
+        <report 
+            id="action_report_product_invoice_xls"
+            model="account.invoice.line"
+            string="Product Invoice Report"
+            report_type="qweb-xls"
+            name="product_invoice_report.report_product_invoice_xls"
+            file="product_invoice_report.report_product_invoice_xls"
             menu="False"/>
     </data>
 </openerp>

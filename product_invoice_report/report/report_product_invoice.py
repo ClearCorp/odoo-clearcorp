@@ -198,8 +198,14 @@ class ProductInvoiceReport(report_sxw.rml_parse):
         return group_lines
 
 
-class report_product_invoice(models.AbstractModel):
-    _name = 'report.product_invoice_report.report_product_invoice'
+class report_product_invoice_pdf(models.AbstractModel):
+    _name = 'report.product_invoice_report.report_product_invoice_pdf'
     _inherit = 'report.abstract_report'
-    _template = 'product_invoice_report.report_product_invoice'
+    _template = 'product_invoice_report.report_product_invoice_pdf'
+    _wrapped_report_class = ProductInvoiceReport
+    
+class report_product_invoice(models.AbstractModel):
+    _name = 'report.product_invoice_report.report_product_invoice_xls'
+    _inherit = 'report.abstract_report'
+    _template = 'product_invoice_report.report_product_invoice_xls'
     _wrapped_report_class = ProductInvoiceReport

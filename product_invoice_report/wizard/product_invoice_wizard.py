@@ -55,10 +55,16 @@ class ProductInvoiceWizard(models.TransientModel):
                      'period_from':self.period_from.id,
             }
         }
-        res = self.env['report'].get_action(self.partner_ids,
-            'product_invoice_report.report_product_invoice', data=data)
-        return res
-
+        if self.out_format=='qweb-PDF':
+            res = self.env['report'].get_action(self.partner_ids,
+            'product_invoice_report.report_product_invoice_pdf', data=data)
+            return res        
+        elif self.out_format=='qweb-XLS':
+            res = self.env['report'].get_action(self.partner_ids,
+            'product_invoice_report.report_product_invoice_xls', data=data)
+            return res
+    
+    out_format=fields.Selection([('qweb-PDF', 'Portable Document Format (.pdf)'), ('qweb-XLS','Microsoft Excel 97/2000/XP/2003 (.xls)')], string="Print Format",required=True)
     sortby=fields.Selection([('sort_date', 'Date'), ('sort_period','Period'), ('sort_partner','Partner'),('sort_product','Product'),('sort_product_category','Product Category')], string="Sort by",required=True)
     filter=fields.Selection([('filter_no', 'No Filter'), ('filter_date','Date'), ('filter_period','Period')], string="Filter",required=True,default='filter_no')
     date_from=fields.Date(string="Start Date")

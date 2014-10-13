@@ -37,9 +37,11 @@ This module permits print the product invoice report.
                 'account',
                 'sale',
                 'report',
+                'report_xls'
                 ],
     'data': [
-             'views/report_product_invoice.xml',
+             'views/report_product_invoice_pdf.xml',
+             'views/report_product_invoice_xls.xml',
              'product_invoice_report_report.xml',
              'wizard/wizard.xml',
              ],
