@@ -42,9 +42,8 @@ class ProductInvoiceReport(report_sxw.rml_parse):
                                   'get_group_lines':self.get_group_lines,
                                   'get_quantity_group':self.get_quantity_group,
                                   'get_subtotal_group':self.get_subtotal_group,
-
-            #'get_partners': self._get_partners,
-            #'get_invoices_data': self._get_invoices_data,
+                                  'get_periods_format_xls':self.get_periods_format_xls,
+                                  'get_dates_format_xls':self.get_dates_format_xls
         })
 
     ############################Read Data#######################################
@@ -66,7 +65,13 @@ class ProductInvoiceReport(report_sxw.rml_parse):
     
     def get_start_period(self, data):
         return self._get_info(data,'period_from', 'account.period')
-
+    
+    def get_periods_format_xls(self, data):
+        return 'From: ' + self.get_start_period(data).name + ' To: ' + self.get_end_period(data).name
+        
+    def get_dates_format_xls(self, data):
+        return 'From: ' + self.get_date_from(data) + ' To: ' + self.get_date_to(data)   
+      
     def get_end_period(self, data):
         return self._get_info(data,'period_to', 'account.period')
     
