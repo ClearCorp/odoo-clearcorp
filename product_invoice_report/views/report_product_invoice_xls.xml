@@ -4,11 +4,10 @@
         <template id="report_product_invoice_xls">
             <div class="workbook">
                 <div class="worksheet" name="Products Invoices">
-					<div class="set_header">Hello</div>
 					<table>
                         <thead>
                             <tr>
-                                <th easyfx="font: height 240, bold on;align: vert center">Products Invoices Report</th>
+                                <th colspan="4" easyfx="font: height 240, bold on;align: vert center">Products Invoices Report</th>
                             </tr>
                             <tr>
                             </tr>
@@ -46,33 +45,33 @@
 		                    <tbody>
 		                        <tr>
 		                           	<t t-if="get_sort(data) == 'sort_date'">
-		                           		<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['date_invoice']"/></td>
+		                           		<td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['date_invoice']"/></td>
 		                           	</t>
 	                               	<t t-if="get_sort(data) == 'sort_period'">
-	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['period_id']"/></td>
+	                                	<td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['period_id']"/></td>
 	                                </t>
 	                                <t t-if="get_sort(data) == 'sort_partner'">
-	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['partner_id']"/></td>
+	                                	<td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['partner_id']"/></td>
 	                                </t>
 	                                <t t-if="get_sort(data) == 'sort_product'">
-	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['product_id']"/></td>
+	                                	<td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['product_id']"/></td>
 	                                </t>
 	                                <t t-if="get_sort(data) == 'sort_product_category'">
-	                                	<td easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['categ_id']"/></td>
+	                                	<td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;"><span t-esc="group_data[0]['categ_id']"/></td>
 	                                </t>
-	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                <td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;">
 	                                </td>
-	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                <td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;">
 	                                </td>
-	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                <td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;">
 	                                </td>
-	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                <td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;">
 	                                </td>
-	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                <td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;">
 	                                </td>
-	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                <td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;">
 	                                </td>
-	                                <td easyfx="font:height 240;align: vert center;borders: bottom medium;">
+	                                <td colspan="4" easyfx="font:height 240;align: vert center;borders: bottom medium;">
 	                                </td>
 	                            </tr>
 	                            <tr>
