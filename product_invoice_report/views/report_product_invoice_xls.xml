@@ -24,7 +24,7 @@
                          <tbody>
                          	<tr>
                          		<td colspan="2"/>
-                         	 	<td colspan="4" easyfx="font:height 200;align: horizontal center,vert center">
+                         	 	<td colspan="4" easyfx="font:height 200;align: horizontal center,vert center'">
                          	 		<t t-if="get_filter(data) == 'filter_date'">Dates</t>
                                     <t t-if="get_filter(data) == 'filter_period'">Periods</t>
                                     <t t-if="get_filter(data) == 'filter_no'">No Filter</t>
@@ -43,7 +43,7 @@
                          	 	<tr>
                          	 		<td colspan="2"/>
                          	 		<td colspan="4" easyfx="font:height 200;align: horizontal center,vert center">
-                         	 			<span t-esc="get_dates_format_xls(data)"/> 
+                         	 			<span t-esc="get_dates_format_xls(data)"/>
                          	 		</td>
                          	 		<td colspan="4" easyfx="font:height 200;align: horizontal center,vert center">
                          	 		</td>
@@ -129,7 +129,7 @@
 	                                    <td easyfx="font:height 200;align: horizontal right,vert center;"><span t-esc="line['quantity']"/></td>
 	                                    <td easyfx="font:height 200;align: horizontal right,vert center;"><span t-esc="line['price_unit']"/></td>
 	                                    <td easyfx="font:height 200;align: horizontal right,vert center;"><span t-esc="line['discount']"/></td>
-	                                    <td easyfx="font:height 200;align: horizontal right,vert center;"><span t-esc="line['subtotal']"/></td>
+	                                    <td easyfx="font:height 200;align: horizontal right,vert center;" num_format_str="0.00%"><span t-esc="line['subtotal']"/></td>
 	                                </tr>
 	                                <tr>
 	                                    <t t-if="get_sort(data) != 'sort_date'">

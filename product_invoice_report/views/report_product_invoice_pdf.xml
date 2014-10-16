@@ -20,7 +20,7 @@
                                     		<t t-if="get_filter(data) == 'filter_date'">
                                     			Dates
                                     			<br/>
-                                    			From: <span t-esc="get_date_from(data)"/> To: <span t-esc="get_date_to(data)"/>
+                                    			From: <span t-esc="formatLang(get_date_from(data),date=True)"/> To: <span t-esc="formatLang(get_date_to(data),date=True)"/>
                                     		</t>
                                     		<t t-if="get_filter(data) == 'filter_period'">
                                     			Periods
@@ -47,7 +47,7 @@
 	                                <thead>
 	                                    <tr>
 	                                    	<t t-if="get_sort(data) == 'sort_date'">
-	                                    		<th><span t-esc="group_data[0]['date_invoice']"/></th>
+	                                    		<th><span t-esc="formatLang(group_data[0]['date_invoice'],date=True)"/></th>
 	                                    	</t>
                                         	<t t-if="get_sort(data) == 'sort_period'">
                                         		<th><span t-esc="group_data[0]['period_id']"/></th>
@@ -102,10 +102,10 @@
 	                                        <t t-if="get_sort(data) != 'sort_product'">
 	                                        	<td class="text-left"><span t-esc="line['product_id']"/></td>
 	                                        </t>
-	                                        <td class="text-right"><span t-esc="line['quantity']"/></td>
-	                                        <td class="text-right"><span t-esc="line['price_unit']"/></td>
-	                                        <td class="text-right"><span t-esc="line['discount']"/></td>
-	                                        <td class="text-right"><span t-esc="line['subtotal']"/></td>
+	                                        <td class="text-right"><span t-esc="formatLang(line['quantity'])"/></td>
+	                                        <td class="text-right"><span t-esc="formatLang(line['price_unit'],currency_obj=res_company.currency_id)"/></td>
+	                                        <td class="text-right"><span t-esc="formatLang(line['discount'],currency_obj=res_company.currency_id)"/></td>
+	                                        <td class="text-right"><span t-esc="formatLang(line['subtotal'],currency_obj=res_company.currency_id)"/></td>
 	                                    </tr>
 	                                    <tr>
 	                                    	<t t-if="get_sort(data) != 'sort_date'">
@@ -121,10 +121,10 @@
                                         	<t t-if="get_sort(data) != 'sort_product'">
                                         		<td class="text-left"></td>
                                         	</t>
-											<th class="text-right"><span t-esc="get_quantity_group(group_data,data)"/></th>
+											<th class="text-right"><span t-esc="formatLang(get_quantity_group(group_data,data),currency_obj=res_company.currency_id)"/></th>
                                     		<td class="text-right"></td>
                                     		<td class="text-right"></td>
-                                    		<th class="text-right"><span t-esc="get_subtotal_group(group_data,data)"/></th>	                                    
+                                    		<th class="text-right"><span t-esc="formatLang(get_subtotal_group(group_data,data),currency_obj=res_company.currency_id)"/></th>	                                    
 	                                    </tr>
 		                             </tbody>
 								</table>

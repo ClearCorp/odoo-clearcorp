@@ -67,10 +67,10 @@ class ProductInvoiceReport(report_sxw.rml_parse):
         return self._get_info(data,'period_from', 'account.period')
     
     def get_periods_format_xls(self, data):
-        return 'From: ' + self.get_start_period(data).name + ' To: ' + self.get_end_period(data).name
+        return 'Desde: ' + self.get_start_period(data).name + ' Hasta: ' + self.get_end_period(data).name
         
     def get_dates_format_xls(self, data):
-        return 'From: ' + self.get_date_from(data) + ' To: ' + self.get_date_to(data)   
+        return 'Desde: ' + self.formatLang(self.get_date_from(data),date=True) + ' Hasta: ' + self.formatLang(self.get_date_to(data),date=True)   
       
     def get_end_period(self, data):
         return self._get_info(data,'period_to', 'account.period')
