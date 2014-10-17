@@ -179,7 +179,10 @@ class ProductInvoiceReport(report_sxw.rml_parse):
             line_report['number']=line.invoice_id.number
             line_report['partner_id']=line.invoice_id.partner_id.name
             line_report['categ_id']=line.product_id.categ_id.name
-            line_report['product_id']=line.product_id.name
+            if line.product_id:
+                line_report['product_id']=line.product_id.name
+            else:
+                line_report['product_id']=line.name
             line_report['price_unit']=line.price_unit
             line_report['discount']=line.discount
             
