@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-14 22:50+0000\n"
-"PO-Revision-Date: 2014-10-14 22:50+0000\n"
+"POT-Creation-Date: 2014-10-20 20:26+0000\n"
+"PO-Revision-Date: 2014-10-20 20:26+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,12 +23,12 @@ msgstr "Cancelar"
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,create_uid:0
 msgid "Created by"
-msgstr "Creado por"
+msgstr ""
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,create_date:0
 msgid "Created on"
-msgstr "Creado en"
+msgstr ""
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,partner_ids:0
@@ -65,7 +65,7 @@ msgstr "Fecha Final"
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,period_to:0
 msgid "End Period"
-msgstr "Período Final"
+msgstr "Fecha Inicio"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,filter:0
@@ -99,7 +99,7 @@ msgstr "Agrupado por"
 #: field:report.product_invoice_report.report_product_invoice_pdf,id:0
 #: field:report.product_invoice_report.report_product_invoice_xls,id:0
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
@@ -110,17 +110,17 @@ msgstr "Factura"
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,write_uid:0
 msgid "Last Updated by"
-msgstr "Ultima actualización realizada por"
+msgstr ""
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,write_date:0
 msgid "Last Updated on"
-msgstr "Ultima actualización el"
+msgstr ""
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,out_format:0
 msgid "Microsoft Excel 97/2000/XP/2003 (.xls)"
-msgstr "Microsoft Excel 97/2000/XP/2003 (.xls)"
+msgstr ""
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,filter:0
@@ -159,7 +159,7 @@ msgstr "Períodos"
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,out_format:0
 msgid "Portable Document Format (.pdf)"
-msgstr "Portable Document Format (.pdf)"
+msgstr ""
 
 #. module: product_invoice_report
 #: view:product.invoice.report.wizard:product_invoice_report.view_product_invoice_wizard_form
@@ -190,19 +190,19 @@ msgstr "Categoría de Producto"
 #: model:ir.actions.report.xml,name:product_invoice_report.action_report_product_invoice_pdf
 #: model:ir.actions.report.xml,name:product_invoice_report.action_report_product_invoice_xls
 msgid "Product Invoice Report"
-msgstr "Reporte de Productos Vendidos"
+msgstr "Informe de Productos Facturados"
 
 #. module: product_invoice_report
 #: view:product.invoice.report.wizard:product_invoice_report.view_product_invoice_wizard_form
 msgid "Products Invoices"
-msgstr "Productos Vendidos"
+msgstr "Productos Facturados"
 
 #. module: product_invoice_report
 #: model:ir.ui.menu,name:product_invoice_report.menu_product_invoice_wizard
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Products Invoices Report"
-msgstr "Reporte de Productos Vendidos"
+msgstr "Informe de Productos Facturados"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
@@ -224,7 +224,7 @@ msgstr "Fecha Inicio"
 #: code:addons/product_invoice_report/wizard/product_invoice_wizard.py:35
 #, python-format
 msgid "Start Date must be less than End Date"
-msgstr "Fecha de Inicio debe ser menor a Fecha Final"
+msgstr "La fecha de inicio debe ser menor que la fecha final"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,period_from:0
@@ -235,7 +235,7 @@ msgstr "Período Inicial"
 #: code:addons/product_invoice_report/wizard/product_invoice_wizard.py:40
 #, python-format
 msgid "Start Period must be less than End Period"
-msgstr "Período Inicial debe ser menor a Período Final"
+msgstr "El período inicial debe ser menor que el período final "
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
@@ -252,5 +252,5 @@ msgstr "Total"
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Unit Price"
-msgstr "Precio unidad"
+msgstr "Precio Unitario"
 
