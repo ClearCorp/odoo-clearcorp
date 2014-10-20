@@ -121,7 +121,7 @@
                                         	<t t-if="get_sort(data) != 'sort_product'">
                                         		<td class="text-left"></td>
                                         	</t>
-											<th class="text-right"><span t-esc="formatLang(get_quantity_group(group_data,data),currency_obj=res_company.currency_id)"/></th>
+											<th class="text-right"><span t-esc="formatLang(get_quantity_group(group_data,data))"/></th>
                                     		<td class="text-right"></td>
                                     		<td class="text-right"></td>
                                     		<th class="text-right"><span t-esc="formatLang(get_subtotal_group(group_data,data),currency_obj=res_company.currency_id)"/></th>	                                    
