@@ -64,5 +64,5 @@ class ProductCategory(osv.Model):
     _sql_constraints = [
         ('code_unique',
         'UNIQUE(code)',
-        'The code already exist ')
+        'The code already exist')
                         ]

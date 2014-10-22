@@ -27,6 +27,6 @@ msgstr "Categoría de Producto"
 
 #. module: product_category_code
 #: sql_constraint:product.category:0
-msgid "The code already exist "
+msgid "The code already exist"
 msgstr "El código ya existe"
 
