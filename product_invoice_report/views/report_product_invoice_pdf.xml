@@ -42,7 +42,7 @@
                                 </tbody>
                             </table>
                             
-                            <tr t-foreach="get_group_lines(data,doc_ids)" t-as="group_data">
+                            <t t-foreach="get_group_lines(data,doc_ids)" t-as="group_data">
 								<table class="table table-condensed">
 	                                <thead>
 	                                    <tr>
@@ -64,71 +64,73 @@
                                         </tr>
 	                                </thead>
 	                            </table>
-	                        
-	                    		<table class="table table-condensed">
+	                            <table class="table table-condensed">
 	                                <thead style="background-color:#E0E0E0" >
 	                                    <tr>
 	                                        <t t-if="get_sort(data) != 'sort_date'">
-	                                        	<th class="text-left">Date</th>
+	                                        	<th class="text-left" width="9%">Date</th>
 	                                        </t>
-	                                        <th class="text-left">Invoice</th>
+	                                        <th class="text-left" width="11%">Invoice</th>
 	                                        <t t-if="get_sort(data) != 'sort_partner'">
-	                                        	<th class="text-left">Customer</th>
+	                                        	<th class="text-left" width="12%">Customer</th>
 	                                        </t>
 	                                        <t t-if="get_sort(data) != 'sort_product_category'">
-	                                        	<th class="text-left">Product Category</th>
+	                                        	<th class="text-left" width="12%">Product Category</th>
 	                                        </t>
 	                                        <t t-if="get_sort(data) != 'sort_product'">
-	                                        	<th class="text-left">Product</th>
+	                                        	<th class="text-left" width="12%">Product</th>
 	                                        </t>
-	                                        <th class="text-center">Quantity</th>
-	                                        <th class="text-center">Unit Price</th>
-	                                        <th class="text-center">Discount</th>
-	                                        <th class="text-center">Total</th>
+	                                        <th class="text-center" width="7%">Quantity</th>
+	                                        <th class="text-center" width="12%">Unit Price</th>
+	                                        <th class="text-center" width="12%">Discount</th>
+	                                        <th class="text-center" width="13%">Total</th>
 	                                    </tr>
 	                                </thead>
+	                            </table>
+	                    		<table class="table table-condensed">
+	                                
 	                                <tbody>
 		                            	<tr t-foreach="group_data" t-as="line">
 	                                    	<t t-if="get_sort(data) != 'sort_date'">
-	                                        	<td class="text-left"><span t-esc="line['date_invoice']"/></td>                                        	
+	                                        	<td class="text-left" width="9%" style="height:5px"><span t-esc="line['date_invoice']"/></td>                                        	
 	                                        </t>
-	                                        <td class="text-left"><span t-esc="line['number']"/></td>
+	                                        <td class="text-left" width="11%" style="height:5px"><span t-esc="line['number']"/></td>
 	                                        <t t-if="get_sort(data) != 'sort_partner'">
-	                                        	<td class="text-left"><span t-esc="line['partner_id']"/></td>
+	                                        	<td class="text-left" width="12%" style="height:5px"><span t-esc="line['partner_id']"/></td>
 	                                        </t>
 	                                        <t t-if="get_sort(data) != 'sort_product_category'">
-	                                        	<td class="text-left"><span t-esc="line['categ_id']"/></td>
+	                                        	<td class="text-left" width="12%" style="height:5px"><span t-esc="line['categ_id']"/></td>
 	                                        </t>
 	                                        <t t-if="get_sort(data) != 'sort_product'">
-	                                        	<td class="text-left"><span t-esc="line['product_id']"/></td>
+	                                        	<td class="text-left" width="12%" style="height:5px"><span t-esc="line['product_id']"/></td>
 	                                        </t>
-	                                        <td class="text-right"><span t-esc="formatLang(line['quantity'])"/></td>
-	                                        <td class="text-right"><span t-esc="formatLang(line['price_unit'],currency_obj=res_company.currency_id)"/></td>
-	                                        <td class="text-right"><span t-esc="formatLang(line['discount'],currency_obj=res_company.currency_id)"/></td>
-	                                        <td class="text-right"><span t-esc="formatLang(line['subtotal'],currency_obj=res_company.currency_id)"/></td>
+	                                        <td class="text-right" width="7%" style="height:5px"><span t-esc="formatLang(line['quantity'])"/></td>
+	                                        <td class="text-right" width="12%" style="height:5px"><span t-esc="formatLang(line['price_unit'],currency_obj=res_company.currency_id)"/></td>
+	                                        <td class="text-right" width="12%" style="height:5px"><span t-esc="formatLang(line['discount'],currency_obj=res_company.currency_id)"/></td>
+	                                        <td class="text-right" width="13%" style="height:5px"><span t-esc="formatLang(line['subtotal'],currency_obj=res_company.currency_id)"/></td>
 	                                    </tr>
 	                                    <tr>
 	                                    	<t t-if="get_sort(data) != 'sort_date'">
-                                        		<td class="text-left"></td>
+                                        		<td class="text-left" width="9%"></td>
                                         	</t>
-                                        	<td class="text-left"></td>
+                                        	<td class="text-left" width="11%"></td>
                                         	<t t-if="get_sort(data) != 'sort_partner'">
-                                        		<td class="text-left"></td>
+                                        		<td class="text-left" width="12%"></td>
                                         	</t>
                                         	<t t-if="get_sort(data) != 'sort_product_category'">
-                                        		<td class="text-left"></td>
+                                        		<td class="text-left" width="12%"></td>
                                         	</t>
                                         	<t t-if="get_sort(data) != 'sort_product'">
-                                        		<td class="text-left"></td>
+                                        		<td class="text-left" width="12%"></td>
                                         	</t>
-											<th class="text-right"><span t-esc="formatLang(get_quantity_group(group_data,data))"/></th>
-                                    		<td class="text-right"></td>
-                                    		<td class="text-right"></td>
-                                    		<th class="text-right"><span t-esc="formatLang(get_subtotal_group(group_data,data),currency_obj=res_company.currency_id)"/></th>	                                    
+											<th class="text-right" width="7%"><span t-esc="formatLang(get_quantity_group(group_data,data))"/></th>
+                                    		<td class="text-right" width="12%"></td>
+                                    		<td class="text-right" width="12%"></td>
+                                    		<th class="text-right" width="14%"><span t-esc="formatLang(get_subtotal_group(group_data,data),currency_obj=res_company.currency_id)"/></th>	                                    
 	                                    </tr>
 		                             </tbody>
 								</table>
-							</tr>
+							</t>
                     </div>
                 </t>
             </t>
