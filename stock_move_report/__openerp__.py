@@ -39,6 +39,7 @@ This module add stock move report
                     #'report_menus.xml',
                     #'security/ir.model.access.csv',
                     'report/stock_move_analysis.xml',
+                    'wizard/stock_move_report_wizard.xml',
                     ],
     'license': 'AGPL-3',
     'installable': True,
