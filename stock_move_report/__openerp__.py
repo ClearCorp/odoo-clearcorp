@@ -34,10 +34,8 @@ This module add stock move report
                 'stock','product'
                 ],
     'data': [
-                    #'report/report.xml',
-                    #'wizard/stock_move_report_wizard.xml',
-                    #'report_menus.xml',
-                    #'security/ir.model.access.csv',
+                    'stock_move_report_report.xml',
+                    'views/report_stock_move_pdf.xml',
                     'report/stock_move_analysis.xml',
                     'wizard/stock_move_report_wizard.xml',
                     ],
