@@ -28,7 +28,7 @@ Product Invoice Report
 This module permits print the product invoice report.
     """,
     'version': '1.0',
-    'author': 'CLEARCORP S.A.',
+    'author': 'ClearCorp',
     'category': 'Sales Management',
     'website': "http://clearcorp.co.cr",
     'complexity': 'normal',
