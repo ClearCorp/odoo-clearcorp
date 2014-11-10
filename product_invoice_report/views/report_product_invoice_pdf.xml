@@ -135,5 +135,12 @@
                 </t>
             </t>
         </template>
+        <template id="pdf_report_product_invoice">
+			<t t-call="report.html_container">
+			<t t-foreach="doc_ids" t-as="doc_id">
+			<t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'product_invoice_report.report_product_invoice_pdf')"/>
+			</t>
+			</t>
+		</template>
     </data>
 </openerp>

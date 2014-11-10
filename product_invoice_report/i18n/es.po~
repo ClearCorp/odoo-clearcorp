@@ -18,7 +18,7 @@ msgstr ""
 #. module: product_invoice_report
 #: view:product.invoice.report.wizard:product_invoice_report.view_product_invoice_wizard_form
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,create_uid:0
@@ -35,7 +35,7 @@ msgstr ""
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Customer"
-msgstr ""
+msgstr "Cliente"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,filter:0
@@ -43,56 +43,56 @@ msgstr ""
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Dates"
-msgstr ""
+msgstr "Fechas"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Discount"
-msgstr ""
+msgstr "Descuento"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,date_to:0
 msgid "End Date"
-msgstr ""
+msgstr "Fecha Final"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,period_to:0
 msgid "End Period"
-msgstr ""
+msgstr "Fecha Inicio"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,filter:0
 msgid "Filter"
-msgstr ""
+msgstr "Filtro"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Filter by"
-msgstr ""
+msgstr "Filtro por"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,fiscalyear_id:0
 msgid "Fiscal Year"
-msgstr ""
+msgstr "Año Fiscal"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "From:"
-msgstr ""
+msgstr "Desde"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Group by"
-msgstr ""
+msgstr "Agrupado por"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,id:0
@@ -105,7 +105,7 @@ msgstr ""
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Invoice"
-msgstr ""
+msgstr "Factura"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,write_uid:0
@@ -127,20 +127,20 @@ msgstr ""
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "No Filter"
-msgstr ""
+msgstr "Sin Filtros"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "No Sort"
-msgstr ""
+msgstr "Sin Agrupar"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,sortby:0
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Partner"
-msgstr ""
+msgstr "Cliente"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,filter:0
@@ -148,13 +148,13 @@ msgstr ""
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Period"
-msgstr ""
+msgstr "Período"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Periods"
-msgstr ""
+msgstr "Períodos"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,out_format:0
@@ -164,93 +164,93 @@ msgstr ""
 #. module: product_invoice_report
 #: view:product.invoice.report.wizard:product_invoice_report.view_product_invoice_wizard_form
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,out_format:0
 msgid "Print Format"
-msgstr ""
+msgstr "Formato de Impresión"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,sortby:0
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Product"
-msgstr ""
+msgstr "Producto"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,sortby:0
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Product Category"
-msgstr ""
+msgstr "Categoría de Producto"
 
 #. module: product_invoice_report
 #: model:ir.actions.act_window,name:product_invoice_report.action_product_invoice_wizard
 #: model:ir.actions.report.xml,name:product_invoice_report.action_report_product_invoice_pdf
 #: model:ir.actions.report.xml,name:product_invoice_report.action_report_product_invoice_xls
 msgid "Product Invoice Report"
-msgstr ""
+msgstr "Informe de Productos Facturados"
 
 #. module: product_invoice_report
 #: view:product.invoice.report.wizard:product_invoice_report.view_product_invoice_wizard_form
 msgid "Products Invoices"
-msgstr ""
+msgstr "Productos Facturados"
 
 #. module: product_invoice_report
 #: model:ir.ui.menu,name:product_invoice_report.menu_product_invoice_wizard
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Products Invoices Report"
-msgstr ""
+msgstr "Informe de Productos Facturados"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Quantity"
-msgstr ""
+msgstr "Cantidad"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,sortby:0
 msgid "Sort by"
-msgstr ""
+msgstr "Agrupado por"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,date_from:0
 msgid "Start Date"
-msgstr ""
+msgstr "Fecha Inicio"
 
 #. module: product_invoice_report
 #: code:addons/product_invoice_report/wizard/product_invoice_wizard.py:35
 #, python-format
 msgid "Start Date must be less than End Date"
-msgstr ""
+msgstr "La fecha de inicio debe ser menor que la fecha final"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,period_from:0
 msgid "Start Period"
-msgstr ""
+msgstr "Período Inicial"
 
 #. module: product_invoice_report
 #: code:addons/product_invoice_report/wizard/product_invoice_wizard.py:40
 #, python-format
 msgid "Start Period must be less than End Period"
-msgstr ""
+msgstr "El período inicial debe ser menor que el período final "
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 msgid "To:"
-msgstr ""
+msgstr "Hasta:"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
 #: view:website:product_invoice_report.report_product_invoice_xls
 msgid "Unit Price"
-msgstr ""
+msgstr "Precio Unitario"
 

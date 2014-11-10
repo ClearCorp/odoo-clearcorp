@@ -23,12 +23,12 @@ msgstr "Cancelar"
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Creado en"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,partner_ids:0
@@ -99,7 +99,7 @@ msgstr "Agrupado por"
 #: field:report.product_invoice_report.report_product_invoice_pdf,id:0
 #: field:report.product_invoice_report.report_product_invoice_xls,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: product_invoice_report
 #: view:website:product_invoice_report.report_product_invoice_pdf
@@ -110,17 +110,17 @@ msgstr "Factura"
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultima Actualización por"
 
 #. module: product_invoice_report
 #: field:product.invoice.report.wizard,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultima Actualización en"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,out_format:0
 msgid "Microsoft Excel 97/2000/XP/2003 (.xls)"
-msgstr ""
+msgstr "Microsoft Excel 97/2000/XP/2003 (.xls)"
 
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,filter:0
@@ -159,7 +159,7 @@ msgstr "Períodos"
 #. module: product_invoice_report
 #: selection:product.invoice.report.wizard,out_format:0
 msgid "Portable Document Format (.pdf)"
-msgstr ""
+msgstr "Portable Document Format (.pdf)"
 
 #. module: product_invoice_report
 #: view:product.invoice.report.wizard:product_invoice_report.view_product_invoice_wizard_form
