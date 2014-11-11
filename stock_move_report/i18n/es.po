@@ -80,12 +80,12 @@ msgstr "Empresa"
 #. module: stock_move_report
 #: field:stock.move.report.wiz,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: stock_move_report
 #: field:stock.move.report.wiz,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Creado en"
 
 #. module: stock_move_report
 #: view:stock.move.analysis:stock_move_report.view_stock_move_analysis_search
@@ -167,7 +167,7 @@ msgstr "Agrupar por..."
 #: field:stock.move.analysis,id:0
 #: field:stock.move.report.wiz,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: stock_move_report
 #: field:stock.move.report.wiz,include_costs:0
@@ -177,12 +177,12 @@ msgstr "Incluir costos"
 #. module: stock_move_report
 #: field:stock.move.report.wiz,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultima Actualización por"
 
 #. module: stock_move_report
 #: field:stock.move.report.wiz,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultima Actualización en"
 
 #. module: stock_move_report
 #: field:stock.move.analysis,name:0
@@ -225,7 +225,7 @@ msgstr "Tipos de Operación"
 #. module: stock_move_report
 #: selection:stock.move.report.wiz,out_format:0
 msgid "Portable Document Format (.pdf)"
-msgstr ""
+msgstr "Portable Document Format (.pdf)"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view

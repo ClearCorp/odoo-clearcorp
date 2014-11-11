@@ -32,50 +32,50 @@ msgstr "Todas"
 #: code:addons/stock_move_report/report/report_stock_move.py:152
 #, python-format
 msgid "All Locations"
-msgstr ""
+msgstr "Todas"
 
 #. module: stock_move_report
 #: code:addons/stock_move_report/report/report_stock_move.py:164
 #, python-format
 msgid "All Picking Types"
-msgstr ""
+msgstr "Todos"
 
 #. module: stock_move_report
 #: code:addons/stock_move_report/report/report_stock_move.py:119
 #, python-format
 msgid "All Products"
-msgstr ""
+msgstr "Todos"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Categories Products"
-msgstr ""
+msgstr "Categoría de productos"
 
 #. module: stock_move_report
 #: view:stock.move.analysis:stock_move_report.view_stock_move_analysis_search
 #: field:stock.move.analysis,categ_id:0
 #: field:stock.move.report.wiz,category_ids:0
 msgid "Category Product"
-msgstr ""
+msgstr "Categoría de producto"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Companies"
-msgstr ""
+msgstr "Empresas"
 
 #. module: stock_move_report
 #: view:stock.move.analysis:stock_move_report.view_stock_move_analysis_search
 #: field:stock.move.analysis,partner_id:0
 #: field:stock.move.report.wiz,partner_ids:0
 msgid "Company"
-msgstr ""
+msgstr "Empresa"
 
 #. module: stock_move_report
 #: field:stock.move.report.wiz,create_uid:0
@@ -92,75 +92,75 @@ msgstr ""
 #: field:stock.move.analysis,date:0
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Dates"
-msgstr ""
+msgstr "Fechas"
 
 #. module: stock_move_report
 #: field:stock.move.analysis,origin:0
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #. module: stock_move_report
 #: view:stock.move.analysis:stock_move_report.view_stock_move_analysis_search
 #: field:stock.move.analysis,location_dest_id:0
 msgid "Destination Location"
-msgstr ""
+msgstr "Localización entrada"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 #: field:stock.move.report.wiz,destination_location_ids:0
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Destination Locations"
-msgstr ""
+msgstr "Localización entrada"
 
 #. module: stock_move_report
 #: field:stock.move.report.wiz,date_to:0
 msgid "End Date"
-msgstr ""
+msgstr "Fecha final"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 msgid "Filters"
-msgstr ""
+msgstr "Filtros"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Final Cost"
-msgstr ""
+msgstr "Costo Final"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Final Cost:"
-msgstr ""
+msgstr "Costo Final"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Final Quantity"
-msgstr ""
+msgstr "Cant. Final"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Final Quantity:"
-msgstr ""
+msgstr "Cant. Final"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "From:"
-msgstr ""
+msgstr "Desde:"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 msgid "General Options"
-msgstr ""
+msgstr "Opciones generales"
 
 #. module: stock_move_report
 #: view:stock.move.analysis:stock_move_report.view_stock_move_analysis_search
 msgid "Group By..."
-msgstr ""
+msgstr "Agrupar por..."
 
 #. module: stock_move_report
 #: field:report.stock_move_report.report_stock_move_pdf,id:0
@@ -172,7 +172,7 @@ msgstr ""
 #. module: stock_move_report
 #: field:stock.move.report.wiz,include_costs:0
 msgid "Include costs"
-msgstr ""
+msgstr "Incluir costos"
 
 #. module: stock_move_report
 #: field:stock.move.report.wiz,write_uid:0
@@ -187,40 +187,40 @@ msgstr ""
 #. module: stock_move_report
 #: field:stock.move.analysis,name:0
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "No inventory moves related to this product"
-msgstr ""
+msgstr "No existen movimientos de inventario relacionados con este producto"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Opening Cost:"
-msgstr ""
+msgstr "Costo inicial:"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Opening Quantity:"
-msgstr ""
+msgstr "Cantidad inicial:"
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Origin"
-msgstr ""
+msgstr "Origen"
 
 #. module: stock_move_report
 #: view:stock.move.analysis:stock_move_report.view_stock_move_analysis_search
 #: field:stock.move.analysis,picking_type_id:0
 #: field:stock.move.report.wiz,picking_type_ids:0
 msgid "Picking Type"
-msgstr ""
+msgstr "Tipo de Operación"
 
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 #: view:website:stock_move_report.report_stock_move_pdf
 msgid "Picking Types"
-msgstr ""
+msgstr "Tipos de Operación"
 
 #. module: stock_move_report
 #: selection:stock.move.report.wiz,out_format:0
@@ -230,7 +230,7 @@ msgstr ""
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #. module: stock_move_report
 #: field:stock.move.report.wiz,out_format:0
@@ -319,7 +319,7 @@ msgstr "Movimientos de Producto"
 #. module: stock_move_report
 #: view:stock.move.report.wiz:stock_move_report.stock_move_report_wizard_form_view
 msgid "This report allows to print a stock move report by different search criteria."
-msgstr "No existen movimientos de inventario relacionados con este producto"
+msgstr "Este reporte le permite imprimir un reporte de movmientos de producto por diferentes criterios de búsqueda."
 
 #. module: stock_move_report
 #: view:website:stock_move_report.report_stock_move_pdf
