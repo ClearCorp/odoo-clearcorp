@@ -21,10 +21,10 @@
 ##############################################################################
 
 from openerp.osv import fields, osv, orm
-import pooler
+from openerp import pooler
 import time
 from datetime import datetime, timedelta
-import netsvc
+from openerp import netsvc
 import string
 from openerp.tools.translate import _
 import logging
@@ -42,7 +42,7 @@ class currencyRateupdate(orm.Model):
     _inherit = "currency.rate.update"
     
     logger2 = logging.getLogger('currency.rate.update')
-    logger = netsvc.Logger()
+    logger =  logging.getLogger(__name__)#netsvc.Logger()
     LOG_NAME = 'cron-rates'
     MOD_NAME = 'c2c_currency_rate_update: '
     
