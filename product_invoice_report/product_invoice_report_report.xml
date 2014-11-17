@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-    	<!--Paper Format-->
+    	<!--Paper Formats-->
+    	<record id="paperformat_LetterPortrait" model="report.paperformat">
+		    <field name="name">US Letter Portrait</field>
+		    <field name="default" eval="True"/>
+		    <field name="format">Letter</field>
+		    <field name="page_height">0</field>
+		    <field name="page_width">0</field>
+		    <field name="orientation">Portrait</field>
+		    <field name="margin_top">20</field>
+		    <field name="margin_bottom">20</field>
+		    <field name="margin_left">7</field>
+		    <field name="margin_right">7</field>
+		    <field name="header_line" eval="False"/>
+		    <field name="header_spacing">7</field>
+		    <field name="dpi">80</field>
+		</record>
     	<record id="paperformat_LetterLandscape" model="report.paperformat">
 		    <field name="name">US Letter Landscape</field>
 		    <field name="default" eval="True"/>
@@ -34,9 +49,14 @@
             name="product_invoice_report.report_product_invoice_xls"
             file="product_invoice_report.report_product_invoice_xls"
             menu="False"/>
-            
-         <record id="action_report_product_invoice_pdf" model="ir.actions.report.xml">
+        
+        <!--Paper Format to product invoice report-->
+        <record id="action_report_product_invoice_pdf" model="ir.actions.report.xml">
         	<field name="paperformat_id" ref="product_invoice_report.paperformat_LetterLandscape"/>
+    	</record>
+    	<!--Paper Format to stock picking report-->
+    	<record id="stock.action_report_picking" model="ir.actions.report.xml">
+        	<field name="paperformat_id" ref="product_invoice_report.paperformat_LetterPortrait"/>
     	</record>
   		</data>
     
