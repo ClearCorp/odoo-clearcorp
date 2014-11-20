@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-13 22:11+0000\n"
-"PO-Revision-Date: 2014-11-13 22:11+0000\n"
+"POT-Creation-Date: 2014-11-20 21:31+0000\n"
+"PO-Revision-Date: 2014-11-20 21:31+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -207,6 +207,11 @@ msgid "ID"
 msgstr "ID"
 
 #. module: project_issue_helpdesk
+#: help:stock.picking.type,issue_required:0
+msgid "If this field has a check, the issue is required"
+msgstr "Si el campo tiene un check, las transferencias solicitarán obligatoriamente una incidencia"
+
+#. module: project_issue_helpdesk
 #: selection:product.category,supply_type:0
 #: selection:product.template,supply_type:0
 msgid "Input"
@@ -224,7 +229,7 @@ msgid "Is a Company?"
 msgstr "¿Es una empresa?"
 
 #. module: project_issue_helpdesk
-#: field:sale.order,issue_id:0
+#: field:stock.picking,issue_id:0
 msgid "Issue"
 msgstr "Incidencia"
 
@@ -234,6 +239,12 @@ msgstr "Incidencia"
 #: view:project.issue.origin:project_issue_helpdesk.view_project_issue_origin_tree
 msgid "Issue Origin"
 msgstr "Medio"
+
+#. module: project_issue_helpdesk
+#: field:stock.picking,issue_required:0
+#: field:stock.picking.type,issue_required:0
+msgid "Issue Required"
+msgstr "Incidencia Requerida"
 
 #. module: project_issue_helpdesk
 #: field:project.issue,issue_type:0
@@ -423,6 +434,11 @@ msgid "Technical Rate"
 msgstr "Tarifa Técnica"
 
 #. module: project_issue_helpdesk
+#: model:ir.model,name:project_issue_helpdesk.model_stock_picking_type
+msgid "The picking type determines the picking view"
+msgstr "El tipo de albarán determina la vista de albarán"
+
+#. module: project_issue_helpdesk
 #: field:hr.analytic.timesheet,ticket_number:0
 msgid "Ticket Number"
 msgstr "Boleta"
@@ -469,13 +485,12 @@ msgid "field at view init"
 msgstr "field at view init"
 
 #. module: project_issue_helpdesk
-#: view:sale.order:project_issue_helpdesk.view_sale_order_form
-msgid "get_domain_issue_id(partner_id)"
-msgstr "get_domain_issue_id(partner_id)"
+#: view:stock.picking:project_issue_helpdesk.view_stock_picking_form
+msgid "issue"
+msgstr "Incidencia"
 
 #. module: project_issue_helpdesk
 #: field:contract.pricelist,line_ids:0
-#: field:stock.picking,issue_id:0
 msgid "unknown"
 msgstr "unknown"
 
