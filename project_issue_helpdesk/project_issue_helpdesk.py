@@ -383,25 +383,50 @@ class StockPickingType(orm.Model):
     _inherit = 'stock.picking.type'
     _columns = {
          'issue_required':fields.boolean(string='Issue Required',help="If this field has a check, the issue is required"),
-         #'init_onchange_call': fields.function(get_issues_partner, method=True, type='many2many', relation='project.issue',string='Nothing Display', help='field at view init'),
          }
 
 class StockPicking(orm.Model):
-     _inherit = 'stock.picking'
-     
-     def _compute_issue_required(self, cr, uid, context=None):
+    _inherit = 'stock.picking'
+    
+    def do_enter_transfer_partner(self, cr, uid, picking, context=None):
+        return 0
+         #for transfer in self.browse(cr, uid, ids, context=context):
+         #    transfer.picking_destination_location_id
+    
+    def _compute_issue_required(self, cr, uid, context=None):
         context = context or {}
         if context.get('default_picking_type_id', False):
             pick_type = self.pool.get('stock.picking.type').browse(cr, uid, context['default_picking_type_id'], context=context)
             return pick_type.issue_required or False
         return False
     
-     _columns = {
+    def get_domain_issue_id(self,cr,uid,ids,partner_id,context=None):
+        if partner_id:
+            issue_ids=self.pool.get('project.issue').search(cr,uid,['|',('branch_id','=',partner_id),('partner_id','=',partner_id)])
+            return {'domain':{'issue_id':[('id','in',issue_ids)]}}
+        else:
+            return {'domain':{'issue_id':False}}
+    def get_issue_required(self,cr,uid,ids,picking_type_id,context=None):
+            picking_type_id=self.pool.get('stock.picking.type').browse(cr, uid, picking_type_id, context=context)
+            return {'value':{'issue_required':picking_type_id.issue_required}}
+    
+    def get_issues_partner(self, cr, uid,ids,field_name,arg,context=None ):
+        issue_obj=self.pool.get('project.issue')
+        picking_ids=[]
+        domain=[]
+        res={}
+        for picking in self.browse(cr, uid, ids, context=context):
+            issue_ids=issue_obj.search(cr, uid, ['|',('branch_id','=',picking.partner_id.id),('partner_id','=',picking.partner_id.id)])
+            for issue in issue_obj.browse(cr, uid, issue_ids, context=context):
+                picking_ids.append(issue.id)
+        res[picking.id]=picking_ids
+        return res
+    
+    _columns = {
+         'init_onchange_call': fields.function(get_issues_partner, method=True, type='many2many', relation='project.issue',string='Nothing Display', help='field at view init'),
          'issue_id':fields.many2one('project.issue',string="Issue"),
          'issue_required':fields.boolean(string='Issue Required'),
-         #'init_onchange_call': fields.function(get_issues_partner, method=True, type='many2many', relation='project.issue',string='Nothing Display', help='field at view init'),
-         }
-     _defaults = {
+              }
+    _defaults = {
           'issue_required':_compute_issue_required
                 }
-
