@@ -209,7 +209,7 @@ msgstr "ID"
 #. module: project_issue_helpdesk
 #: help:stock.picking.type,issue_required:0
 msgid "If this field has a check, the issue is required"
-msgstr "Si el campo tiene un check, la transferencias solicitarán obligatoriamente una incidencia"
+msgstr "Si el campo tiene un check, las transferencias solicitarán obligatoriamente una incidencia"
 
 #. module: project_issue_helpdesk
 #: selection:product.category,supply_type:0

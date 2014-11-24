@@ -387,12 +387,7 @@ class StockPickingType(orm.Model):
 
 class StockPicking(orm.Model):
     _inherit = 'stock.picking'
-    
-    def do_enter_transfer_partner(self, cr, uid, picking, context=None):
-        return 0
-         #for transfer in self.browse(cr, uid, ids, context=context):
-         #    transfer.picking_destination_location_id
-    
+
     def _compute_issue_required(self, cr, uid, context=None):
         context = context or {}
         if context.get('default_picking_type_id', False):
@@ -430,3 +425,32 @@ class StockPicking(orm.Model):
     _defaults = {
           'issue_required':_compute_issue_required
                 }
+
+class StockTransferDetail(osv.osv_memory):
+    _inherit = 'stock.transfer_details'
+    
+    def do_enter_transfer_partner(self, cr, uid,ids, context=None):
+        stock_move_obj=self.pool.get('stock.move')
+        stock_picking_obj=self.pool.get('stock.picking')
+        for transfer in self.browse(cr, uid, ids, context=context):
+            location_dest_original=transfer.picking_id.location_dest_id.id
+            partner_original=transfer.picking_id.partner_id.id
+            if transfer.picking_id.issue_id.branch_id:
+                location_dest_actual=location_dest_original=transfer.picking_id.issue_id.branch_id.property_stock_customer.id
+                partner_actual=transfer.picking_id.issue_id.branch_id.id
+            elif transfer.picking_id.issue_id.partner_id:
+                location_dest_actual=transfer.picking_id.issue_id.partner_id.property_stock_customer.id
+                partner_actual=transfer.picking_id.issue_id.partner_id.id
+            else:
+                raise osv.except_osv(_('Warning!'), _('You can not transfer to a partner, if you have not selected an issue'))  
+            stock_move_obj.write(cr,uid, transfer.picking_id.move_lines.id,{'location_dest_id': location_dest_actual,'partner_id':partner_actual})
+            stock_picking_obj.write(cr,uid, transfer.picking_id.id,{'location_dest_id': location_dest_actual,'partner_id':partner_actual})
+            
+            self.do_detailed_transfer(cr,uid,ids,context)
+            
+            move_ids=stock_move_obj.search(cr, uid,[('split_from','=',transfer.picking_id.move_lines.id)])
+            for move in stock_move_obj.browse(cr, uid, move_ids, context=context):
+                    stock_move_obj.write(cr,uid, move.id,{'state': 'draft'})
+                    stock_move_obj.write(cr,uid, move.id,{'location_dest_id': location_dest_original,'partner_id':partner_original,'state': 'done'})
+        
+            stock_picking_obj.write(cr,uid, transfer.picking_id.id,{'invoice_state': '2binvoiced'})
