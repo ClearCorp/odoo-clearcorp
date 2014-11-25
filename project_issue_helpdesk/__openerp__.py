@@ -37,6 +37,7 @@ Extends Project Issue Helpdesk
     'demo_xml': [],
     'data': ['view/project_issue_helpdesk_view.xml',
              'view/project_issue_helpdesk_menu.xml',
+             'data/project_issue_sequence_data.xml'
              ],
     'license': 'AGPL-3',
     'installable': True,
