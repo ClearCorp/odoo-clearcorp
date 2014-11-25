@@ -26,7 +26,29 @@ import math
 
 class ProjectIssue(osv.Model):
     _inherit = 'project.issue'
-     
+    
+    def name_get(self, cr, uid, ids, context=None):
+        if not isinstance(ids, list):
+            ids = [ids]
+        res = []
+        if not ids:
+            return res
+        reads = self.read(cr, uid, ids, ['name', 'issue_number'], context)
+
+        for record in reads:
+            name = record['name']
+            if record['issue_number']:
+                name = '[' + record['issue_number'] + ']' + ' ' + name
+            res.append((record['id'], name))
+        return res
+
+    def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
+        res = super(ProjectIssue, self).name_search(cr, uid, name, args = args, operator = 'ilike', context = context)
+        ids=self.search(cr, uid, [('issue_number', operator, name)],
+                              limit=limit, context=context)
+        res = list(set(res + self.name_get(cr, uid, ids, context)))
+        return res
+    
     def onchange_partner_id(self, cr, uid, ids, partner_id, context=None):
         result={}
         result = super(ProjectIssue, self).onchange_partner_id(cr, uid, ids, partner_id)
@@ -72,11 +94,18 @@ class ProjectIssue(osv.Model):
             data.update({'partner_id': branch.parent_id.id})
           
         return {'value': data}
-          
+    
+    def create(self, cr, uid, vals, context=None):
+        issue_number = self.pool.get('ir.sequence').get(cr, uid, 'project.issue', context=context) or '/'
+        vals['issue_number'] = issue_number
+        result = super(ProjectIssue, self).create(cr, uid, vals, context=context)
+        return result
+        
     _columns = {
                 'issue_type': fields.selection([('support','Support'),('preventive check','Preventive Check'),
                                               ('workshop repair','Workshop Repair'),('installation','Installation')],
                                              required=True,string="Issue Type"),
+                'issue_number': fields.char(string='Issue Number', select=True),
                 'warranty': fields.selection([('seller','Seller'),('manufacturer','Manufacturer')],string="Warranty"),                                 
                 'backorder_ids': fields.one2many('stock.picking','issue_id',domain=[('picking_type_id.code','=','outgoing')],string="Backorders"),
                 'origin_id':fields.many2one('project.issue.origin',string="Origin"),
