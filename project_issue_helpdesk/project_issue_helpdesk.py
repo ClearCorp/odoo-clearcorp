@@ -44,7 +44,7 @@ class ProjectIssue(osv.Model):
 
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
         res = super(ProjectIssue, self).name_search(cr, uid, name, args = args, operator = 'ilike', context = context)
-        ids=self.search(cr, uid, [('issue_number', operator, name)],
+        ids=self.search(cr, uid, [('issue_number', operator, name)] + args,
                               limit=limit, context=context)
         res = list(set(res + self.name_get(cr, uid, ids, context)))
         return res
@@ -423,7 +423,7 @@ class StockPicking(orm.Model):
             pick_type = self.pool.get('stock.picking.type').browse(cr, uid, context['default_picking_type_id'], context=context)
             return pick_type.issue_required or False
         return False
-    
+
     def get_domain_issue_id(self,cr,uid,ids,partner_id,context=None):
         if partner_id:
             issue_ids=self.pool.get('project.issue').search(cr,uid,['|',('branch_id','=',partner_id),('partner_id','=',partner_id)])
