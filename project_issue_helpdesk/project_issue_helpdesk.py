@@ -465,7 +465,7 @@ class StockTransferDetail(osv.osv_memory):
             location_dest_original=transfer.picking_id.location_dest_id.id
             partner_original=transfer.picking_id.partner_id.id
             if transfer.picking_id.issue_id.branch_id:
-                location_dest_actual=location_dest_original=transfer.picking_id.issue_id.branch_id.property_stock_customer.id
+                location_dest_actual=transfer.picking_id.issue_id.branch_id.property_stock_customer.id
                 partner_actual=transfer.picking_id.issue_id.branch_id.id
             elif transfer.picking_id.issue_id.partner_id:
                 location_dest_actual=transfer.picking_id.issue_id.partner_id.property_stock_customer.id
