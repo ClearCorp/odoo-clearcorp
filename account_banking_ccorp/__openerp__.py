@@ -28,7 +28,7 @@
     """,
     'author': 'ClearCorp',
     'website': 'http://www.clearcorp.co.cr',
-    'depends': [
+    'depends': [ 
                 'account_payment',
                 ],
     'data': [
