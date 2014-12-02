@@ -20,22 +20,16 @@
 #
 ##############################################################################
 
-{
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
-    """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [ 
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
-    'installable': True,
-    'auto_install': False,
-}
+from openerp.osv import osv, fields, orm
+
+class AccountJournal(osv.osv):
+    _name = "account.journal"
+    _inherit = "account.journal"
+    _columns = {
+        'payment_method_customer'   : fields.boolean('Payment Method Customer'),
+        'payment_method_supplier'   : fields.boolean('Payment Method Supplier'),
+        'payment_verification'      : fields.boolean('Payment Verification'),
+        'transfers'      : fields.boolean('Transfers'),
+        'check'      : fields.boolean('Check'),
+        
+    }
