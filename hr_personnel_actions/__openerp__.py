@@ -23,7 +23,7 @@
 {
     "name" : 'Personnel Actions',
     "version" : '1.0',
-    "author" : 'CLEARCORP S.A.',
+    "author" : 'ClearCorp',
     'complexity': 'normal',
     "description": """
 Module to register wage, date, and struct changes in contracts.

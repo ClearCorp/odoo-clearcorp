@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<openerp> 
     <data noupdate="1">
         <record id="personnel_action_report_id" model="ir.actions.report.xml">
             <field name="name">Personnel Actions Report</field>

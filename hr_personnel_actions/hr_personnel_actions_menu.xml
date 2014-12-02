@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<openerp>
+<openerp> 
     <data>
         <menuitem id="menu_action_personnel_action"
             parent="hr.menu_hr_main"
