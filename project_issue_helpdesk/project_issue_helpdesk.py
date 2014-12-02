@@ -463,6 +463,7 @@ class StockTransferDetail(osv.osv_memory):
         stock_picking_obj=self.pool.get('stock.picking')
         stock_picking_type_obj=self.pool.get('stock.picking.type')
         stock_pack_operation_obj=self.pool.get('stock.pack.operation')
+        stock_move_ids=[]
         
         for transfer in self.browse(cr, uid, ids, context=context):
             location_dest_original=transfer.picking_id.location_dest_id.id
@@ -478,11 +479,14 @@ class StockTransferDetail(osv.osv_memory):
                 raise osv.except_osv(_('Warning!'), _('You can not transfer to a partner, if you have not selected an issue'))  
             
             picking_type_id=stock_picking_type_obj.search(cr, uid,[('code','=','outgoing'),('warehouse_id','=',transfer.picking_id.picking_type_id.warehouse_id.id)])
-            stock_move_obj.write(cr,uid, transfer.picking_id.move_lines.id,{'location_dest_id': location_dest_actual,'partner_id':partner_actual,'picking_type_id':picking_type_id[0]})
+            for move in transfer.picking_id.move_lines:
+                stock_move_obj.write(cr,uid, move.id,{'location_dest_id': location_dest_actual,'partner_id':partner_actual,'picking_type_id':picking_type_id[0]})
+                stock_move_ids.append(move.id)
             stock_picking_obj.write(cr,uid, transfer.picking_id.id,{'location_dest_id': location_dest_actual,'partner_id':partner_actual,'picking_type_id':picking_type_id[0]})
             self.do_detailed_transfer(cr,uid,ids,context)
-            stock_pack_operation_obj.write(cr,uid, transfer.picking_id.pack_operation_ids.id,{'location_dest_id': location_dest_actual})
-            move_ids=stock_move_obj.search(cr, uid,[('split_from','=',transfer.picking_id.move_lines.id)])
+            for pack in transfer.picking_id.pack_operation_ids:
+                stock_pack_operation_obj.write(cr,uid,pack.id,{'location_dest_id': location_dest_actual})
+            move_ids=stock_move_obj.search(cr, uid,[('split_from','in',stock_move_ids)])
             
             for move in stock_move_obj.browse(cr, uid, move_ids, context=context):
                     stock_move_obj.write(cr,uid, move.id,{'state': 'draft'})
