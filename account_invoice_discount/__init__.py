@@ -20,22 +20,7 @@
 #
 ##############################################################################
 
-{
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
-    """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
-    'installable': True,
-    'auto_install': False,
-}
+import account_invoice_discount
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+

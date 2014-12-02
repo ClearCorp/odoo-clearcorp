@@ -21,21 +21,19 @@
 ##############################################################################
 
 {
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
-    """,
+    'name': 'BNCR Account Banking',
+    'version': '0.1',
+    'license': 'AGPL-3',
     'author': 'ClearCorp',
     'website': 'http://www.clearcorp.co.cr',
+    'category': 'Accounting & Finance',
     'depends': [
-                'account_payment',
+                'account_banking_ccorp_dg',
                 ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
+    'init_xml': [],
+    'update_xml': [],
+    'demo_xml': [],
+    'description': '',
+    'active': False,
     'installable': True,
-    'auto_install': False,
 }
