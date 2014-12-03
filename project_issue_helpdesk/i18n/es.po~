@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-24 20:04+0000\n"
-"PO-Revision-Date: 2014-11-24 20:04+0000\n"
+"POT-Creation-Date: 2014-11-25 14:38+0000\n"
+"PO-Revision-Date: 2014-11-25 14:38+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -93,6 +93,11 @@ msgstr "Categoría de Producto"
 #: selection:res.partner,partner_type:0
 msgid "Company"
 msgstr "Compañía"
+
+#. module: project_issue_helpdesk
+#: view:project.issue:project_issue_helpdesk.view_project_issue_filter
+msgid "Contact"
+msgstr "Contacto"
 
 #. module: project_issue_helpdesk
 #: view:contract.pricelist:project_issue_helpdesk.view_contract_pricelist_form
@@ -209,7 +214,7 @@ msgstr "ID"
 #. module: project_issue_helpdesk
 #: help:stock.picking.type,issue_required:0
 msgid "If this field has a check, the issue is required"
-msgstr "Si el campo tiene un check, la transferencias solicitarán obligatoriamente una incidencia"
+msgstr "Si el campo tiene un check, las transferencias solicitarán obligatoriamente una incidencia"
 
 #. module: project_issue_helpdesk
 #: selection:product.category,supply_type:0
@@ -234,6 +239,12 @@ msgid "Issue"
 msgstr "Incidencia"
 
 #. module: project_issue_helpdesk
+#: view:project.issue:project_issue_helpdesk.view_project_issue_filter
+#: field:project.issue,issue_number:0
+msgid "Issue Number"
+msgstr "Número de Incidencia"
+
+#. module: project_issue_helpdesk
 #: model:ir.actions.act_window,name:project_issue_helpdesk.action_project_issue_origin
 #: view:project.issue.origin:project_issue_helpdesk.view_project_issue_origin_form
 #: view:project.issue.origin:project_issue_helpdesk.view_project_issue_origin_tree
@@ -249,7 +260,7 @@ msgstr "Incidencia Requerida"
 #. module: project_issue_helpdesk
 #: field:project.issue,issue_type:0
 msgid "Issue Type"
-msgstr "Tipo de Incidencia"
+msgstr "Tipo de Caso"
 
 #. module: project_issue_helpdesk
 #: field:contract.pricelist,write_uid:0
@@ -471,7 +482,7 @@ msgid "True"
 msgstr "True"
 
 #. module: project_issue_helpdesk
-#: code:addons/project_issue_helpdesk/project_issue_helpdesk.py:445
+#: code:addons/project_issue_helpdesk/project_issue_helpdesk.py:474
 #, python-format
 msgid "Warning!"
 msgstr "Alerta!"
@@ -497,7 +508,7 @@ msgid "Workshop Repair"
 msgstr "Reparación en taller"
 
 #. module: project_issue_helpdesk
-#: code:addons/project_issue_helpdesk/project_issue_helpdesk.py:445
+#: code:addons/project_issue_helpdesk/project_issue_helpdesk.py:474
 #, python-format
 msgid "You can not transfer to a partner, if you have not selected an issue"
 msgstr "No puede realizar la transferencia al cliente, si no ha seleccionado una incidencia"
