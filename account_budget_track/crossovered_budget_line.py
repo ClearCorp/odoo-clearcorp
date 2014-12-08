@@ -20,22 +20,16 @@
 #
 ##############################################################################
 
-{
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
-    """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
-    'installable': True,
-    'auto_install': False,
-}
+from openerp import models, fields
+
+class CrossoveredBudgetLine(models.Model):
+
+    _inherit = ['crossovered.budget.lines', 'mail.thread']
+    _name = 'crossovered.budget.lines'
+
+    analytic_account_id = fields.Many2one(track_visibility='onchange')
+    general_budget_id = fields.Many2one(track_visibility='onchange')
+    date_from = fields.Date(track_visibility='onchange')
+    date_to = fields.Date(track_visibility='onchange')
+    paid_date = fields.Date(track_visibility='onchange')
+    planned_amount = fields.Float(track_visibility='onchange')

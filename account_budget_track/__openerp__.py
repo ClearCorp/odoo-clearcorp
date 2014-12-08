@@ -21,21 +21,31 @@
 ##############################################################################
 
 {
-    'name': 'Account Banking CCorp',
+    'name': 'Budgets Management Track',
     'version': '1.0',
     'category': 'Accounting & Finance',
+    'sequence': 21,
+    'summary': 'Track Budget Lines Changes',
     'description': """
-    """,
+Budget Lines Changes Tracking
+=============================
+Features
+--------
+* Track state changes done in budgets.""",
     'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [
-                'account_payment',
-                ],
+    'website': 'http://clearcorp.co.cr',
+    'complexity': 'normal',
+    'images' : [],
+    'depends': ['account_budget',],
     'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
+             'account_budget_track_view.xml',
+             'account_budget_track_menu.xml',
+             'data/mail_message_subtypes.xml',
              ],
+    'test' : [],
+    'demo': [],
     'installable': True,
     'auto_install': False,
+    'application': False,
+    'license': 'AGPL-3',
 }

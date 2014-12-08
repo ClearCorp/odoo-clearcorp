@@ -21,21 +21,32 @@
 ##############################################################################
 
 {
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
+    "name" : 'Invoice discount',
+    "version" : '1.0',
+    "author" :  'ClearCorp',
+    'complexity': 'normal',
+    "description": """
+Adds a discount feature for invoice.
+
+With it one can add a discount percent to all invoice lines on an invoice.
+It adds the discounted and undiscounted amounts on the invoice totals.
     """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
-    'installable': True,
-    'auto_install': False,
+    "category": 'Accounting & Finance',
+    "sequence": 4,
+    "website" : "http://clearcorp.co.cr",
+    "images" : [],
+    "depends" : ['account'],
+    "init_xml" : [],
+    "demo_xml" : [],
+    "update_xml" : [],
+    "data" : [
+        'account_invoice_discount_view.xml',
+    ],
+    "test" : [],
+    "auto_install": False,
+    "application": False,
+    "installable": True,
+    'license': 'AGPL-3',
 }
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

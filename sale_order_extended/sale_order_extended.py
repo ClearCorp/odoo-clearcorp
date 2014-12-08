@@ -20,22 +20,15 @@
 #
 ##############################################################################
 
-{
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
-    """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
-    'installable': True,
-    'auto_install': False,
-}
+from openerp import models, fields,api, _
+from datetime import datetime
+from openerp.exceptions import Warning
+import openerp.addons.decimal_precision as dp
+from openerp import tools
+import os
+from openerp.tools.safe_eval import safe_eval as eval
+
+class sale_order(models.Model):
+    _inherit = 'sale.order'
+      
+    expiration_date= fields.Date('Expiration date')

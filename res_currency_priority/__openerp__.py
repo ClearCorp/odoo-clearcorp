@@ -20,22 +20,17 @@
 #
 ##############################################################################
 
+
 {
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
-    """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
-    'installable': True,
-    'auto_install': False,
+    "name" : 'Res Currency Priority',
+    "version" : '1.0',
+    "author" : 'ClearCorp',
+    "category": 'Accounting & Finance',
+    "description": """ Add priority to currency """,
+    "depends" : ["base",
+                 "currency_rate_update",],
+    "data" : ["res_currency_priority_view.xml",],
+    'active': False,
+    'installable': True,    
+    'license': 'AGPL-3',
 }
