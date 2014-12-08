@@ -20,22 +20,27 @@
 #
 ##############################################################################
 
+
 {
-    'name': 'Account Banking CCorp',
-    'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
+    "name" : 'Sale Order Discount',
+    "version" : '2.0',
+    "author" : 'ClearCorp',
+    'complexity': 'normal',
+    "description": """
+            Customization from sale.order to apply global discounts
     """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
-    'depends': [
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
-    'installable': True,
-    'auto_install': False,
+    "category": 'Sales',
+    "sequence": 4,
+    "website" : "http://clearcorp.co.cr",
+    "images" : [],
+    "icon" : False,
+    "depends" : ['sale'],
+    "init_xml" : [],
+    "demo_xml" : [],
+    "update_xml" : ['sale_order_discount_view.xml'],
+    "test" : [],
+    "auto_install": False,
+    "application": False,
+    "installable": True,
+    'license': 'AGPL-3',
 }

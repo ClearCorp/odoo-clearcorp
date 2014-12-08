@@ -19,23 +19,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 {
-    'name': 'Account Banking CCorp',
+    'name': 'Purchase Order Discount',
     'version': '1.0',
-    'category': 'Accounting & Finance',
-    'description': """
-    """,
+    'url': 'http://launchpad.net/openerp-ccorp-addons',
     'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
+    'website': 'http://clearcorp.co.cr',
+    'category': 'Purchase Management',
+    'complexity': 'normal',
+    'description': """This module add discount to purchase order object. Also, calculate the discout for the object""",
     'depends': [
-                'account_payment',
-                ],
-    'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
-             ],
+        'purchase',
+    ],
+    'init_xml': [],
+    'demo_xml': [],
+    'update_xml': ['purchase_order_discount.xml',],
+    'license': 'AGPL-3',
     'installable': True,
-    'auto_install': False,
+    'active': False,
 }

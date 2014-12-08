@@ -19,23 +19,26 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 {
-    'name': 'Account Banking CCorp',
+    'name': 'Currency Second Rate BCCR',
     'version': '1.0',
-    'category': 'Accounting & Finance',
+    'author': 'ClearCorp',    
+    'category': 'Generic Modules/Base',
     'description': """
+    
+IMPORT THE EXCHANGES FOR THE SECOND RATE.
+==================================
+    This module permits for each currency that have the web service 
+    of BCCR, take the value of the second rate
     """,
-    'author': 'ClearCorp',
-    'website': 'http://www.clearcorp.co.cr',
     'depends': [
-                'account_payment',
+                "base",
+                "currency_rate_update",
                 ],
     'data': [
-             'security/ir.model.access.csv',
-             'view/account_banking_ccorp_view.xml',
-             'wizard/account_banking_ccorp_wizard_view.xml',
+             'res_currency_secondrate.xml',
              ],
     'installable': True,
     'auto_install': False,
+    'license': 'AGPL-3',
 }
