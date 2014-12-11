@@ -20,4 +20,15 @@
 #
 ##############################################################################
 
-import commission_report
+from openerp import models, fields, api
+
+class CalendarEvent(models.Model):
+
+    _inherit = 'calendar.event'
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, context=None,
+        orderby=False, lazy=True):
+        res = super(CalendarEvent, self).read_group(domain, fields, groupby, offset=offset,
+            limit=limit, context=context, orderby=orderby, lazy=lazy)
+        return res

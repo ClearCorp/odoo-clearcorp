@@ -21,38 +21,25 @@
 ##############################################################################
 
 {
-    'name': 'Sale Commission',
+    'name': 'Project Events',
     'version': '1.0',
-    'category': 'Sales Management',
-    'sequence': 3,
-    'summary': 'Commissions over Sales',
+    'category': 'Project Management',
+    'sequence': 9,
+    'summary': 'Project events and resources',
     'description': """
-Commissions Rules for Sales
-===========================
-This module allow Sale Manager to define commission rules based on preset
-conditions.
-
-Main Features
--------------
-* Commission Percentage
-* Post-Expiration Day
-* Conditions based on Pricelist, Payment Terms, Amount of Sales, etc.
-""",
-    'author': 'CLEARCORP S.A.',
+Events for projects
+===================
+Allows the user to easy reach and view the Budget related to a project.""",
+    'author': 'ClearCorp',
     'website': 'http://clearcorp.co.cr',
     'complexity': 'normal',
+    'sequece': 10,
     'images' : [],
     'depends': [
-                'account_invoice_global_discount',
-                'report_aeroo_ooo',
+                'project',
+                'calendar'
                 ],
-    'data': [
-             'view/sale_commission_view.xml',
-             'view/sale_commission_menu.xml',
-             'wizard/wizard.xml',
-             'report/report.xml',
-             'security/ir.model.access.csv',
-             ],
+    'data': [],
     'test' : [],
     'demo': [],
     'installable': True,
