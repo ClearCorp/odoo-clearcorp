@@ -20,8 +20,9 @@
 #
 ##############################################################################
 {
-    'name': 'Currency Second Rate BCCR',
+    'name': 'Currency Second Rate',
     'version': '1.0',
+    #'author': 'ClearCorp',
     'author': 'ClearCorp',    
     'category': 'Generic Modules/Base',
     'description': """
