@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': 'Currency Rate Update BCCR',
+    'name': 'currency_second_rate',
     'version': '1.0',
     'author': 'CLEARCORP S.A.',    
     'category': 'Generic Modules/Base',
