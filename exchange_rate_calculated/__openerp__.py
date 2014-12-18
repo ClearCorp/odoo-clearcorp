@@ -22,7 +22,7 @@
 {
     "name" : 'Exchange Rate Calculated',
     "version" : '1.0',
-    "author" : 'CLEARCORP S.A.',
+    "author" : 'ClearCorp',
     'category': 'Accounting & Finance',
     "description": """
 Exchange Rate Calculated:
@@ -35,7 +35,7 @@ if it is positve, it will be debit.
     "website" : "http://clearcorp.co.cr",
     "depends" : ['account',],
     "data" : [
-              'account_move_line.xml',
+              #'account_move_line.xml',
              ],
     'active': False,
     'installable': True,    
