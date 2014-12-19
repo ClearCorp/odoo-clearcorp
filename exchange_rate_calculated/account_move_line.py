@@ -22,7 +22,6 @@
 
 from openerp import models, fields, api
 import time
-import copy
 
 class accountMoveline(models.Model):
     
@@ -38,24 +37,14 @@ class accountMoveline(models.Model):
         
         if(self.amount_currency):
             res_currency_obj = self.env['res.currency']
-            #res_user_obj = self.env['res.users']
-            res = {'value':{}}
-        
-           
             """
             1. Get currency for current company. 
             (The exchange rate for this case is from currency_company to currency_id)
             """
-            #res_user = res_user_obj.browse(self)
             company_currency = self.move_id.company_id.currency_id
-            
            # """ 2. Get date as string"""
             if not self.date:
                 self.date = time.strftime('%Y-%m-%d')
-            #copy_context = copy.copy(self)
-            #copy_context.update({'date':self.date})
-                
-            
             if self.amount_currency != 0 and self.currency_id:
                 """3. Get amount_currency for today"""
                 currency_selected = res_currency_obj.browse(self.currency_id.id)
@@ -65,10 +54,6 @@ class accountMoveline(models.Model):
                 if self.amount_currency > 0:
                     self.debit = self.amount_currency * exchange_amount
                     self.credit = 0.0
-                    #dict = {'debit': debit, 'credit': 0.0}
                 else:
                     self.credit = -1 * self.amount_currency * exchange_amount #credit is positive
                     self.debit = 0.0
-                    #dict = {'debit':0.0, 'credit':credit}
-            
-               
