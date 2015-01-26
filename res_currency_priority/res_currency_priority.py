@@ -67,5 +67,5 @@ class ResCurrency(osv.osv):
                 
             return result
         else:
-            raise osv.except_osv(_('Please select your base currency '
+            raise Warning(_('Please select your base currency '
                                     'Misellanius/Currency'))
