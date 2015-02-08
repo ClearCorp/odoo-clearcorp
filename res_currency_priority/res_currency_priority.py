@@ -47,7 +47,8 @@ class ResCurrency(osv.osv):
         res_obj = self.pool.get('res.currency.rate')
         result = 0.00
         
-        copy_context = context #
+        copy_context = context.copy()
+        copy_context.update({'date':name})
         
         res_currency_base_id = self.search(cr, uid, [('base', '=', True)])
         if res_currency_base_id:
@@ -66,5 +67,5 @@ class ResCurrency(osv.osv):
                 
             return result
         else:
-            raise osv.except_osv(_('Please select your base currency '
+            raise Warning(_('Please select your base currency '
                                     'Misellanius/Currency'))
