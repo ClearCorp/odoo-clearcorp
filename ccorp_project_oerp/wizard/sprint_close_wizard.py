@@ -35,17 +35,17 @@ class SprintCloseWizard(osv.TransientModel):
         try:
             task_ids = []
             for task in closing.task_ids:
-                if task.state in ['open','pending','draft']:
+                if task.state in ['open', 'pending', 'draft']:
                     task_ids.append(task.id)
                     task.write({'sprint_id': False}, context=context)
                     
             feature_ids = []
             for feature in closing.feature_ids:
-                if feature.state not in ['cancelled','done']:
+                if feature.state not in ['cancelled', 'done']:
                     feature_ids.append(feature.id)
             opening.write({
-                           'desirable_task_ids': [[6,0,task_ids]],
-                           'feature_ids': [[6,0,feature_ids]],
+                           'desirable_task_ids': [[6, 0, task_ids]],
+                           'feature_ids': [[6, 0, feature_ids]],
                            }, context=context)
             
             closing.set_done(context=context)
@@ -61,7 +61,7 @@ class SprintCloseWizard(osv.TransientModel):
                 }
         
         except:
-            raise osv.except_osv(_('Error'),_('An error occurred while closing the sprint.')) 
+            raise osv.except_osv(_('Error'), _('An error occurred while closing the sprint.')) 
 
     _columns = {
                 'closing_sprint_id': fields.many2one('ccorp.project.scrum.sprint', string='Closing Sprint',

@@ -36,13 +36,13 @@ class FeatureImportWizard(osv.TransientModel):
             file = StringIO.StringIO(base64.decodestring(wizard.file))
             reader = csv.reader(file, delimiter=';')
         except:
-            raise osv.except_osv(_('Error'),_('An error occurred while reading the file. Please '
+            raise osv.except_osv(_('Error'), _('An error occurred while reading the file. Please '
                                               'check if the format is correct.'))
         
         department_obj = self.pool.get('hr.department')
         department_ids = department_obj.search(cr, uid, [], context=context)
         work_type_obj = self.pool.get('ccorp.project.oerp.work.type')
-        work_type_ids = work_type_obj.search(cr, uid, [('department_id','in',department_ids)], context=context)
+        work_type_ids = work_type_obj.search(cr, uid, [('department_id', 'in', department_ids)], context=context)
         work_types = work_type_obj.browse(cr, uid, work_type_ids, context=context)
         
         # TODO: improve skip
@@ -54,10 +54,10 @@ class FeatureImportWizard(osv.TransientModel):
             if row[2] == '':
                 
                 feature_type_id = self.pool.get('ccorp.project.scrum.feature.type').search(
-                    cr, uid, [('code','=',row[0])], context=context) or False
+                    cr, uid, [('code', '=', row[0])], context=context) or False
                 if feature_type_id: 
                     feature_type_id = feature_type_id[0]
-                else: # TODO: log error
+                else:  # TODO: log error
                     pass
                 
                 try:
@@ -73,7 +73,7 @@ class FeatureImportWizard(osv.TransientModel):
                     hour_ids = []
                     for work_type in work_types:
                         try:
-                            planned_hours = row[work_type.column_number-1]
+                            planned_hours = row[work_type.column_number - 1]
                             if planned_hours == '':
                                 planned_hours = 0.0
                             else:
@@ -85,9 +85,9 @@ class FeatureImportWizard(osv.TransientModel):
                                         'work_type_id': work_type.id,
                                         'expected_hours': planned_hours,
                                         }
-                                hour_ids.append([0,False,vals])
+                                hour_ids.append([0, False, vals])
                         except:
-                            raise osv.except_osv(_('Error'),_('An error occurred while reading the planned hours '
+                            raise osv.except_osv(_('Error'), _('An error occurred while reading the planned hours '
                                 'from file in column %s for work type %s') % (work_type.column_number, work_type.name))
                     values['hour_ids'] = hour_ids
                     
@@ -114,7 +114,7 @@ class FeatureImportWizard(osv.TransientModel):
                 'product_backlog_id': fields.many2one('ccorp.project.scrum.product.backlog', string='Product Backlog',
                     required=True, domain="[('project_id','=',project_id)]"),
                 'file': fields.binary('File to Import', required=True),
-                'state': fields.selection([('new','New'),('done','Done')], string='State'),
+                'state': fields.selection([('new', 'New'), ('done', 'Done')], string='State'),
                 }
     
     _defaults = {

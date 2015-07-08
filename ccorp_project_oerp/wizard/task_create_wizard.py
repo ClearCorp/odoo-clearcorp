@@ -94,7 +94,7 @@ AND types.sequence = %s;''', (feature.id, number,))
                     
                     vals = []
                     for row in cr.dictfetchall():
-                        vals.append([0,0,{
+                        vals.append([0, 0, {
                                           'department_id': row.get('department_id'),
                                           'work_type_id': row.get('id'),
                                           'expected_hours': row.get('expected_hours'),
@@ -110,22 +110,22 @@ AND types.sequence = %s;''', (feature.id, number,))
                     desirables.append(task_id)
                     
                     if previous_id:
-                        values = {'previous_task_ids': [[6,0,[previous_id]]]}
+                        values = {'previous_task_ids': [[6, 0, [previous_id]]]}
                         task_obj.write(cr, uid, task_id, values, context=context)
-                        values = {'next_task_ids': [[6,0,[task_id]]]}
+                        values = {'next_task_ids': [[6, 0, [task_id]]]}
                         task_obj.write(cr, uid, previous_id, values, context=context)
                     
                     previous_id = task_id
                 
             except:
-                raise osv.except_osv(_('Error'),_('An error occurred while creating the tasks. '
+                raise osv.except_osv(_('Error'), _('An error occurred while creating the tasks. '
                                                   'Please contact your system administrator.'))
             
         sprint_obj = self.pool.get('ccorp.project.scrum.sprint')
         for desirable in desirables:
             sprint_obj.write(cr, uid, sprint.id,
                              {
-                              'desirable_task_ids': [[4,desirable]],
+                              'desirable_task_ids': [[4, desirable]],
                               })
             
         return {
@@ -140,7 +140,7 @@ AND types.sequence = %s;''', (feature.id, number,))
     
     _columns = {
                 'sprint_id': fields.many2one('ccorp.project.scrum.sprint', string='Sprint',
-                    required = True, domain="[('state','=','open')]"),
+                    required=True, domain="[('state','=','open')]"),
                 }
     
     _defaults = {
