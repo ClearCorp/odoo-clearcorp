@@ -188,6 +188,7 @@ class task(osv.Model):
         'state': fields.related('stage_id', 'state', type="selection", store=True,
                 selection=_TASK_STATE, string="Status", readonly=True, select=True),
         'kind_task_id':fields.many2one('ccorp.project.oerp.work.type','Type of task',required=True),
+        'name': fields.char('Task Summary', track_visibility='onchange', size=128, required=True, select=True),
         }
 
     _defaults = {

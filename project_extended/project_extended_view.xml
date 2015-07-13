@@ -60,6 +60,9 @@
                         <field name="number" readonly="1" />
                         <field name="state" invisible="1" />
                     </xpath>
+                    <field name="name" position="replace">
+                        <field name="name"></field>
+                    </field>
                 </data>
             </field>
         </record>
