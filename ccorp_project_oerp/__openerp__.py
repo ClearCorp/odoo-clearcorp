@@ -35,6 +35,7 @@
                  'ccorp_project_scrum',
                    'hr',
                    'project_issue',
+                   'sale',
                  ],
     "data" : [
               'security/project_security.xml',
