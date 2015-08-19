@@ -156,6 +156,7 @@ class Feature(osv.Model):
                 'hour_ids': fields.one2many('ccorp.project.oerp.feature.hours', 'feature_id', string='Feature Hours'),
                 'acceptance_requirements_client': fields.text('Acceptance requirements by client'),
                 'acceptance_requirements_supplier': fields.text('Funtional acceptance requirements'),
+                'issue_id': fields.one2many('project.issue','feature_id', string='Issue'),
                 }
     
     def write(self, cr, uid, ids, values, context=None):

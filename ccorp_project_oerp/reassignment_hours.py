@@ -1,5 +1,6 @@
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning
+
 class origin_task(models.Model):
     
     _name = 'ccorp.project.oerp.origin.task'
@@ -82,4 +83,4 @@ class ReassignmentHours(models.Model):
                 reassignment.target_task.write({'reassignment_hour': self.total_time_reassignment})
         reassignment.state = 'reassignment'
         return True
-        
+
