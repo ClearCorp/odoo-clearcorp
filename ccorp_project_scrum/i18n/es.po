@@ -41,13 +41,6 @@ msgid "5 - Very Low"
 msgstr "5 - Muy Baja"
 
 #. module: ccorp_project_scrum
-#: model:ir.actions.act_window,help:ccorp_project_scrum.action_feature_type
-msgid "<p class=\"oe_view_nocontent_create\">Create new Feature Type</p>\n"
-"            "
-msgstr "<p class=\"oe_view_nocontent_create\">Crer nuevo tipo de característica</p>\n"
-"            "
-
-#. module: ccorp_project_scrum
 #: model:ir.actions.act_window,help:ccorp_project_scrum.action_feature
 msgid "<p class=\"oe_view_nocontent_create\">Create new Feature</p>\n"
 "            "
@@ -113,7 +106,7 @@ msgstr "¿Estás seguro que deseas marcar como realizado este sprint?"
 #. module: ccorp_project_scrum
 #: help:project.project,deadline:0
 msgid "Calculated Deadline, will be empty if any feature has no deadline."
-msgstr "Calculated Deadline, will be empty if any feature has no deadline."
+msgstr "Calcular fecha limite, podria ser vacia si el feature no tiene fecha de limite."
 
 #. module: ccorp_project_scrum
 #: help:ccorp.project.scrum.release.backlog,deadline:0
@@ -123,7 +116,7 @@ msgstr "Fecha límite calculada, se encontrará vacía si algún sprint no posee
 #. module: ccorp_project_scrum
 #: help:project.project,date_end:0
 msgid "Calculated End Date, will be empty if any feature has no end date."
-msgstr "Calculated End Date, will be empty if any feature has no end date."
+msgstr "Calcular fecha de cierre, podria ser vacia si algun feature no tiene fecha de cierre."
 
 #. module: ccorp_project_scrum
 #: help:ccorp.project.scrum.release.backlog,date_end:0
@@ -205,12 +198,12 @@ msgstr "Creado por"
 #: field:ccorp.project.scrum.release.backlog,create_date:0
 #: field:ccorp.project.scrum.sprint,create_date:0
 msgid "Created on"
-msgstr "Created on"
+msgstr "Creado en"
 
 #. module: ccorp_project_scrum
 #: help:ccorp.project.scrum.feature,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr "Date of the last message posted on the record."
+msgstr "Fecha del ultimo mensaje, posteado en el registro."
 
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,deadline:0
@@ -335,7 +328,7 @@ msgstr "Características"
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,message_follower_ids:0
 msgid "Followers"
-msgstr "Followers"
+msgstr "Seguidores"
 
 #. module: ccorp_project_scrum
 #: view:ccorp.project.scrum.feature:ccorp_project_scrum.view_feature_search
@@ -370,7 +363,7 @@ msgstr "ID"
 #. module: ccorp_project_scrum
 #: help:ccorp.project.scrum.feature,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "If checked new messages require your attention."
+msgstr "Hay mensajes que requieren su atención"
 
 #. module: ccorp_project_scrum
 #: view:ccorp.project.scrum.feature:ccorp_project_scrum.view_feature_search
@@ -392,12 +385,12 @@ msgstr "Horas planeadas inicialmente"
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Is a Follower"
+msgstr "Es seguidor"
 
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,message_last_post:0
 msgid "Last Message Date"
-msgstr "Last Message Date"
+msgstr "Fecha del ultimo mensaje"
 
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,write_uid:0
@@ -405,7 +398,7 @@ msgstr "Last Message Date"
 #: field:ccorp.project.scrum.release.backlog,write_uid:0
 #: field:ccorp.project.scrum.sprint,write_uid:0
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Ultima actualización por"
 
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,write_date:0
@@ -413,7 +406,7 @@ msgstr "Last Updated by"
 #: field:ccorp.project.scrum.release.backlog,write_date:0
 #: field:ccorp.project.scrum.sprint,write_date:0
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "Ultima actualización"
 
 #. module: ccorp_project_scrum
 #: view:ccorp.project.scrum.feature:ccorp_project_scrum.view_feature_kanban
@@ -428,12 +421,12 @@ msgstr "Media"
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,message_ids:0
 msgid "Messages"
-msgstr "Messages"
+msgstr "Mensajes"
 
 #. module: ccorp_project_scrum
 #: help:ccorp.project.scrum.feature,message_ids:0
 msgid "Messages and communication history"
-msgstr "Messages and communication history"
+msgstr "Historial de mensajes y comunicación"
 
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.sprint,name:0
@@ -617,7 +610,7 @@ msgstr "Estatus"
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,message_summary:0
 msgid "Summary"
-msgstr "Summary"
+msgstr "Resumen"
 
 #. module: ccorp_project_scrum
 #: model:ir.model,name:ccorp_project_scrum.model_project_task
@@ -697,13 +690,13 @@ msgstr "Nombre del tipo"
 #. module: ccorp_project_scrum
 #: field:ccorp.project.scrum.feature,message_unread:0
 msgid "Unread Messages"
-msgstr "Unread Messages"
+msgstr "Mensajes sin leer"
 
 #. module: ccorp_project_scrum
 #: view:ccorp.project.scrum.sprint:ccorp_project_scrum.view_sprint_search
 #: field:ccorp.project.scrum.sprint,partner_id:0
 msgid "User"
-msgstr "User"
+msgstr "Usuario"
 
 #. module: ccorp_project_scrum
 #: view:ccorp.project.scrum.feature:ccorp_project_scrum.view_feature_kanban
@@ -726,21 +719,4 @@ msgstr "No puedes cancelar una pila de liberación si todos los sprints relacion
 #, python-format
 msgid "You can not set as done a release backlog if all sprints related to it are not cancelled or done"
 msgstr "No puedes marcar como realizada una pila de liberación si todos los sprints relacinados a esta no se encuentran cancelados o realizados"
-
-#. module: ccorp_project_scrum
-#: view:ccorp.project.scrum.feature:ccorp_project_scrum.view_feature_kanban
-#: view:ccorp.project.scrum.release.backlog:ccorp_project_scrum.view_release_backlog_kanban
-#: view:ccorp.project.scrum.sprint:ccorp_project_scrum.view_sprint_kanban
-msgid "oe_kanban_text_red"
-msgstr "oe_kanban_text_red"
-
-#. module: ccorp_project_scrum
-#: view:project.task:ccorp_project_scrum.view_task_form
-msgid "{'readonly': ['|',('state','!=','open')]}"
-msgstr "{'readonly': ['|',('state','!=','open')]}"
-
-#. module: ccorp_project_scrum
-#: view:project.task:ccorp_project_scrum.view_task_form
-msgid "{'readonly': ['|',('state','in',['done','cancelled']),('is_scrum','=',True)]}"
-msgstr "{'readonly': ['|',('state','in',['done','cancelled']),('is_scrum','=',True)]}"
 
