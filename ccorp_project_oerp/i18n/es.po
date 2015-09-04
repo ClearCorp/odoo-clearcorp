@@ -154,7 +154,7 @@ msgstr "Date of the last message posted on the record."
 #. module: ccorp_project_oerp
 #: field:ccorp.project.scrum.sprint,planned_task_ids:0
 msgid "Desirable Tasks"
-msgstr "Desirable Tasks"
+msgstr "Tareas deseables"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,detail:0
@@ -227,12 +227,12 @@ msgstr "Archivo a importar"
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,message_follower_ids:0
 msgid "Followers"
-msgstr "Followers"
+msgstr "Seguidores"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.scrum.feature,acceptance_requirements_supplier:0
 msgid "Funtional acceptance requirements"
-msgstr "Funtional acceptance requirements"
+msgstr "Criterios de aceptación funcionales"
 
 #. module: ccorp_project_oerp
 #: model:ir.actions.server,name:ccorp_project_oerp.action_create_tasks
@@ -259,7 +259,7 @@ msgstr "ID"
 #. module: ccorp_project_oerp
 #: help:ccorp.project.oerp.reassignment.hours,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "If checked new messages require your attention."
+msgstr "Hay mensajes que requieren su atención"
 
 #. module: ccorp_project_oerp
 #: view:ccorp.project.oerp.feature.import.wizard:ccorp_project_oerp.view_feature_import_wizard_form
@@ -279,7 +279,7 @@ msgstr "Horas planeadas inicialmente"
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Is a Follower"
+msgstr "Es seguidor"
 
 #. module: ccorp_project_oerp
 #: view:ccorp.project.scrum.feature:ccorp_project_oerp.view_feature_form
@@ -297,7 +297,7 @@ msgstr "Tipo de incidencia"
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,message_last_post:0
 msgid "Last Message Date"
-msgstr "Last Message Date"
+msgstr "Fecha ultimo mensaje"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.feature.hours,write_uid:0
@@ -309,7 +309,7 @@ msgstr "Last Message Date"
 #: field:ccorp.project.oerp.task.hour,write_uid:0
 #: field:ccorp.project.oerp.work.type,write_uid:0
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Ultima actualización por"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.feature.hours,write_date:0
@@ -321,17 +321,17 @@ msgstr "Last Updated by"
 #: field:ccorp.project.oerp.task.hour,write_date:0
 #: field:ccorp.project.oerp.work.type,write_date:0
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "Ultima actualización"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,message_ids:0
 msgid "Messages"
-msgstr "Messages"
+msgstr "Mensajes"
 
 #. module: ccorp_project_oerp
 #: help:ccorp.project.oerp.reassignment.hours,message_ids:0
 msgid "Messages and communication history"
-msgstr "Messages and communication history"
+msgstr "Historial de mensajes y comunicación"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.origin.task,origin_task_id:0
@@ -367,12 +367,12 @@ msgstr "Tareas planeadas"
 #. module: ccorp_project_oerp
 #: view:ccorp.project.scrum.feature:ccorp_project_oerp.view_feature_form
 msgid "Please describe the functional analysis of this functionality"
-msgstr "Please describe the functional analysis of this functionality"
+msgstr "Por favor describa el analisis funcional de este requerimiento"
 
 #. module: ccorp_project_oerp
 #: view:ccorp.project.scrum.feature:ccorp_project_oerp.view_feature_form
 msgid "Please describe what you expect of this functionality"
-msgstr "Please describe what you expect of this functionality"
+msgstr "Por favor describa, que espera de este requerimiento"
 
 #. module: ccorp_project_oerp
 #: selection:project.issue,issue_type:0
@@ -418,12 +418,12 @@ msgstr "Reasignar horas de tarea"
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.origin.task,reassignment_hour_id:0
 msgid "Reassignment hour id"
-msgstr "Reassignment hour id"
+msgstr "Reasinganción de hora"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.feature.import.wizard,release_backlog_id:0
 msgid "Release Backlog"
-msgstr "Pila de liberacion"
+msgstr "Pila de liberación"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.feature.hours,remaining_hours:0
@@ -483,7 +483,7 @@ msgstr "Estado"
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,message_summary:0
 msgid "Summary"
-msgstr "Summary"
+msgstr "resumen"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,target_task:0
@@ -509,7 +509,7 @@ msgstr "Horas de tarea"
 #. module: ccorp_project_oerp
 #: view:project.issue:ccorp_project_oerp.project_issue_form_view
 msgid "Task Sumary"
-msgstr "Task Sumary"
+msgstr "Resumen de tarea"
 
 #. module: ccorp_project_oerp
 #: model:ir.ui.menu,name:ccorp_project_oerp.task_work_type
@@ -519,7 +519,7 @@ msgstr "Tipo de tarea"
 #. module: ccorp_project_oerp
 #: field:project.issue,task_ids:0
 msgid "Task ids"
-msgstr "Task ids"
+msgstr "Tareas"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,type_task_id:0
@@ -556,7 +556,7 @@ msgstr "Total Consumido"
 #: view:project.issue:ccorp_project_oerp.project_issue_form_view
 #: view:project.task:ccorp_project_oerp.view_task_form_user
 msgid "True"
-msgstr "True"
+msgstr "Verdadero"
 
 #. module: ccorp_project_oerp
 #: field:project.task,kind_task_id:0
@@ -571,7 +571,7 @@ msgstr "Tipo de hora"
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.reassignment.hours,message_unread:0
 msgid "Unread Messages"
-msgstr "Unread Messages"
+msgstr "Mensajes sin leer"
 
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.feature.hours,work_type_id:0
@@ -598,7 +598,7 @@ msgstr "Su tiempo para esta tarea ha excedido lo estimado"
 #. module: ccorp_project_oerp
 #: field:ccorp.project.oerp.work.type,name:0
 msgid "name"
-msgstr "name"
+msgstr "nombre"
 
 #. module: ccorp_project_oerp
 #: view:ccorp.project.oerp.feature.import.wizard:ccorp_project_oerp.view_feature_import_wizard_form
@@ -606,9 +606,4 @@ msgstr "name"
 #: view:ccorp.project.oerp.task.create.wizard:ccorp_project_oerp.view_task_create_wizard_form
 msgid "or"
 msgstr "o"
-
-#. module: ccorp_project_oerp
-#: view:project.task:ccorp_project_oerp.view_task_form_teammanager
-msgid "{'readonly': [('state','!=','draft')]}"
-msgstr "{'readonly': [('state','!=','draft')]}"
 
