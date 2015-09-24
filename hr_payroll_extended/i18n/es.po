@@ -29,6 +29,7 @@ msgstr "Activo"
 
 #. module: hr_payroll_extended
 #: selection:hr.payslip.run,schedule_pay:0
+#: selection:hr.contract,schedule_pay:0
 msgid "Annually"
 msgstr "Anualmente"
 
@@ -39,11 +40,13 @@ msgstr "Aparece en informe"
 
 #. module: hr_payroll_extended
 #: selection:hr.payslip.run,schedule_pay:0
+#: selection:hr.contract,schedule_pay:0
 msgid "Bi-monthly"
 msgstr "Bimensual"
 
 #. module: hr_payroll_extended
 #: selection:hr.payslip.run,schedule_pay:0
+#: selection:hr.contract,schedule_pay:0
 msgid "Bi-weekly"
 msgstr "Bisemanal"
 
@@ -51,6 +54,8 @@ msgstr "Bisemanal"
 #: field:hr.contract,fixed_working_hours_code:0
 #: field:hr.job,code:0
 #: field:hr.payroll.extended.input.value,code:0
+#: field:hr.payslip.input,input_code:0
+#: field:hr.payslip.worked_days,work_code:0
 msgid "Code"
 msgstr "Código"
 
@@ -92,6 +97,7 @@ msgstr "Forzar período"
 
 #. module: hr_payroll_extended
 #: selection:hr.payslip.run,schedule_pay:0
+#: selection:hr.contract,schedule_pay:0
 msgid "Fortnightly"
 msgstr "Quincenal"
 
@@ -128,6 +134,7 @@ msgstr "Ultima actualización el"
 
 #. module: hr_payroll_extended
 #: selection:hr.payslip.run,schedule_pay:0
+#: selection:hr.contract,schedule_pay:0
 msgid "Monthly"
 msgstr "Mensual"
 
@@ -164,6 +171,7 @@ msgstr "Pie de página en nómina"
 
 #. module: hr_payroll_extended
 #: selection:hr.payslip.run,schedule_pay:0
+#: selection:hr.contract,schedule_pay:0
 msgid "Quarterly"
 msgstr "Trimestral"
 
@@ -220,6 +228,7 @@ msgstr "Advertencia !"
 
 #. module: hr_payroll_extended
 #: selection:hr.payslip.run,schedule_pay:0
+#: selection:hr.contract,schedule_pay:0
 msgid "Weekly"
 msgstr "Semanal"
 
@@ -239,7 +248,7 @@ msgid "Worked Days"
 msgstr "Días laborados"
 
 #. module: hr_payroll_extended
-#: code:addons/hr_payroll_extended/hr_payroll_extended.py:217
+#: code:addons/hr_payroll_extended/hr_payroll_extended.py:218
 #, python-format
 msgid "Worked Hours"
 msgstr "Horas laboradas"
