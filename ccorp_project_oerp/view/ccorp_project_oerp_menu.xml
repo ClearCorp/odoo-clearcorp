@@ -9,9 +9,6 @@
 			name="Import Features" action="action_feature_import_wizard"
 			sequence="10" />
 
-		<menuitem id="menu_task_create_wizard" parent="menu_tools"
-			name="Create Tasks" action="action_task_create_wizard" sequence="20" />
-
 		<menuitem id="menu_sprint_close_wizard" parent="menu_tools"
 			name="Close Sprint" action="action_sprint_close_wizard" sequence="40" />
             
