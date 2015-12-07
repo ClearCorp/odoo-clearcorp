@@ -31,7 +31,7 @@ class ExtraPart(models.TransientModel):
                 vals_line = {
                     'parts_id': line.parts_id.id,
                     'parts_qty': line.parts_qty,
-                    'product_uom': line.parts_uom.id,
+                    'parts_uom': line.parts_uom.id,
                     'maintenance_id': line.maintenance_id.id
                     }
                 part_line = part_line_obj.create(vals_line)

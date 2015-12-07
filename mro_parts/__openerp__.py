@@ -29,8 +29,9 @@
     'author': 'ClearCorp',
     'website': 'http://clearcorp.co.cr',
     'depends': ['mro'],
-    'data': ['mro_parts_view.xml',
+    'data': [
              'wizard/view_extra_parts_form.xml',
+             'mro_parts_view.xml',
              'security/ir.model.access.csv',],
     'test': [],
     'demo': [],
