@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="hr_contract_currency_view" model="ir.ui.view">
+            <field name="name">hr.contract.currency.view</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+            <data>
+                 <xpath expr="//field[@name='wage']" position="after">
+                    <field name="currency_id" />
+                </xpath>
+            </data>
+            </field>
+        </record>
+    </data>
+</openerp>
