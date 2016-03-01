@@ -6,7 +6,7 @@
     'name': 'Desktop Notifications',
     'summary': 'Desktop notifications',
     'version': '8.0.1.0',
-    'category': 'Mail',
+    'category': 'Social Network',
     'website': 'http://clearcorp.cr',
     'author': 'ClearCorp',
     'license': 'AGPL-3',
@@ -22,13 +22,8 @@
         'base', 'mail'
     ],
     'data': [
-        "views/assets.xml",
-        "views/report_name.xml",
-        "views/model_name_view.xml",
-        "wizards/wizard_model_view.xml",
     ],
     'demo': [],
     'qweb': [
-        "static/src/xml/module_name.xml",
     ],
 }
