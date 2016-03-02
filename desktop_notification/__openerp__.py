@@ -22,6 +22,7 @@
         'base', 'mail'
     ],
     'data': [
+        'view/assets.xml'
     ],
     'demo': [],
     'qweb': [
