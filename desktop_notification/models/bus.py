@@ -10,17 +10,6 @@ class ImBus(models.Model):
 
     def sendmany(self, cr, uid, notifications):
         print "\n Metodo heredado \n", notifications
-        notification =\
-            [[(u'cc_notificaciones', 'im_chat.session', 5),
-              {
-                  'create_date': '2016-03-01 19:18:55',
-                  'to_id': (2, u'59f32ef1-1557-464d-a73f-20d2b85d9f1f'),
-                  'message': '1,2,3,4,5,6,7,8,9',
-                  'type': u'message',
-                  'id': 155,
-                  'from_id': (5, u'lesmed')
-               }
-              ]] 
         super(ImBus, self).sendmany(cr, uid, notifications)
 
 
@@ -30,8 +19,18 @@ class MailMessage(models.Model):
     @api.model
     @api.returns('self', lambda value: value.id)
     def create(self, vals):
-        print "\n create heredado \n"
+        print "\n create heredado \n", vals
         bus_obj = self.env['bus.bus']
-        bus_obj.sendone("59f32ef1-1557-464d-a73f-20d2b85d9f1f",
-            "Mensaje de prueba")
+        notification =\
+            [[(u'cc_notificaciones', 'im_chat.session', 5),
+              {
+                  'create_date': '2016-03-01 19:18:55',
+                  'to_id': (2, u'59f32ef1-1557-464d-a73f-20d2b85d9f1f'),
+                  'message': vals['body'],
+                  'type': u'message',
+                  'id': 155,
+                  'from_id': (5, u'lesmed')
+               }
+              ]] 
+        bus_obj.sendmany(notification)
         return models.Model.create(self, vals)
