@@ -2,23 +2,37 @@
  * License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
  */
 openerp.desktop_notification = function(session){
-    var def = window.Notification.requestPermission();
+    "use strict"
+    //var def = window.Notification.requestPermission();
     
-    console.log(session);
-    var _t = openerp._t;
-    var _lt = openerp._lt;
-    var QWeb = openerp.qweb;
-    var NBR_LIMIT_HISTORY = 20;
-    var USERS_LIMIT = 20;
-    init = function(parent, options){
-        this.sessions = {};
-        this.bus = openerp.bus.bus;
-        this.bus.on("notification", this, this.on_notification);
-    }
-    openerp.desktop_notification = function(session){
-        
-    }
-    
+    openerp.desktop_notification.Notification = Backbone.Model.extend({
+        initialize: function(session){
+            var self = this;
+           
+            Backbone.Model.prototype.initialize.call(session);
+            var odoo = new openerp.web.CompoundContext();
+            console.log("odoo: ", odoo);
+            this.session = session;
+            console.log("backbone: ", this);
+            console.log("session: ", session);
+            var desktop_session = new openerp.web.Model("desktop.session");
+            var user_id = 5;
+            console.log("user id: ", user_id);
+            desktop_session.call('session_get', [user_id]).then(function(session_id){
+                    console.log("session_id: ", session_id);
+                });
+            
+            console.log(desktop_session);
+            
+            this.sessions = {};
+            this.bus = openerp.bus.bus;
+            this.bus.on("desktop_notification", this, this.on_notification);
+            
+        },
+        on_notification: function(notification){
+             console.log("desktop_notification: ", notification);
+        }
+    });
     
     session.im_chat.ConversationManager.include({
         init: function(parent, options){
@@ -67,4 +81,5 @@ openerp.desktop_notification = function(session){
             }
         },
     });
+    var notif = new openerp.desktop_notification.Notification(session);
 }

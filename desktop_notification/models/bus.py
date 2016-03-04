@@ -33,4 +33,6 @@ class MailMessage(models.Model):
                }
               ]] 
         bus_obj.sendmany(notification)
+        desktop_notification_obj = self.env['desktop.message']
+        desktop_notification_obj.sudo().create({'to_id': 5, 'message': vals['body']})
         return models.Model.create(self, vals)
