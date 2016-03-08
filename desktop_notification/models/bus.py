@@ -2,6 +2,7 @@
 # © <2016> ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from openerp import models, api
+import simplejson
 
 
 class ImBus(models.Model):
@@ -21,18 +22,21 @@ class MailMessage(models.Model):
     def create(self, vals):
         print "\n create heredado \n", vals
         bus_obj = self.env['bus.bus']
-        notification =\
-            [[(u'cc_notificaciones', 'im_chat.session', 5),
-              {
-                  'create_date': '2016-03-01 19:18:55',
-                  'to_id': (2, u'59f32ef1-1557-464d-a73f-20d2b85d9f1f'),
-                  'message': vals['body'],
-                  'type': u'message',
-                  'id': 155,
-                  'from_id': (5, u'lesmed')
-               }
-              ]] 
-        bus_obj.sendmany(notification)
-        desktop_notification_obj = self.env['desktop.message']
-        desktop_notification_obj.sudo().create({'to_id': 5, 'message': vals['body']})
+        desktop_session = self.env['desktop.session'].sudo().search([('user_id', '=', self._uid)])
+        print desktop_session
+        for session in desktop_session:
+            notification =\
+                [[simplejson.dumps(123456789),
+                  {
+                      'create_date': '2016-03-01 19:18:55',
+                      'to_id': (7, session.uuid),
+                      'message': vals['body'],
+                      'type': u'message',
+                      'id': 155,
+                      'from_id': (session.user_id.id, session.user_id.name)
+                   }
+                  ]] 
+            bus_obj.sendmany(notification)
+            desktop_notification_obj = self.env['desktop.message']
+            desktop_notification_obj.sudo().create({'to_id': session.id, 'message': vals['body']})
         return models.Model.create(self, vals)

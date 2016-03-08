@@ -5,32 +5,51 @@ openerp.desktop_notification = function(session){
     "use strict"
     //var def = window.Notification.requestPermission();
     
-    openerp.desktop_notification.Notification = Backbone.Model.extend({
-        initialize: function(session){
+    openerp.desktop_notification.Notification = openerp.Widget.extend({
+        init: function(){
+            this._super();
             var self = this;
-           
-            Backbone.Model.prototype.initialize.call(session);
-            var odoo = new openerp.web.CompoundContext();
-            console.log("odoo: ", odoo);
-            this.session = session;
-            console.log("backbone: ", this);
-            console.log("session: ", session);
-            var desktop_session = new openerp.web.Model("desktop.session");
-            var user_id = 5;
-            console.log("user id: ", user_id);
-            desktop_session.call('session_get', [user_id]).then(function(session_id){
-                    console.log("session_id: ", session_id);
-                });
-            
-            console.log(desktop_session);
-            
             this.sessions = {};
             this.bus = openerp.bus.bus;
-            this.bus.on("desktop_notification", this, this.on_notification);
+            this.bus.on("notification", this, this.on_notification);
+            this.set("session", openerp.session);
+            this.desktop_session = new openerp.web.Model("desktop.session");
+            console.log("init wifget");
+            var self = this;
+            console.log("bus: ", self.bus);
+            console.log("session: ", this.get("session"));
+            var user_id = 19;
+            console.log("user id: ", user_id);
+            self.desktop_session.call('session_get', [user_id]).then(function(session_id){
+                
+                console.log("bus: ", self.bus);
+                session_id = JSON.parse(session_id);
+                console.log("session_id: ", session_id);
+                self.bus.add_channel(session_id.uuid);
+                self.bus.add_channel('[cc_notificaciones, desktop.session, 21]')
+                self.bus.add_channel("123456789")
+                
+                console.log("uuid: ", session_id.uuid);
+                console.log("channels: ", self.bus.channels);
+            });
+            
+            
+        },
+        start: function(){
+            
+            //console.log(this.desktop_session["uuid"]);
             
         },
         on_notification: function(notification){
-             console.log("desktop_notification: ", notification);
+            console.log("desktop_notification: ", notification);
+            var self = this;
+            var channel = notification[0];
+            var message = notification[1];
+            var regex_uuid = new RegExp(/(\w{8}(-\w{4}){3}-\w{12}?)/g);
+
+            if((Array.isArray(channel) && (channel[1] === 'desktop.session'))){
+                console.log("desktop session confirmed");
+            }
         }
     });
     
@@ -58,7 +77,7 @@ openerp.desktop_notification = function(session){
             var channel = notification[0];
             var message = notification[1];
             var regex_uuid = new RegExp(/(\w{8}(-\w{4}){3}-\w{12}?)/g);
-            console.log('Nuevo javascript')
+            console.log('Nuevo javascript', notification);
 
             // Concern im_chat : if the channel is the im_chat.session or im_chat.status, or a 'private' channel (aka the UUID of a session)
             if((Array.isArray(channel) && (channel[1] === 'im_chat.session' || channel[1] === 'im_chat.presence')) || (regex_uuid.test(channel))){
@@ -81,5 +100,6 @@ openerp.desktop_notification = function(session){
             }
         },
     });
-    var notif = new openerp.desktop_notification.Notification(session);
+    
+    var notif = new openerp.desktop_notification.Notification();
 }
