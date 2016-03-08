@@ -18,25 +18,28 @@ class MailMessage(models.Model):
     _inherit = 'mail.message'
 
     @api.model
-    @api.returns('self', lambda value: value.id)
     def create(self, vals):
+        message_id = super(MailMessage, self).create(vals)
         print "\n create heredado \n", vals
         bus_obj = self.env['bus.bus']
+        
+        message_obj = self.env['mail.message'].browse([message_id])
+        
         desktop_session = self.env['desktop.session'].sudo().search([('user_id', '=', self._uid)])
         print desktop_session
         for session in desktop_session:
             notification =\
-                [[simplejson.dumps(123456789),
+                [[session.uuid,
                   {
                       'create_date': '2016-03-01 19:18:55',
-                      'to_id': (7, session.uuid),
+                      'to_id': (session.user_id.id, session.uuid),
                       'message': vals['body'],
-                      'type': u'message',
-                      'id': 155,
+                      'type': u'notification',
+                      'id': message_id,
                       'from_id': (session.user_id.id, session.user_id.name)
                    }
                   ]] 
             bus_obj.sendmany(notification)
             desktop_notification_obj = self.env['desktop.message']
             desktop_notification_obj.sudo().create({'to_id': session.id, 'message': vals['body']})
-        return models.Model.create(self, vals)
+        return message_id
