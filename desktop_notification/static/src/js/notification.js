@@ -17,7 +17,6 @@ openerp.desktop_notification = function(session){
             var user_id = 19;
             self.desktop_session.call('session_get', [user_id]).then(function(session_id){
                 session_id = JSON.parse(session_id);
-                console.log("session_id: ", session_id);
                 self.bus.add_channel(session_id.uuid);
             });
         },
@@ -28,7 +27,6 @@ openerp.desktop_notification = function(session){
             var regex_uuid = new RegExp(/(\w{8}(-\w{4}){3}-\w{12}?)/g);
             
             if (regex_uuid.test(channel)) {
-                console.log("message.type: ", message.type);
                 if (message.type === "notification") {
                     this.send_native_notification('From: ' + message.model, message.record_name);
                 }
@@ -45,40 +43,6 @@ openerp.desktop_notification = function(session){
                 }
             };
         },
-    });
-    
-    session.im_chat.ConversationManager.include({
-        init: function(parent, options){
-            this._super()
-            this.bus.on('notification', this, this.on_desktop_notification);
-        },
-        send_native_notification: function(title, content) {
-            var notification = new Notification(title, {body: content, icon: 'web/binary/company_logo'});
-            notification.onclick = function (e) {
-                window.focus();
-                this.close()
-                if (this.cancel) {
-                    this.cancel();
-                } else if (this.close) {
-                    this.close();
-                }
-            };
-        },
-        on_desktop_notification: function(notification){
-            var self = this;
-            var channel = notification[0];
-            var message = notification[1];
-            var regex_uuid = new RegExp(/(\w{8}(-\w{4}){3}-\w{12}?)/g);
-            // Concern im_chat : if the channel is the im_chat.session or im_chat.status, or a 'private' channel (aka the UUID of a session)
-            if((Array.isArray(channel) && (channel[1] === 'im_chat.session' || channel[1] === 'im_chat.presence')) || (regex_uuid.test(channel))){
-                // message to display in the chatview
-                if (message.type === "message" || message.type === "meta") {
-                    self.received_message(message);
-                    this.send_native_notification('From: ' + message.from_id[1], message.message);
-                }
-            }
-        },
-    });
-    
+    });    
     var notif = new openerp.desktop_notification.Notification();
 }
