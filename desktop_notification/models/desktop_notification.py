@@ -1,9 +1,7 @@
 from openerp import models, fields, api
-from openerp.http import request as rqst
-import uuid
-import openerp.addons.bus.bus
-import simplejson
 from Tkconstants import CASCADE
+import uuid
+import simplejson
 
 
 class DesktopMessage(models.Model):
@@ -46,21 +44,20 @@ class DesktopSession(models.Model):
                                   ondelete=CASCADE)
     user_id = fields.Many2one('res.users', string='Session Users',
                               ondelete=CASCADE)
-#   user_ids = fields.Many2many('res.users', string='Session Users', )
 
     @api.model
     def session_get(self, user_id):
         if user_id:
             user_id = self._uid
-            session_id = self.sudo().search([('user_id', '=', user_id)], limit=1)
+            session_id = self.sudo().search([('user_id', '=', user_id)],
+                                            limit=1)
             if session_id:
                 return simplejson.dumps(
-                {
-                    'id': session_id.id,
-                    'uuid': session_id.uuid,
-                    'user_id': user_id,
-#                   'user_ids': [id for id in session_id.user_ids]
-                })
+                    {
+                        'id': session_id.id,
+                        'uuid': session_id.uuid,
+                        'user_id': user_id,
+                    })
             else:
                 session_id = self.sudo().create({'user_id': user_id})
                 return simplejson.dumps(
@@ -68,7 +65,6 @@ class DesktopSession(models.Model):
                         'id': session_id.id,
                         'uuid': session_id.uuid,
                         'user_id': user_id,
-    #                   'user_ids': [id for id in session_id.user_ids]
                     })
 
 
@@ -78,22 +74,3 @@ class DesktopUser(models.Model):
 
     desktop_notification_id = fields.One2many(
         'desktop.session', 'user_id', required=True)
-
-"""
-class Controller(openerp.addons.bus.bus.Controller):
-    def _pool(self, dbname, channels, last, options):
-        registry, cr, uid, context = \
-            rqst.registry, rqst.cr, rqst.session.uid, rqst.context
-        channels.append((rqst.db, 'desktop.session', rqst.uid),)
-        return super(Controller, self)._poll(dbname, channels, last, options)
-
-    
-    @openerp.http.route('/desktop_notification/init', type='json', auth=None)
-    def init(self):
-        return super(Controller, self).init()
-    
-    @openerp.http.route('/desktop_notification/post', type='json', auth=None)
-    def post(self, uuid, message):
-        registry, uid = rqst.registry, rqst.session.uid
-        message_id = registry['desktop.message'].sudo().post(uid, uuid, message)
-        return message_id"""
