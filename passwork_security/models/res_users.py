@@ -11,21 +11,21 @@ class ResUsers(models.Model):
 
     @api.model
     def create(self, vals):
-        password = vals['password']
-        print password
+        if 'password' in vals:
+            password = vals['password']
+            self._validate_password(password)
         return super(ResUsers, self).create(vals)
 
     @api.multi
     def write(self, vals):
-        password = vals['password']
-        print password
-        self._validate_password(password)
+        if 'password' in vals:
+            password = vals['password']
+            self._validate_password(password)
         return super(ResUsers, self).write(vals)
 
     def _validate_password(self, password):
         params = self._load_params()
         regex = ''
-        print params
         if bool(params['password_security_validate']):
             print "\npassword security\n"
             length_password = int(params['password_security_length'])
@@ -49,7 +49,7 @@ class ResUsers(models.Model):
                 if bool(params['password_security_include_lowercase']):
                     length_lowercase =\
                         int(params['password_security_lowercase_length'])
-                    if length_uppercase != 0:
+                    if length_lowercase != 0:
                         regex = ('[a-z]{%s,}' % length_lowercase)
                         if not (re.findall(regex, password)):
                             raise Warning(_(
@@ -69,8 +69,8 @@ class ResUsers(models.Model):
             if bool(params['password_security_include_special']):
                 length_special =\
                     int(params['password_security_special_length'])
-                if length_numbers != 0:
-                    regex = (r'.*[\%\$\^\*\@\!\_\-\(\)\:\;\'\"\{\}\[\]]{%s,}'
+                if length_special != 0:
+                    regex = (u"[@#$%^&+=]{%s,}"
                              % length_special)
                     if not (re.findall(regex, password)):
                         raise Warning(_(
