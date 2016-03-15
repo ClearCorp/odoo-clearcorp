@@ -31,48 +31,48 @@ class ResUsers(models.Model):
             length_password = int(params['password_security_length'])
             if length_password != 0:
                 regex = (".{%s,}" % length_password)
-                if not(re.findall(regex, password)):
+                if not(re.search(regex, password)):
                     raise Warning(_(
                         "The password must be at least %s characters long"
                         % length_password))
             if bool(params['password_security_include_letters']):
                 if bool(params['password_security_include_uppercase']):
-                    length_uppercase =\
+                    length_uppercase = \
                         int(params['password_security_uppercase_length'])
                     if length_uppercase != 0:
-                        regex = ('[A-Z]{%s,}' % length_uppercase)
-                        if not (re.findall(regex, password)):
+                        regex = ('.[A-Z]{%s,}' % length_uppercase)
+                        if not (re.search(regex, password)):
                             raise Warning(_(
                                 """The password must be have at least
                                 %s uppercase letters"""
                                 % length_uppercase))
                 if bool(params['password_security_include_lowercase']):
-                    length_lowercase =\
+                    length_lowercase = \
                         int(params['password_security_lowercase_length'])
                     if length_lowercase != 0:
-                        regex = ('[a-z]{%s,}' % length_lowercase)
-                        if not (re.findall(regex, password)):
+                        regex = ('.[a-z]{%s,}' % length_lowercase)
+                        if not (re.search(regex, password)):
                             raise Warning(_(
                                 """The password must be have at least
                                 %s lowercase letters"""
                                 % length_lowercase))
             if bool(params['password_security_include_numbers']):
-                length_numbers =\
+                length_numbers = \
                     int(params['password_security_numbers_length'])
                 if length_numbers != 0:
-                    regex = ('[0-9]{%s,}' % length_numbers)
-                    if not (re.findall(regex, password)):
+                    regex = ('.[0-9]{%s,}' % length_numbers)
+                    if not (re.search(regex, password)):
                         raise Warning(_(
                             """The password must be have at least
                             %s numbers"""
                             % length_numbers))
             if bool(params['password_security_include_special']):
-                length_special =\
+                length_special = \
                     int(params['password_security_special_length'])
                 if length_special != 0:
-                    regex = (u"[@#$%^&+=]{%s,}"
-                             % length_special)
-                    if not (re.findall(regex, password)):
+                    regex = r'[\w!#$%&\'\*\+\-/=\?\^`\{\|\}~]{%s,}'\
+                            % length_special
+                    if not (re.search(regex, password)):
                         raise Warning(_(
                             """The password must be have at least
                             %s special characters"""
