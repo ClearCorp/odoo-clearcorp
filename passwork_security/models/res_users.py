@@ -99,3 +99,13 @@ class ResUsers(models.Model):
         ir_config_parameter = self.env["ir.config_parameter"]
         domain = ir_config_parameter.get_param(param)
         return domain
+
+    @api.model
+    def signup(self, values, token=None):
+        partner = self.env['res.partner']._signup_retrieve_partner(
+            token, check_validity=False, raise_exception=False)
+        try:
+            return super(ResUsers, self).signup(values, token)
+        except Warning as e:
+            partner.write({'signup_token': token})
+            raise Warning(e.message)
