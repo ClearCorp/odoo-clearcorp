@@ -25,6 +25,7 @@ class ResUsers(models.Model):
 
     def _validate_password(self, password):
         params = self._load_params()
+        messages = []
         regex = ''
         if bool(params['password_security_validate']):
             print "\npassword security\n"
@@ -32,8 +33,8 @@ class ResUsers(models.Model):
             if length_password != 0:
                 regex = (".{%s,}" % length_password)
                 if not(re.search(regex, password)):
-                    raise Warning(_(
-                        "The password must be at least %s characters long"
+                    messages.append(_(
+                        "Have at least %s characters long"
                         % length_password))
             if bool(params['password_security_include_letters']):
                 if bool(params['password_security_include_uppercase']):
@@ -42,9 +43,8 @@ class ResUsers(models.Model):
                     if length_uppercase != 0:
                         regex = ('.[A-Z]{%s,}' % length_uppercase)
                         if not (re.search(regex, password)):
-                            raise Warning(_(
-                                """The password must be have at least
-                                %s uppercase letters"""
+                            messages.append(_(
+                                """Have at least %s uppercase letters"""
                                 % length_uppercase))
                 if bool(params['password_security_include_lowercase']):
                     length_lowercase = \
@@ -52,9 +52,8 @@ class ResUsers(models.Model):
                     if length_lowercase != 0:
                         regex = ('.[a-z]{%s,}' % length_lowercase)
                         if not (re.search(regex, password)):
-                            raise Warning(_(
-                                """The password must be have at least
-                                %s lowercase letters"""
+                            messages.append(_(
+                                """Have at least %s lowercase letters"""
                                 % length_lowercase))
             if bool(params['password_security_include_numbers']):
                 length_numbers = \
@@ -62,9 +61,8 @@ class ResUsers(models.Model):
                 if length_numbers != 0:
                     regex = ('.[0-9]{%s,}' % length_numbers)
                     if not (re.search(regex, password)):
-                        raise Warning(_(
-                            """The password must be have at least
-                            %s numbers"""
+                        messages.append(_(
+                            """Have at least %s numbers"""
                             % length_numbers))
             if bool(params['password_security_include_special']):
                 length_special = \
@@ -73,10 +71,15 @@ class ResUsers(models.Model):
                     regex = r'[\w!#$%&\'\*\+\-/=\?\^`\{\|\}~]{%s,}'\
                             % length_special
                     if not (re.search(regex, password)):
-                        raise Warning(_(
-                            """The password must be have at least
-                            %s special characters"""
+                        messages.append(_(
+                            """Have at least %s special characters"""
                             % length_special))
+        if len(messages) > 0:
+            warning = _(
+                "The password must satisfy the following criteria:\n\n")
+            for message in messages:
+                warning += "* " + message + "\n"
+            raise Warning(warning)
 
     def _load_params(self):
         params = {'password_security_validate': '',
