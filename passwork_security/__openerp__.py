@@ -19,7 +19,7 @@
         'bin': [],
     },
     'depends': [
-        'base_setup', 'auth_signup',
+        'base_setup', 'auth_signup', 'web'
     ],
     'data': [
         'views/base_config_settings.xml'
