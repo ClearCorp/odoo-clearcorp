@@ -1,0 +1,28 @@
+<openerp>
+    <data>
+
+        <record id="view_website_config_settings" model="ir.ui.view">
+            <field name="name">Website settings</field>
+            <field name="model">website.config.settings</field>
+            <field name="inherit_id" ref="website.view_website_config_settings" />
+            <field name="arch" type="xml">
+                <group string="Social Media" position="after">
+                    <group string="Login reCAPTCHA">
+                        <label for="login_recaptcha_site_key"/>
+                        <div name="login_recaptcha_site_key">
+                            <div class="oe_inline">
+                                <field name="login_recaptcha_site_key" placeholder="Your reCAPTCHA site key"/>
+                            </div>
+                        </div>
+                        <label for="login_recaptcha_private_key"/>
+                        <div name="loginrecaptcha_private_key">
+                            <div class="oe_inline">
+                                <field name="login_recaptcha_private_key" placeholder="Your reCAPTCHA private key"/>
+                            </div>
+                        </div>
+                    </group>
+                </group>
+            </field>
+        </record>
+    </data>
+</openerp>
