@@ -68,8 +68,8 @@ class ResUsers(models.Model):
                 length_special = \
                     int(params['password_security_special_length'])
                 if length_special != 0:
-                    regex = r'[\w!#$%&\'\*\+\-/=\?\^`\{\|\}~]{%s,}'\
-                            % length_special
+                    regex = r'[!#$%&\'\*\+\-/=\?\^`\{\|\}~]{' +\
+                        str(length_special) + ',}'
                     if not (re.search(regex, password)):
                         messages.append(_(
                             """Have at least %s special characters"""

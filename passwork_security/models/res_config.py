@@ -4,7 +4,7 @@
 from openerp import models, fields, api
 
 
-class BaseCongigSettings(models.TransientModel):
+class BaseConfigSettings(models.TransientModel):
     _inherit = 'base.config.settings'
 
     password_security_validate = fields.Boolean(
@@ -223,4 +223,40 @@ class BaseCongigSettings(models.TransientModel):
         return {
             'password_security_special_length':
             int(password_security_special_length) or False
+            }
+
+    @api.multi
+    def set_password_security_site_key(self):
+        config_parameters = self.env["ir.config_parameter"]
+        for record in self.browse(self._ids):
+            config_parameters.set_param(
+                "password_security_site_key",
+                record.password_security_site_key or '')
+
+    @api.multi
+    def get_default_password_security_site_key(self):
+        password_security_site_key =\
+            self.env["ir.config_parameter"].get_param(
+                "password_security_site_key", default=None)
+        return {
+            'password_security_site_key':
+            password_security_site_key or False
+            }
+
+    @api.multi
+    def set_password_security_secret_key(self):
+        config_parameters = self.env["ir.config_parameter"]
+        for record in self.browse(self._ids):
+            config_parameters.set_param(
+                "password_security_secret_key",
+                record.password_security_secret_key or '')
+
+    @api.multi
+    def get_default_password_security_secret_key(self):
+        password_security_secret_key =\
+            self.env["ir.config_parameter"].get_param(
+                "password_security_secret_key", default=None)
+        return {
+            'password_security_secret_key':
+            password_security_secret_key or False
             }

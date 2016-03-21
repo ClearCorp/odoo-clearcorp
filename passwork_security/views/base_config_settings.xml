@@ -61,6 +61,17 @@
                                     <field name="password_security_special_length" class="oe_inline" />
                                 </div>
                             </div>
+                            <div>
+                                <div>
+                                    <label for="password_security_site_key"/>
+                                    <field name="password_security_site_key" placeholder="Google reCAPTCHA Site Key"/>
+                                </div>
+                                <div>
+                                    <label for="password_security_secret_key"/>
+                                    <field name="password_security_secret_key" placeholder="Google reCaptcha Secret Key" />
+                                </div>
+                            </div>
+                            
                         </div>
                     </group>
                 </xpath>
