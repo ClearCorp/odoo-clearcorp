@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from openerp import http
+from openerp import http, _
 from openerp.addons.web.controllers import main
 from openerp.http import request
 from werkzeug.contrib.securecookie import SecureCookie
@@ -25,12 +25,14 @@ class Home(main.Home):
     def web_login(self, redirect=None, **kw):
         session = request.session
         response = super(Home, self).web_login(redirect, **kw)
+        login_attemps = 0
         secure_cookie = self._load_cookie('session_data')
         if 'error' in response.qcontext:
             print "secure cookie: ", secure_cookie
             if 'login_attemps' in secure_cookie:
                 login_attemps = int(secure_cookie['login_attemps'])
                 secure_cookie['login_attemps'] = str(login_attemps + 1)
+                response.qcontext.update({'login_attemps': login_attemps})
             else:
                 secure_cookie['login_attemps'] = str(0)
                 print secure_cookie
@@ -38,7 +40,13 @@ class Home(main.Home):
                 secure_cookie.save_cookie(response, 'session_data',
                                           httponly=True, max_age=60*3)
         else:
-            secure_cookie['login_attemps'] = str(0)
+            secure_cookie['login_attemps'] = str(1)
             print secure_cookie
         print "qcontext: ", response.qcontext, session
+
+        if 'g-recaptcha-response' in kw and\
+                not request.website.is_captcha_valid(kw['g-recaptcha-response']):
+            qcontext = response.qcontext
+            qcontext['error'] = _("Wrong Captcha2222 !!!" + str(login_attemps))
+            return request.render('web.login', qcontext)
         return response

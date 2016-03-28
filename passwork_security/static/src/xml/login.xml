@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <template id="password_security_recaptcha" name="PasswordSecurityReCaptcha" inherit_id="website.layout">
-            <xpath expr="//body" position="inside">
-              <script src="https://www.google.com/recaptcha/api.js"></script>
-            </xpath>
-        </template>
-
         <template id="web_login_extended" inherit_id="web.login">
             <xpath expr="//p[@t-if='error']" position="replace">
                 <p class="alert alert-danger" t-if="error">
                     <t t-esc="error"/>-----
                     <br/><t t-esc="error2"/>-----
                 </p>
-                
-            </xpath>
-            <xpath expr="//button/.." position="before">
-                <div class="g-recaptcha" t-att-data-sitekey="website.recaptcha_site_key" >
-                </div>
-                <br/>
             </xpath>
         </template>
     </data>

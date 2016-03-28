@@ -7,10 +7,10 @@
             </xpath>
         </template>
         <template id="web_login_extended" inherit_id="web.login">
-            <xpath expr="//button/.." position="before">
-                <div class="g-recaptcha" t-att-data-sitekey="website.login_recaptcha_site_key" >
-                </div>
-                <br/>
+                <xpath expr="//button/.." position="before">
+                    <div t-if="login_attemps &gt; 2" class="g-recaptcha" t-att-data-sitekey="website.login_recaptcha_site_key" >
+                    </div>
+                    <br/>
             </xpath>
         </template>
     </data>
