@@ -31,40 +31,44 @@ class Home(main.Home):
 
     @http.route('/web/login', type='http', auth="none")
     def web_login(self, redirect=None, **kw):
-        response = super(Home, self).web_login(redirect, **kw)
-        secure_cookie = self._load_cookie('session_data')
+        cookie = self._load_cookie('session_data')
         login_attemps = 0
-        if 'error' in response.qcontext:
-            if 'login_attemps' in secure_cookie:
-                login_attemps = int(secure_cookie['login_attemps'])
-                secure_cookie['login_attemps'] = str(login_attemps + 1)
-            else:
-                secure_cookie['login_attemps'] = str(1)
-        else:
-            secure_cookie['login_attemps'] = str(0)
-        response.qcontext.update(
-            {'login_attemps': int(secure_cookie['login_attemps'])})
-        if hasattr(response, 'set_cookie'):
-                secure_cookie.save_cookie(response, 'session_data',
-                                          httponly=True, max_age=60*2)
+        if 'login_attemps' in cookie:
+            login_attemps = cookie['login_attemps']
         if 'g-recaptcha-response' in kw and\
                 not request.website.is_captcha_valid(
                     kw['g-recaptcha-response']):
-            if login_attemps >= 3 and login_attemps < 4:
-                response.qcontext['error'] = _(
-                    "Wrong Captcha, please try again.")
-            elif login_attemps >= 3 and login_attemps >= 4:
-                if self._action_reset_password(response.qcontext['login']):
-                    response.qcontext['error'] = _(
+            if login_attemps > 8:
+                qcontext = {
+                    'error': _(
                         """The amount of login attemps has been over passed.
-                        A password reset link has been sent to the user's email.
+                        A password reset link has been sent to the user's
+                        email.
                         """)
+                    }
+                return request.render('web.login', qcontext)
+            else:
+                qcontext = {
+                    'error': _("Wrong Captcha")
+                    }
+                return request.render('web.login', qcontext)
+        else:
+            response = super(Home, self).web_login(redirect, **kw)
+            secure_cookie = self._load_cookie('session_data')
+            if 'error' in response.qcontext:
+                if 'login_attemps' in secure_cookie:
+                    login_attemps = int(secure_cookie['login_attemps'])
+                    secure_cookie['login_attemps'] = str(login_attemps + 1)
                 else:
-                    response.qcontext['error'] = _(
-                        """The amount of login attemps has been over passed.
-                        A password reset link has been sent to the user's email.
-                        """)
-            return request.render('web.login', response.qcontext)
-        print "secure cookie: ", secure_cookie
-        print "qcontext: ", response.qcontext
-        return response
+                    secure_cookie['login_attemps'] = str(1)
+            elif 'login_attemps' in secure_cookie:
+                pass
+            else:
+                secure_cookie['login_attemps'] = str(0)
+            response.qcontext.update(
+                {'login_attemps': int(secure_cookie['login_attemps'])})
+            if hasattr(response, 'set_cookie'):
+                secure_cookie.save_cookie(response, 'session_data',
+                                          httponly=True, max_age=60*2)
+            print 'secure cookie', secure_cookie
+            return response
