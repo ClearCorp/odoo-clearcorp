@@ -38,7 +38,7 @@ class WageIncreaseWizard(osv.TransientModel):
                         (contract.wage * wizard.amount_percentage / 100)
                 else:
                     new_wage = contract.wage + wizard.amount_fixed
-                contract.write({'wage': new_wage}, context=context)
+                contract.write({'wage': new_wage})
                 contract_ids.append(contract.id)
             return {
                 'name': _('Updated contracts'),
