@@ -21,7 +21,7 @@ Credits
 Contributors
 ------------
 
-* Lesmed Gutiérrez <lesmed.gutierrez@clearcorp.com>
+* Lesmed Gutiérrez <lesmed.gutierrez@clearcorp.co.cr>
 
 
 Maintainer
