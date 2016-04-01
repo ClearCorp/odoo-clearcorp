@@ -23,7 +23,7 @@
               'report/report_hr_personnel_actions_user.xml',
               'security/ir.model.access.csv',
               'views/hr_personnel_actions_view.xml',
-              'viewshr_personnel_actions_menu.xml',
+              'views/hr_personnel_actions_menu.xml',
               'views/hr_personnel_actions_report.xml',
     ],
 }
