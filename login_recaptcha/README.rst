@@ -6,8 +6,9 @@
 Login ReCaptcha
 ===============
 
-This module was written to allow a captcha confirmation when users log in into the system
-=========================================================================================
+This module was written to allow a captcha confirmation when users log in into the system.
+If the user fails 3 times to log in a Google reCAPTCHA is shown.
+If the user fails 8 times the system send reset password email.
 
 Credits
 =======

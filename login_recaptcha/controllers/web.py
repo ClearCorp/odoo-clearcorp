@@ -34,24 +34,27 @@ class Home(main.Home):
         cookie = self._load_cookie('session_data')
         login_attemps = 0
         if 'login_attemps' in cookie:
-            login_attemps = cookie['login_attemps']
+            login_attemps = int(cookie['login_attemps'])
         if 'g-recaptcha-response' in kw and\
                 not request.website.is_captcha_valid(
                     kw['g-recaptcha-response']):
-            if login_attemps > 8:
-                qcontext = {
+            response = super(Home, self).web_login(redirect, **kw)
+            if login_attemps >= 8:
+                response.qcontext.update({
                     'error': _(
-                        """The amount of login attemps has been over passed.
+                        """The amount of login attemps have exceeded the
+                        restriction.
                         A password reset link has been sent to the user's
                         email.
                         """)
                     }
-                return request.render('web.login', qcontext)
+                )
             else:
-                qcontext = {
+                response.qcontext.update({
                     'error': _("Wrong Captcha")
                     }
-                return request.render('web.login', qcontext)
+                )
+            return request.render('web.login', response.qcontext)
         else:
             response = super(Home, self).web_login(redirect, **kw)
             secure_cookie = self._load_cookie('session_data')
@@ -69,6 +72,5 @@ class Home(main.Home):
                 {'login_attemps': int(secure_cookie['login_attemps'])})
             if hasattr(response, 'set_cookie'):
                 secure_cookie.save_cookie(response, 'session_data',
-                                          httponly=True, max_age=60*2)
-            print 'secure cookie', secure_cookie
+                                          httponly=True, max_age=60*3)
             return response
