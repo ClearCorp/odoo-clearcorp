@@ -22,8 +22,7 @@
         'base_setup', 'auth_signup', 'web'
     ],
     'data': [
-        'views/base_config_settings.xml',
-        'static/src/xml/login.xml'
+        'views/base_config_settings.xml'
     ],
     'qweb': [
     ],

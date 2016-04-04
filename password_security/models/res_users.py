@@ -28,7 +28,6 @@ class ResUsers(models.Model):
         messages = []
         regex = ''
         if bool(params['password_security_validate']):
-            print "\npassword security\n"
             length_password = int(params['password_security_length'])
             if length_password != 0:
                 regex = (".{%s,}" % length_password)
