@@ -1,0 +1,79 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* desktop_notification
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-04 22:49+0000\n"
+"PO-Revision-Date: 2016-04-04 22:49+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: desktop_notification
+#: field:desktop.message,create_uid:0
+#: field:desktop.session,create_uid:0
+msgid "Created by"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.message,create_date:0
+#: field:desktop.session,create_date:0
+msgid "Created on"
+msgstr ""
+
+#. module: desktop_notification
+#: field:res.users,desktop_notification_id:0
+msgid "Desktop notification id"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.message,id:0
+#: field:desktop.session,id:0
+msgid "ID"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.message,write_uid:0
+#: field:desktop.session,write_uid:0
+msgid "Last Updated by"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.message,write_date:0
+#: field:desktop.session,write_date:0
+msgid "Last Updated on"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.message,message:0
+#: field:desktop.session,message_ids:0
+#: model:ir.model,name:desktop_notification.model_mail_message
+msgid "Message"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.session,user_id:0
+msgid "Session Users"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.message,to_id:0
+msgid "To id"
+msgstr ""
+
+#. module: desktop_notification
+#: field:desktop.session,uuid:0
+msgid "UUID"
+msgstr ""
+
+#. module: desktop_notification
+#: model:ir.model,name:desktop_notification.model_res_users
+msgid "Users"
+msgstr ""
+

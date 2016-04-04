@@ -5,7 +5,7 @@
 {
     'name': 'Desktop Notification',
     'summary': 'Desktop notification',
-    'version': '8.0.1.0',
+    'version': '8.0.1.0.1',
     'category': 'Social Network',
     'website': 'http://clearcorp.cr',
     'author': 'ClearCorp',
@@ -19,12 +19,6 @@
         'bin': [],
     },
     'depends': [
-        'base', 'mail'
-    ],
-    'data': [
-        'views/assets.xml'
-    ],
-    'demo': [],
-    'qweb': [
-    ],
+        'base', 'mail', 'im_chat'
+    ]
 }
