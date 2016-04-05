@@ -1,4 +1,4 @@
-/* © <YEAR(S)> ClearCorp
+/* © 2016 ClearCorp
  * License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
  */
 openerp.desktop_notification = function(session){
