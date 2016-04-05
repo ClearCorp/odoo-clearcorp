@@ -28,7 +28,7 @@ openerp.desktop_notification = function(session){
             
             if (regex_uuid.test(channel)) {
                 if (message.type === "notification") {
-                    this.send_native_notification('From: ' + message.model, message.record_name);
+                    this.send_native_notification(message.model, message.record_name);
                 }
             }
         },
