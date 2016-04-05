@@ -16,5 +16,8 @@
     'auto_install': False,
     'depends': [
         'base', 'mail', 'im_chat'
+    ],
+    'data': [
+        'views/assets.xml'
     ]
 }
