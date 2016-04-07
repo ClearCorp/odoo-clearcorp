@@ -6,8 +6,7 @@
 Payroll Multi-currency
 ======================
 
-This module was written to extend the functionality of payroll to multicurrency
-suport it.
+This module was written to extend the functionality of payroll to support multicurrency
 
 Credits
 =======

@@ -28,10 +28,10 @@ class HRPayslip(models.Model):
             for account_move_line in account_move.line_id:
                 currency_id = self.company_id.currency_id
                 if account_move_line.credit > 0.0:
-                    account_move_line.credit = currency_id.with_context(
+                    account_move_line.credit = self.currency_id.with_context(
                         {'date': account_move.date}
-                    ).compute(account_move_line.credit, self.currency_id)
+                    ).compute(account_move_line.credit, currency_id)
                 if account_move_line.debit > 0.0:
-                    account_move_line.debit = currency_id.with_context(
+                    account_move_line.debit = self.currency_id.with_context(
                         {'date': account_move.date}
-                    ).compute(account_move_line.debit, self.currency_id)
+                    ).compute(account_move_line.debit, currency_id)
