@@ -23,7 +23,7 @@ msgstr "Cuenta de cheques"
 #. module: account_voucher_report
 #: view:website:account_voucher_report.accountvoucher_report
 msgid "Credit"
-msgstr "Haber"
+msgstr "Crédito"
 
 #. module: account_voucher_report
 #: code:addons/account_voucher_report/report/account_voucher_report.py:39
@@ -34,7 +34,7 @@ msgstr "La moneda no es compatible para este informe."
 #. module: account_voucher_report
 #: view:website:account_voucher_report.accountvoucher_report
 msgid "Debit"
-msgstr "Debe"
+msgstr "Débito"
 
 #. module: account_voucher_report
 #: view:website:account_voucher_report.accountvoucher_report
