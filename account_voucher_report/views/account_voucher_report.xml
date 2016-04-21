@@ -59,6 +59,15 @@
                 <br />
                 <br />
                 <br />
+                <div class="row">
+                    <div class="col-xs-6">
+                        <b><span>Num. Voucher: </span>
+                        <span t-field="o.reference"> </span></b>
+                    </div>
+                    <div class="col-xs-6">
+                        <span style="white-space: pre;">  </span>
+                    </div>
+                </div>
                 <br />
                 <br />
                 <div class="row">
@@ -66,25 +75,26 @@
                         <table class="table table-condensed">
                             <thead>
 	                            <tr>
-	                                <th class="text-center" style="border: 1px solid #000000">Journal Entry.</th>
-	                                <th class="text-center" style="border: 1px solid #000000">Fact Supplier</th>
+	                                <th class="text-center" style="border: 1px solid #000000">Journal Entry</th>
+	                                <th class="text-center" style="border: 1px solid #000000">Fact. Number</th>
 	                                <th class="text-center" style="border: 1px solid #000000">Debit</th>
 	                                <th class="text-center" style="border: 1px solid #000000">Credit</th>
 	                            </tr>
 	                        </thead>
 	                        <tbody>
-	                           <tr t-foreach="o.move_ids" t-as="m">
+	                           <tr t-foreach="o.line_cr_ids" t-as="m">
 	                               <td class="text-left" style="border-bottom: 1px solid #000000">
 	                                   <b><span t-field="m.account_id"/></b>
 	                               </td>
 	                               <td class="text-center" style="border-bottom: 1px solid #000000">
-                                       <b><span t-field="m.ref"/></b>
+                                       <b><span t-field="m.move_line_id"/></b>
                                    </td>
                                    <td class="text-center" style="border-bottom: 1px solid #000000">
-                                       <b><span t-field="m.debit"/></b>
+                                       <b><span t-field="m.amount"/></b>
                                    </td>
                                    <td class="text-center" style="border-bottom: 1px solid #000000">
-                                       <b><span t-field="m.credit"/></b>
+                                       <t t-set="balance" t-value="m.amount - m.amount_unreconciled"/>
+                                            <b><span t-esc="balance"/></b>
                                    </td>
 	                           </tr>
 	                        </tbody>
