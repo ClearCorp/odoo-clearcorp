@@ -76,7 +76,7 @@
                             <thead>
 	                            <tr>
 	                                <th class="text-center" style="border: 1px solid #000000">Journal Entry</th>
-	                                <th class="text-center" style="border: 1px solid #000000">Fact. Number</th>
+	                                <th class="text-center" style="border: 1px solid #000000">Invoice Number</th>
 	                                <th class="text-center" style="border: 1px solid #000000">Debit</th>
 	                                <th class="text-center" style="border: 1px solid #000000">Credit</th>
 	                            </tr>
