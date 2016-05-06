@@ -24,7 +24,7 @@
     'description': """ 
 Product Code History
 ================
-This module permits In the data sheet should be able to register the old codes by reference for searches.
+This module permits In the data sheet should be able to register the old part numbers by reference for searches.
     """,
     'version': '1.0',
     'author': 'ClearCorp',

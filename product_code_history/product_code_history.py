@@ -10,7 +10,7 @@
 #    published by the Free Software Foundation, either version 3 of the
 #    License, or (at your option) any later version.
 #
-#    This program is distributed in the hope that it will be useful,related relationrelated relation
+#    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
@@ -25,11 +25,10 @@ import datetime
 
 class ProductCodeHistory(osv.Model):
     _name = 'product.code.history'
-    
     _columns={
                 'product_id': fields.many2one('product.product',string="Product"),
                 'datetime':fields.datetime(required=True,string="Date Time"),
-                'default_code':fields.char(required=True,string="Default Code")
+                'name':fields.char(required=True,string="Part Number")
                 }
     _defaults={
                'datetime':fields.datetime.now
@@ -41,14 +40,14 @@ class product_template(osv.Model):
     _columns = {
         'code_history_ids': fields.related('product_variant_ids', 'code_history_ids', type='one2many', relation='product.code.history',string='Product Code History'),
               }
-      
+    
 class Product(osv.Model):
     _inherit = 'product.product'
     
     _columns={
              'code_history_ids': fields.one2many('product.code.history','product_id',string="Product Code History"),
-        }
-    
+            }
+        
     def name_search(self, cr, uid,name,args=None,operator='ilike', context=None,limit=100):
         history_obj = self.pool.get('product.code.history')
         if not args:
@@ -58,21 +57,21 @@ class Product(osv.Model):
             if not ids:
                 ids = self.search(cr, uid, [['default_code','ilike',name]]+ args, limit=limit, context=context)
                 if not ids:
-                    history_ids = history_obj.search(cr, uid, [['default_code','ilike',name]]+ args, limit=limit, context=context)         
+                    history_ids = history_obj.search(cr, uid, [['name','ilike',name]]+ args, limit=limit, context=context)
                     for product in history_obj.browse(cr,uid,history_ids,context=context):
                         ids=[product.product_id.id]
         else:
             ids = self.search(cr, uid, args, limit=limit, context=context)
         result = self.name_get(cr, uid, ids, context=context)
         return result
-
+    
     def create(self, cr, uid, vals, context=None):
         new_product=super(Product, self).create(cr, uid, vals, context=context)
         history_obj = self.pool.get('product.code.history')
-        default_code = vals.get('default_code', False)
-        if default_code and default_code!='':
+        part_number = vals.get('part_number', False)
+        if part_number and part_number!='':
                 new_history=history_obj.create(cr, uid,{'product_id':new_product,
-               'default_code':default_code   
+               'name':part_number
             }, context=context)
         
         return new_product
@@ -80,10 +79,10 @@ class Product(osv.Model):
     def write(self, cr, uid, ids, vals, context=None):
         res = super(Product, self).write(cr, uid, ids, vals, context=context)
         history_obj = self.pool.get('product.code.history')
-        default_code = vals.get('default_code', False)
-        if default_code and  default_code!='':
+        part_number = vals.get('part_number', False)
+        if part_number and  part_number!='':
                 new_history=history_obj.create(cr, uid,{'product_id':ids[0],
-               'default_code': default_code   
+               'name': part_number
             }, context=context)
         return res
     
