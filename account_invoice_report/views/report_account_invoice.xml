@@ -137,16 +137,6 @@
                                                 </td>
                                             </tr>
                                         </t>
-                                        <t t-if="o.amount_tax == 0.0">
-                                            <tr class="text-right" style="white-space: nowrap; border: none">
-                                                <td t-att-colspan="(o.amount_discounted != 0.0) and '5' or '4'" style="padding-left: 24px; padding-right: 15px">
-                                                    Taxes
-                                                </td>
-                                                <td>
-                                                    <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                                </td>
-                                            </tr>
-                                        </t>
                                         <tr class="text-right" style="white-space: nowrap; font-size: 120%">
                                             <td t-att-colspan="(o.amount_discounted != 0.0) and '5' or '4'" style="padding-left: 24px; padding-right: 15px; border-top: 1px solid black">
                                                 <b>Total</b>
