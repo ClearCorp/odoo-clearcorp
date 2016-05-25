@@ -60,7 +60,7 @@ class BaseConfigSettings(models.TransientModel):
             self.env["ir.config_parameter"].get_param(
                 "password_security_length", default=None)
         return {
-            'password_security_length': int(password_security_length) or False
+            'password_security_length': int(password_security_length or False)
             }
 
     @api.multi
@@ -114,7 +114,7 @@ class BaseConfigSettings(models.TransientModel):
                 "password_security_uppercase_length", default=None)
         return {
             'password_security_uppercase_length':
-            int(password_security_uppercase_length) or False
+            int(password_security_uppercase_length or False)
             }
 
     @api.multi
@@ -150,7 +150,7 @@ class BaseConfigSettings(models.TransientModel):
                 "password_security_lowercase_length", default=None)
         return {
             'password_security_lowercase_length':
-            int(password_security_lowercase_length) or False
+            int(password_security_lowercase_length or False)
             }
 
     @api.multi
@@ -186,7 +186,7 @@ class BaseConfigSettings(models.TransientModel):
                 "password_security_numbers_length", default=None)
         return {
             'password_security_numbers_length':
-            int(password_security_numbers_length) or False
+            int(password_security_numbers_length or False)
             }
 
     @api.multi
@@ -222,5 +222,5 @@ class BaseConfigSettings(models.TransientModel):
                 "password_security_special_length", default=None)
         return {
             'password_security_special_length':
-            int(password_security_special_length) or False
+            int(password_security_special_length or False)
             }
