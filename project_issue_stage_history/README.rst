@@ -8,12 +8,13 @@ Project Issue Stage History
 
 This module was written to extend the functionality of project_issue to support
 history changes of the stages in a project issue and allow you to see 
-time differences between changes
+time differences between changes.
 
 Contributors
 ------------
 
-* Lesmed Gutierrez <lesmed.gutierrez@clearcorp.cr>
+* Lesmed Gutierrez <lesmed.gutierrez@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 
 Maintainer

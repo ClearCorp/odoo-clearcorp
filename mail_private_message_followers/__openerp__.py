@@ -4,7 +4,7 @@
 
 {
     'name': 'Mail Private Message Followers',
-    'version': '8.0.1.2',
+    'version': '9.0.1.0',
     'category': 'Mail',
     'sequence': 10,
     'installable': True,

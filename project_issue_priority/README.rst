@@ -6,8 +6,9 @@
 Project Issue Priority
 ======================
 
-This module was written to extend the functionality of project_issue to support issues priority 
-and allow you to set 5 stars on priority.
+This module was written to extend the functionality of project_issue,
+in order to support issue priority. The priority representation is based on
+a 5-star rating.
 
 Credits
 =======
@@ -15,8 +16,8 @@ Credits
 Contributors
 ------------
 
-* Lesmed Gutierrez <lesmed.gutierrez@clearcorp.cr>
-
+* Lesmed Gutierrez <lesmed.gutierrez@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 Maintainer
 ----------

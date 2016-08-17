@@ -15,6 +15,7 @@ Contributors
 ------------
 
 * Fabio Vilchez <fabio.vilchez@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 
 Maintainer

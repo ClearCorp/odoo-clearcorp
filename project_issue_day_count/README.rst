@@ -6,7 +6,7 @@
 Project Issue Day Count
 =======================
 
-This module was written to add deadline at tickets and total day.
+This module adds deadlines to tickets and a remaining-days counter.
 
 Credits
 =======
@@ -15,6 +15,7 @@ Contributors
 ------------
 
 * Fabio Vílchez <fabio.vilchez@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 
 Maintainer

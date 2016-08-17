@@ -7,7 +7,7 @@ Project Issue Contact
 =====================
 
 This module was written to extend the functionality of project_issue to 
-prevent contact change once the project is assigned
+prevent any contact change once the project is assigned.
 
 Credits
 =======
@@ -15,7 +15,8 @@ Credits
 Contributors
 ------------
 
-* Lesmed Gutierrez <lesmed.gutierrez@clearcorp.cr>
+* Lesmed Gutierrez <lesmed.gutierrez@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 
 Maintainer

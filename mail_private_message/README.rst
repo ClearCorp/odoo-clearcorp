@@ -8,7 +8,7 @@ Mail Private Message
 
 Features
 
-* Private messages only visible to employees.
+* Private messages visible to employees only.
 * Disable notifications to followers.
 
 Credits
@@ -18,7 +18,9 @@ Contributors
 ------------
 
 * Glen Sojo <glen.sojo@clearcorp.co.cr>
-* Lesmed Gutiérrez <lesmed.gutierrez@clearcorp.cr>
+* Lesmed Gutiérrez <lesmed.gutierrez@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
+
 
 Maintainer
 ----------

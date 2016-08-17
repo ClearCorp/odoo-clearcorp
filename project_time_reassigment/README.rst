@@ -7,7 +7,7 @@ Project Time Reassigment
 ========================
 
 This module was created to maintain control over the reallocation of 
-tasks hours
+task hours.
 
 Credits
 =======
@@ -15,8 +15,8 @@ Credits
 Contributors
 ------------
 
-* Rodney Vargas <rodney.vargas@clearcorp.cr>
-
+* Rodney Vargas <rodney.vargas@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 Maintainer
 ----------
