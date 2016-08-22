@@ -12,7 +12,7 @@
     'sequence': 4,
     'website' : 'http://clearcorp.co.cr',
     'depends' : ['base','project'],
-    'data' : ['views/project_task_sequence_view.xml','data/project_task_sequence_data.xml'],
+    'data' : ['views/project_task_sequence_view.xml'],
     'auto_install': False,
     'application': False,
     'installable': True,
