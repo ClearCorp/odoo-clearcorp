@@ -7,7 +7,7 @@
     'version': '9.0.1.0',
     'category': 'Project',
     'sequence': 10,
-    'summary': 'Count days left before a deadline',
+    'summary': 'Days left before a deadline',
     'author': 'ClearCorp',
     'website': 'http://clearcorp.co.cr',
     'depends': ['base', 'project_issue'],

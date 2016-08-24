@@ -20,5 +20,5 @@ class ProjectIssue(models.Model):
                                          DEFAULT_SERVER_DATE_FORMAT).date()
             self.day_count = (deadline - today).days
 
-    day_count = fields.Integer('Quantity of days',
+    day_count = fields.Integer('Amount of days',
                                compute='_compute_day_count')
