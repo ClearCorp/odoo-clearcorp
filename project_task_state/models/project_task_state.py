@@ -9,7 +9,7 @@ _TASK_STATE = [('draft', 'New'), ('open', 'In Progress'),
                ('done', 'Done'), ('cancelled', 'Cancelled')]
 
 
-class project_task_type(models.Model):
+class ProjectTaskType(models.Model):
 
     _inherit = 'project.task.type'
     state = fields.Selection(_TASK_STATE, 'Related Status', required=True,
@@ -31,7 +31,7 @@ class project_task_type(models.Model):
     }
 
 
-class task(models.Model):
+class Task(models.Model):
 
     _inherit = 'project.task'
 
