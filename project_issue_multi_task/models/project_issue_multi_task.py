@@ -5,15 +5,11 @@
 from openerp import models, fields
 
 
-class project_issue(models.Model):
-
+class ProjectIssue(models.Model):
     _inherit = 'project.issue'
-
     task_ids = fields.Many2many('project.task', string='Tasks')
 
 
-class project_task(models.Model):
-
+class ProjectTask(models.Model):
     _inherit = 'project.task'
-
     tickets_ids = fields.Many2many('project.issue', string='Tickets')

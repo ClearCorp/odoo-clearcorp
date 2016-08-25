@@ -4,19 +4,17 @@
 
 <openerp>
     <data>
+        <!-- Project Issue Form View -->
         <record model="ir.ui.view" id="project_issue_form_view_mt">
             <field name="name">Project Issue Tracker Form</field>
             <field name="model">project.issue</field>
             <field name="inherit_id" ref="project_issue.project_issue_form_view" />
             <field name="arch" type="xml">
-                <xpath expr="//form/sheet/group/group/label[@for='task_id']" position="attributes">
+                <xpath expr="//form/sheet/group/group/field[@name='task_id']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>
-                <xpath expr="//form/sheet/group/group/div/field[@name='task_id']" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </xpath>
-                <xpath expr="//notebook/page[@string='Extra Info']" position="before">
-                    <page string="Task Sumary">
+                <xpath expr="//notebook/page[@name='extra_info']" position="before">
+                    <page string="Task Summary">
                         <field name="task_ids" colspan="4" nolabel="1" 
                             domain="[('project_id','=',project_id)]" 
                             context="{'default_name': name, 'default_project_id': project_id, 'default_description': description,
