@@ -2,13 +2,12 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-===========================
-Project Issue Stage History
-===========================
+==================
+Project Issue Type
+==================
 
-This module was written to extend the functionality of project_issue to view
-the historic changes of the stages in an issue and allow you to see the elapsed
-time between changes.
+This module was written to extend the functionality of project_issue to create
+different types of issues. Works with Enterprise version only.
 
 Contributors
 ------------

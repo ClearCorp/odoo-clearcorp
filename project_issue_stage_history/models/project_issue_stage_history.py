@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api
-from openerp.fields import Many2one
 from datetime import datetime
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
@@ -14,7 +13,7 @@ class ProjectIssueStageHistory(models.Model):
 
     @api.one
     @api.depends('date', 'issue_id')
-    def _compute_value(self):
+    def _compute_elapsed_time(self):
         last_history = self.search([
             ('issue_id', '=', self.issue_id.id),
             ('date', '<', self.date)], order='date DESC', limit=1)
@@ -23,19 +22,21 @@ class ProjectIssueStageHistory(models.Model):
                                     DEFAULT_SERVER_DATETIME_FORMAT)
             last = datetime.strptime(last_history.date,
                                      DEFAULT_SERVER_DATETIME_FORMAT)
-            self.value = (((now - last).days * 24.0 * 60.0) +
-                          (now - last).seconds / 60.0) / 60.0
+            self.elapsed_time = (((now - last).days * 24.0 * 60.0) +
+                                 (now - last).seconds / 60.0) / 60.0
         else:
-            self.value = 0.0
+            self.elapsed_time = 0.0
 
-    stage_from_id = Many2one('project.task.type', 'Stage from',
-                             select=True, copy=False)
-    stage_to_id = Many2one('project.task.type', 'Stage to',
-                           select=True, copy=False)
+    stage_from_id = fields.Many2one('project.task.type', 'Previous Stage',
+                                    select=True, copy=False)
+    stage_to_id = fields.Many2one('project.task.type', 'Succeding Stage',
+                                  select=True, copy=False)
     date = fields.Datetime(
         'Date', default=lambda self: fields.Datetime.now(), required=True)
-    issue_id = fields.Many2one('project.issue', 'Issue', required=True, ondelete='cascade')
-    value = fields.Float('Value', store=True, compute='_compute_value')
+    issue_id = fields.Many2one(
+        'project.issue', 'Issue', required=True, ondelete='cascade')
+    elapsed_time = fields.Float(
+        'Elapsed time', store=True, compute='_compute_elapsed_time')
 
 
 class ProjectIssue(models.Model):
@@ -48,7 +49,7 @@ class ProjectIssue(models.Model):
 
     @api.multi
     def write(self, values):
-        if ('stage_id' in values.keys()):
+        if 'stage_id' in values.keys():
             stage_history_obj = self.env['project.issue.stage.history']
             stage_to_id = values['stage_id']
             for issue in self:

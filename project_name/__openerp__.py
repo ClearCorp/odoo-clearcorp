@@ -11,7 +11,7 @@
     'category': 'Project Management',
     'sequence': 4,
     'website' : 'http://clearcorp.co.cr',
-    'depends' : ['base','project','account_analytic_name'],
+    'depends' : ['base','project','account_analytic'],
     'data' : ['views/project_name_view.xml'],
     'auto_install': False,
     'application': False,
