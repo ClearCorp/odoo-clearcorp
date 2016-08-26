@@ -4,6 +4,8 @@
 
 <openerp>
     <data>
+
+        <!-- Adds invoiced and issue_type fields -->
         <record model="ir.ui.view" id="project_issue_form_view_type">
             <field name="name">Project Issue Tracker Form</field>
             <field name="model">project.issue</field>
@@ -16,6 +18,7 @@
             </field>
         </record>
 
+        <!-- Adds ticket configuration to analytic account form-->
         <record id="analytic_analytic_account_form2" model="ir.ui.view">
             <field name="name">Invoice</field>
             <field name="model">account.analytic.account</field>
@@ -36,6 +39,7 @@
             </field>
         </record>
 
+        <!-- Allows the creation and editing of new issue types -->
         <record id="action_issue_type" model="ir.actions.act_window">
             <field name="name">Issue Types</field>
             <field name="res_model">ticket.invoice.type.name</field>
@@ -43,6 +47,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="issue_work_type" name="Issue Types" sequence="50" action="action_issue_type" />
+        <!-- Adds Issue Type item to menu -->
+        <menuitem id="issue_work_type" name="Issue Types" parent="project.menu_project_config" sequence="50" action="action_issue_type" />
     </data>
 </openerp>
