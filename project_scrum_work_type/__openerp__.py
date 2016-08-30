@@ -15,7 +15,7 @@
                    'hr',
                  ],
     "data" : [
-              'views/view.xml',
+              'views/project_scrum_work_type_view.xml',
               'security/ir.model.access.csv',
               ],
     "demo_xml" : [],

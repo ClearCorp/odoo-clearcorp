@@ -16,7 +16,7 @@
                     <field name="is_scrum" class="oe_inline" attrs="{'invisible': [('use_tasks','=',False)]}" />
                     <label for="is_scrum" attrs="{'invisible': [('use_tasks','=',False)]}" />
                  </xpath>
-                 <xpath expr="//form/sheet/notebook/page[@string='Other Info']" position="after">
+                 <xpath expr="//form/sheet/notebook/page[3]" position="after">
                     <page string="Release Backlogs" name="release_backlogs">
                         <field name="release_backlog_ids" attrs="{'readonly':['!','|',('state','=','open'),('state','=','pending')]}" context="{'project_id': id}" />
                      </page>
@@ -31,10 +31,13 @@
             <field name="model">project.task</field>
             <field name="inherit_id" ref="project.view_task_form2" />
             <field name="arch" type="xml">
+
+                <!-- Non-existent field - project.task doesn't have it anymore-->
                     <xpath expr="//form/sheet/notebook/page/field[@name='work_ids']"
                         position="attributes">
                         <attribute name="attrs">{'readonly': ['|',('state','!=','open')]}</attribute>
                     </xpath>
+
                 <xpath expr="//form/sheet/group/group/field[@name='project_id']"
                     position="after">
                     <field name="is_scrum" invisible="True" />
@@ -44,11 +47,15 @@
                         attrs="{'invisible': [('is_scrum','=',False)]}"/>
                     <field name="feature_type_id" />
                 </xpath>
+
+                <!-- Non-existent field -->
                 <xpath
                     expr="//form/sheet/notebook/page[@string='Extra Info']/group/group/field[@name='date_end']"
                     position="attributes">
                          <attribute name="attrs">{'readonly': [('state','=','done')]}</attribute>
                 </xpath>
+
+                <!-- Sequence page -->
                 <xpath
                     expr="//form/sheet/notebook/page[@string='Extra Info']"
                     position="after">
