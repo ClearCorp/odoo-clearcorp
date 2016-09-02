@@ -7,7 +7,18 @@
     <data>
         <record id="project_deadline_tag_data" model="project.tags">
             <field name="name">Impending Deadline</field>
-            <field name="color" eval="2"/>
+            <!-- Tag colors: 1 green,
+                             2 yellow,
+                             3 orange,
+                             4 red,
+                             5 blue,
+                             6 light blue,
+                             7 blue-green,
+                             8 pink,
+                             9 black,
+                             0 gray
+            -->
+            <field name="color" eval="4"/>
         </record>
     </data>
 </openerp>
