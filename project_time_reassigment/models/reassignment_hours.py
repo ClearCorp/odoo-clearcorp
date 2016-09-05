@@ -6,10 +6,11 @@ from openerp import models, fields, api, _
 from openerp.exceptions import Warning
 
 
-class origin_task(models.Model):
+class OriginTask(models.Model):
 
     _name = 'project.origin.task'
 
+    # Many Origin Tasks to one ...
     origin_task_id = fields.Many2one('project.task', string="Name")
     reassignment_hour = fields.Float('Reassignment Hour')
     reassignment_hour_id = fields.Many2one('project.reassignment.hours')
@@ -127,14 +128,14 @@ class ReassignmentHours(models.Model):
         return True
 
 
-class projectTask(models.Model):
+class ProjectTask(models.Model):
 
     _inherit = 'project.task'
 
     reassignment_hour = fields.Float('Reassignment Hour', readonly=True)
 
 
-class reassignmentReason(models.Model):
+class ReassignmentReason(models.Model):
 
     _name = 'project.reassignment.reason'
 
