@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- © 2016 ClearCorp
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+
+<openerp>
+    <data><!-- noupdate="1"-->
+
+        <!-- Filter to only add the tag to currently open tasks, those not
+        done and not cancelled-->
+        <record id="task_pending" model="ir.filters">
+            <field name="name">Pending Tasks</field>
+            <field name="model_id">project.task</field>
+            <field name="domain">[('stage_id.state', '!=', 'cancelled'), '|', ('stage_id.state', '!=', 'Done'), '|', ('stage_id.state', '!=', 'Ready')]
+            </field>
+        </record>
+
+        <!-- Python code ran each time the action is triggered -->
+        <record id="task_add_almost_expired_tag" model="ir.actions.server">
+            <field name="name">Project Task add almost expired tag</field>
+            <field name="model_id" ref="project.model_project_task"/>
+            <field name="state">code</field>
+            <field name="code">object.add_urgent_tag()</field>
+        </record>
+
+        <!-- Sets basic rule that gets triggered if there is a single
+        day remaining before the task's deadline -->
+        <record id="rule_task_deadline_check_date" model="base.action.rule">
+            <field name="name">Check time to deadline</field>
+            <field name="model_id" ref="project.model_project_task"/>
+
+            <!-- Triggered one day before deadline -->
+            <field name="kind">on_time</field>
+
+            <!-- Use previously defined filter -->
+            <field name="filter_id" ref="task_pending"/>
+            <field name="trg_date_id" ref="project.field_project_task_date_deadline"/>
+            <field name="trg_date_range">-1</field>
+            <field name="trg_date_range_type">day</field>
+
+            <!-- Relates this rule with a sever action (the python code)
+                (6, 0, [IDs]) replaces linked IDs in many2many rel-->
+            <field name="server_action_ids" eval="[(6, 0, [ref('task_add_almost_expired_tag')])]"/>
+        </record>
+    </data>
+</openerp>
