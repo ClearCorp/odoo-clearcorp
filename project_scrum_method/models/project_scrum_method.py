@@ -1,24 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Addons modules by CLEARCORP S.A.
-#    Copyright (C) 2009-TODAY CLEARCORP S.A. (<http://clearcorp.co.cr>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# © 2016 ClearCorp
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp.osv import osv, fields
 from openerp.tools.translate import _
@@ -34,20 +16,23 @@ PRIORITY = {
             1: '0',
             }
 
-STATES = [('draft', 'Draft'),('new', 'New'), ('open', 'In Progress'),
-          ('pending', 'Pending'),('done', 'Done'),
+STATES = [('draft', 'Draft'), ('new', 'New'), ('open', 'In Progress'),
+          ('pending', 'Pending'), ('done', 'Done'),
           ('cancelled', 'Cancelled')]
 
-class featureType(osv.Model):
+
+class FeatureType(osv.Model):
     
     _name = 'project.scrum.feature.type'
     
     _columns = {
                 'code': fields.char('Code', size=16, required=True),
-                'name': fields.char('Type Name', size=128, required=True, translate=True),
+                'name': fields.char('Type Name', size=128, required=True,
+                                    translate=True)
                 }
     
-    _sql_constraints = [('unique_code', 'UNIQUE(code)', 'Code must be unique for every feature type.')]
+    _sql_constraints = [('unique_code', 'UNIQUE(code)',
+                         'Code must be unique for every feature type.')]
     
     def name_get(self, cr, uid, ids, context=None):
         res = []
@@ -55,7 +40,8 @@ class featureType(osv.Model):
             name = '%s - %s' % (r['code'], r['name'])
             res.append((r['id'], name))
         return res
-    
+
+
 class Feature(osv.Model):
     
     _inherit = 'mail.thread'
@@ -68,25 +54,27 @@ class Feature(osv.Model):
         for id in ids:
             task_ids = [x.id for x in
                           self.browse(cr, uid, id,
-                              context=context).task_ids]
+                                      context=context).task_ids]
             task_obj = self.pool.get('project.task')
             task_ids = task_obj.search(cr, uid,
-                                       [('id','in',task_ids),
-                                        ('feature_id','=',id),
-                                        '!',('state','in',['cancelled','draft'])],
+                                       [('id', 'in', task_ids),
+                                        ('feature_id', '=', id),
+                                        '!', ('state', 'in',
+                                              ['cancelled', 'draft'])],
                                        context=context)
-            tasks = task_obj.browse(cr,uid,task_ids,context=context)
+            tasks = task_obj.browse(cr, uid, task_ids, context=context)
             date_start = False
             for task in tasks:
                 if task.date_start:
-                    date = datetime.strptime(task.date_start,'%Y-%m-%d %H:%M:%S')
+                    date = datetime.strptime(task.date_start,
+                                             '%Y-%m-%d %H:%M:%S')
                     if not date_start:
                         date_start = date
                     else:
                         if date_start > date:
                             date_start = date
             if date_start:
-                date_start = datetime.strftime(date_start,'%Y-%m-%d %H:%M:%S') 
+                date_start = datetime.strftime(date_start, '%Y-%m-%d %H:%M:%S')
             res[id] = date_start
         return res
     
@@ -96,26 +84,28 @@ class Feature(osv.Model):
         res = {}
         for id in ids:
             task_ids = [x.id for x in
-                          self.browse(cr, uid, id,
-                              context=context).task_ids]
+                        self.browse(cr, uid, id,
+                                    context=context).task_ids]
             task_obj = self.pool.get('project.task')
             task_ids = task_obj.search(cr, uid,
-                                       [('id','in',task_ids),
-                                        ('feature_id','=',id),
-                                        '!',('state','in',['cancelled','draft'])],
+                                       [('id', 'in', task_ids),
+                                        ('feature_id', '=', id),
+                                        '!', ('state', 'in',
+                                              ['cancelled', 'draft'])],
                                        context=context)
-            tasks = task_obj.browse(cr,uid,task_ids,context=context)
+            tasks = task_obj.browse(cr, uid, task_ids, context=context)
             date_end = False
             for task in tasks:
                 if task.date_end:
-                    date = datetime.strptime(task.date_end,'%Y-%m-%d %H:%M:%S')
+                    date = datetime.strptime(task.date_end,
+                                             '%Y-%m-%d %H:%M:%S')
                     if not date_end:
                         date_end = date
                     else:
                         if date > date_end:
                             date_end = date
             if date_end:
-                date_end = datetime.strftime(date_end,'%Y-%m-%d %H:%M:%S') 
+                date_end = datetime.strftime(date_end, '%Y-%m-%d %H:%M:%S')
             res[id] = date_end
         return res
     
@@ -127,25 +117,25 @@ class Feature(osv.Model):
         for id in ids:
             task_ids = [x.id for x in
                               self.browse(cr, uid, id,
-                                  context=context).task_ids]
+                                          context=context).task_ids]
             task_obj = self.pool.get('project.task')
             task_ids = task_obj.search(cr, uid,
-                                           [('id','in',task_ids),
-                                            ('feature_id','=',id)],
-                                           context=context)
-            tasks = task_obj.browse(cr,uid,task_ids,context=context)
-            sum = reduce(lambda result,task: result+task.effective_hours,
-                             tasks, 0.0)
+                                       [('id', 'in', task_ids),
+                                        ('feature_id', '=', id)],
+                                       context=context)
+            tasks = task_obj.browse(cr, uid, task_ids, context=context)
+            sum = reduce(lambda result, task: result+task.effective_hours,
+                         tasks, 0.0)
             res[id] = sum
             return res
     
     def _remaining_hours(self, cr, uid, ids, field_name, arg, context=None):
         """Calculate the difference between planned and effective hours"""
-        res={}
+        res = {}
         features = self.browse(cr, uid, ids, context=context)
         for feature in features:
             res[feature.id] = feature.expected_hours - \
-            feature.effective_hours
+                feature.effective_hours
         return res
     
     def _progress(self, cr, uid, ids, field_name, arg, context=None):
@@ -154,16 +144,16 @@ class Feature(osv.Model):
         res = {}
         for id in ids:
             task_ids = [x.id for x in
-                          self.browse(cr, uid, id,
-                              context=context).task_ids]
+                        self.browse(cr, uid, id,
+                                    context=context).task_ids]
             task_obj = self.pool.get('project.task')
             task_ids = task_obj.search(cr, uid,
-                                       [('id','in',task_ids),
-                                        ('feature_id','=',id)],
+                                       [('id', 'in', task_ids),
+                                        ('feature_id', '=', id)],
                                        context=context)
-            tasks = task_obj.browse(cr,uid,task_ids,context=context)
+            tasks = task_obj.browse(cr, uid, task_ids, context=context)
             if tasks:
-                sum = reduce(lambda result,task: result+task.progress,
+                sum = reduce(lambda result, task: result+task.progress,
                              tasks, 0.0)
                 res[id] = sum/len(tasks)
             else:
@@ -171,71 +161,95 @@ class Feature(osv.Model):
         return res
     
     def set_open(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state':'open'}, context=context)
+        return self.write(cr, uid, ids, {'state': 'open'}, context=context)
     
     def set_done(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state':'done'}, context=context)
+        return self.write(cr, uid, ids, {'state': 'done'}, context=context)
     
     def set_cancel(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state':'cancelled'}, context=context)
+        return self.write(cr, uid, ids, {'state': 'cancelled'}, context=context)
     
     def set_very_low_priority(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'priority':5}, context=context)
+        return self.write(cr, uid, ids, {'priority': 5}, context=context)
     
     def set_low_priority(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'priority':4}, context=context)
+        return self.write(cr, uid, ids, {'priority': 4}, context=context)
     
     def set_medium_priority(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'priority':3}, context=context)
+        return self.write(cr, uid, ids, {'priority': 3}, context=context)
     
     def set_high_priority(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'priority':2}, context=context)
+        return self.write(cr, uid, ids, {'priority': 2}, context=context)
     
     def set_very_high_priority(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'priority':1}, context=context)
+        return self.write(cr, uid, ids, {'priority': 1}, context=context)
 
     _columns = {
                 'name': fields.char('Feature Name', size=128, required=True),
                 'code': fields.char('Code', size=16, required=True),
-                'release_backlog_id': fields.many2one('project.scrum.release.backlog',
-                    string='Release Backlog', domain="[('project_id','=',project_id),"
+                'release_backlog_id': fields.many2one(
+                    'project.scrum.release.backlog',
+                    string='Release Backlog',
+                    domain="[('project_id', '=', project_id),"
                     "'|',('state','=','open'),('state','=','pending')]"),
-                'project_id': fields.many2one('project.project', string='Project', required=True),
+                'project_id': fields.many2one(
+                    'project.project', string='Project', required=True),
                 'description': fields.text('Description'),
-                'partner_id': fields.many2one('res.partner', string='Product Owner',
+                'partner_id': fields.many2one(
+                    'res.partner', string='Product Owner',
                     domain="[('customer','=',True)]",
                     help='Contact or person responsible of keeping the '
-                    'business perspective in scrum projects.'),
-                'type_id': fields.many2one('project.scrum.feature.type', string='Type'),
-                'priority': fields.selection([(5, '5 - Very Low'), (4, '4 - Low'), (3, '3 - Medium'), (2, '2 - High'),
-                    (1, '1 - Very High')], string='Priority', required=True),
-                'task_ids': fields.one2many('project.task', 'feature_id', string='Tasks', readonly=True),
-                'date_start': fields.function(_date_start, type='datetime', string='Start Date', store=True),
-                'date_end': fields.function(_date_end, type='datetime', string='End Date', store=True),
+                         'business perspective in scrum projects.'),
+                'type_id': fields.many2one('project.scrum.feature.type',
+                                           string='Type'),
+                'priority': fields.selection(
+                    [(5, '5 - Very Low'), (4, '4 - Low'), (3, '3 - Medium'),
+                     (2, '2 - High'), (1, '1 - Very High')],
+                    string='Priority', required=True),
+                'task_ids': fields.one2many(
+                    'project.task', 'feature_id',
+                    string='Tasks', readonly=True),
+                'date_start': fields.function(
+                    _date_start, type='datetime',
+                    string='Start Date', store=True),
+                'date_end': fields.function(
+                    _date_end, type='datetime',
+                    string='End Date', store=True),
                 'deadline': fields.date(string='Deadline'),
-                'expected_hours': fields.float('Initially Planned Hour(s)',
+                'expected_hours': fields.float(
+                    'Initially Planned Hour(s)',
                     help='Total planned hours for the development of '
-                    'this feature.\nRecommended values are:\n 1h, 2h, 4h,'
-                    ' or 8h'),
+                    'this feature.\nRecommended values '
+                    'are:\n 1 h, 2 h, 4 h, or 8 h.'),
                 'effective_hours': fields.function(
                     _effective_hours, type='float', string='Spent Hour(s)',
-                    help='Total effective hours from tasks related to this feature.', store=True),
+                    help='Total effective hours spent on tasks '
+                         'related to this feature.', store=True),
                 'remaining_hours': fields.function(
                     _remaining_hours, type='float', string='Remaining Hour(s)',
-                    help='Difference between planned hours and spent hours.', store=True),
-                'progress': fields.function(_progress, type='float', string='Progress (%)', store=True),
-                'state': fields.selection([('draft', 'New'), ('open', 'In Progress'), 
-                                           ('cancelled', 'Cancelled'), ('done', 'Done'), ],'Status', required=True),
+                    help='Difference between planned hours and spent hours.',
+                    store=True),
+                'progress': fields.function(
+                    _progress, type='float', string='Progress (%)',
+                    store=True),
+                'state': fields.selection(
+                    [('draft', 'New'), ('open', 'In Progress'),
+                     ('cancelled', 'Cancelled'),
+                     ('done', 'Done'), ],
+                    'Status', required=True),
                 'color': fields.integer('Color Index'),
-                'acceptance_requirements_client': fields.text('Acceptance requirements by client'),
-                'acceptance_requirements_supplier': fields.text('Funtional acceptance requirements'), 
+                'acceptance_requirements_client': fields.text(
+                    'Acceptance requirements by client'),
+                'acceptance_requirements_supplier': fields.text(
+                    'Funtional acceptance requirements'),
                 'validation_date': fields.date('Validation Date'),
                 }
     
     _defaults = {
                  'priority': 3,
                  'state': 'draft',
-                 'release_backlog_id': lambda self, cr, uid, c: c.get('release_backlog_id', False),
+                 'release_backlog_id': lambda self, cr, uid, c: c.get(
+                     'release_backlog_id', False),
                  }
     
     def name_get(self, cr, uid, ids, context=None):
@@ -245,7 +259,9 @@ class Feature(osv.Model):
             res.append((r['id'], name))
         return res
     
-    def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=50):
+    def name_search(
+            self, cr, uid, name='', args=None,
+            operator='ilike', context=None, limit=50):
         ids = []
         if name:
             ids = self.search(cr, uid,
@@ -260,11 +276,14 @@ class Feature(osv.Model):
     def copy(self, cr, uid, id, defaults, context=None):
         feature = self.browse(cr, uid, id, context=context)
         defaults['code'] = feature.code + ' (copy)'
-        return super(Feature, self).copy(cr, uid, id, defaults, context=context)
+        return super(Feature, self).copy(
+            cr, uid, id, defaults, context=context)
     
-    _sql_constraints = [('unique_code_product', 'UNIQUE(code,project_id)',
-                         'Code must be unique for every feature related to a Product Backlog')]
-    
+    _sql_constraints = [
+        ('unique_code_product', 'UNIQUE(code,project_id)',
+         'Code must be unique for every feature related to a Product Backlog')]
+
+
 class Sprint(osv.Model):
     
     _name = 'project.scrum.sprint'
@@ -278,7 +297,8 @@ class Sprint(osv.Model):
             date_end = False
             for task in tasks:
                 if task.date_end and task.state not in ('draft', 'cancelled'):
-                    date = datetime.strptime(task.date_end, '%Y-%m-%d %H:%M:%S')
+                    date = datetime.strptime(
+                        task.date_end, '%Y-%m-%d %H:%M:%S')
                     if not date_end:
                         date_end = date
                     else:
@@ -334,33 +354,38 @@ class Sprint(osv.Model):
                 res[id] = 0.0
         return res
     
-    def onchange_project(self, cr, uid, ids, project_id, stage_id, context=None):
+    def onchange_project(
+            self, cr, uid, ids, project_id, stage_id, context=None):
         if project_id:
             type_ids = [x.id for x in self.pool.get('project.project').browse(
                 cr, uid, project_id, context=context).type_ids]
-            if not stage_id in type_ids: 
-                stage = self.get_default_stage_id(cr, uid, project_id, context=context)
+            if not stage_id in type_ids:
+                stage = self.get_default_stage_id(
+                    cr, uid, project_id, context=context)
                 return {'value': {'stage_id': stage}}
             else: 
                 return {}
         return {
                 'value': {
-                          'stage_id': self.get_default_stage(cr, uid, context=context)
+                          'stage_id': self.get_default_stage(
+                              cr, uid, context=context)
                           }
                 }
     
-    def get_default_stage(self, cr , uid, context=None):
+    def get_default_stage(self, cr, uid, context=None):
         type_obj = self.pool.get('project.task.type')
         type = type_obj.search(cr, uid, [('state', '=', 'draft')],
-            context=context, limit=1)[0]
+                               context=context, limit=1)[0]
         if not type:
-            raise osv.except_osv(_('Error'), _('There is no ''draft'' state configured.'))
+            raise osv.except_osv(
+                _('Error'), _('There is no ''draft'' state configured.'))
         return type
         
-    def get_default_stage_id(self, cr , uid, project_id, context=None):
+    def get_default_stage_id(self, cr, uid, project_id, context=None):
         type_obj = self.pool.get('project.task.type')
-        type = type_obj.search(cr, uid,
-            [('project_ids', '=', project_id)], context=context, limit=1)[0]
+        type = type_obj.search(
+            cr, uid, [('project_ids', '=', project_id)],
+            context=context, limit=1)[0]
         return type
     
     def tasks_from_features(self, cr, uid, ids, context=None):
