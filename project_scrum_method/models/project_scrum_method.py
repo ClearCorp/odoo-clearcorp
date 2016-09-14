@@ -116,8 +116,8 @@ class Feature(osv.Model):
         res = {}
         for id in ids:
             task_ids = [x.id for x in
-                              self.browse(cr, uid, id,
-                                          context=context).task_ids]
+                        self.browse(
+                            cr, uid, id, context=context).task_ids]
             task_obj = self.pool.get('project.task')
             task_ids = task_obj.search(cr, uid,
                                        [('id', 'in', task_ids),
@@ -167,7 +167,8 @@ class Feature(osv.Model):
         return self.write(cr, uid, ids, {'state': 'done'}, context=context)
     
     def set_cancel(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state': 'cancelled'}, context=context)
+        return self.write(cr, uid, ids,
+                          {'state': 'cancelled'}, context=context)
     
     def set_very_low_priority(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids, {'priority': 5}, context=context)
@@ -200,8 +201,9 @@ class Feature(osv.Model):
                     domain="[('customer','=',True)]",
                     help='Contact or person responsible of keeping the '
                          'business perspective in scrum projects.'),
-                'type_id': fields.many2one('project.scrum.feature.type',
-                                           string='Type'),
+                'type_id': fields.many2one(
+                    'project.scrum.feature.type',
+                    string='Type'),
                 'priority': fields.selection(
                     [(5, '5 - Very Low'), (4, '4 - Low'), (3, '3 - Medium'),
                      (2, '2 - High'), (1, '1 - Very High')],
@@ -359,7 +361,7 @@ class Sprint(osv.Model):
         if project_id:
             type_ids = [x.id for x in self.pool.get('project.project').browse(
                 cr, uid, project_id, context=context).type_ids]
-            if not stage_id in type_ids:
+            if stage_id not in type_ids:
                 stage = self.get_default_stage_id(
                     cr, uid, project_id, context=context)
                 return {'value': {'stage_id': stage}}
@@ -367,8 +369,8 @@ class Sprint(osv.Model):
                 return {}
         return {
                 'value': {
-                          'stage_id': self.get_default_stage(
-                              cr, uid, context=context)
+                    'stage_id': self.get_default_stage(
+                        cr, uid, context=context)
                           }
                 }
     
@@ -413,7 +415,7 @@ class Sprint(osv.Model):
     def set_features_done(self, cr, uid, ids, context=None):
         sprint = self.browse(cr, uid, ids[0], context=context)
         for feature in sprint.feature_ids:
-            if not feature.state in ('done', 'cancelled'):
+            if feature.state not in ('done', 'cancelled'):
                 feature.write({'state': 'done'}, context=context)
         return True
     
@@ -422,10 +424,10 @@ class Sprint(osv.Model):
             ids = [ids]
         sprint = self.browse(cr, uid, ids[0], context=context)
         for task in sprint.task_ids:
-            if not task.state in ['done', 'cancelled']:
-                raise osv.except_osv(_('Error'),
-                    _('All tasks must be done or cancelled in order '
-                      'to cancel this sprint.'))
+            if task.state not in ['done', 'cancelled']:
+                raise osv.except_osv(
+                    _('Error'), _('All tasks must be done or cancelled '
+                                  'in order to cancel this sprint.'))
         project = sprint.project_id
         id = False
         for stage in project.type_ids:
@@ -438,10 +440,10 @@ class Sprint(osv.Model):
     def set_cancel(self, cr, uid, ids, context=None):
         sprint = self.browse(cr, uid, ids[0], context=context)
         for task in sprint.task_ids:
-            if not task.state in ['done', 'cancelled']:
-                raise osv.except_osv(_('Error'),
-                    _('All tasks must be done or cancelled in order '
-                      'to cancel this sprint.'))
+            if task.state not in ['done', 'cancelled']:
+                raise osv.except_osv(_('Error'), _('All tasks must be done '
+                                                   'or cancelled in order '
+                                                   'to cancel this sprint.'))
         project = sprint.project_id
         id = False
         for stage in project.type_ids:
@@ -454,7 +456,8 @@ class Sprint(osv.Model):
     def _check_deadline(self, cr, uid, ids, context=None):
         sprints = self.browse(cr, uid, ids, context=context)
         for sprint in sprints:
-            date_start = datetime.strptime(sprint.date_start, '%Y-%m-%d %H:%M:%S')
+            date_start = datetime.strptime(
+                sprint.date_start, '%Y-%m-%d %H:%M:%S')
             deadline = datetime.strptime(sprint.deadline, '%Y-%m-%d')
             if deadline < date_start:
                 return False
@@ -462,39 +465,60 @@ class Sprint(osv.Model):
     
     _columns = {
                 'name': fields.char('Name', size=128, required=True),
-                'partner_id': fields.many2one('res.users', string='User', size=128, required=True),
-                'task_ids': fields.one2many('project.task', 'sprint_id', string='Tasks'),
+                'partner_id': fields.many2one(
+                    'res.users', string='User', size=128, required=True),
+                'task_ids': fields.one2many(
+                    'project.task', 'sprint_id', string='Tasks'),
                 'date_start': fields.datetime('Start Date', required=True),
-                'date_end': fields.function(_date_end, type='datetime', string='End Date', store=True),
+                'date_end': fields.function(
+                    _date_end, type='datetime', string='End Date', store=True),
                 'deadline': fields.date('Deadline', required=True),
-                'expected_hours': fields.function(_expected_hours, type='float', string='Initially Planned Hour(s)', store=True),
-                'effective_hours': fields.function(_effective_hours, type='float', string='Spent Hour(s)', store=True),
-                'remaining_hours': fields.function(_remaining_hours, type='float', string='Remaining Hour(s)', store=True),
-                'progress': fields.function(_progress, type='float', string='Progress (%)', store=True),
-                'stage_id': fields.many2one('project.task.type', string='Stage', domain="[('fold', '=', False)]"),
-                'state': fields.related('stage_id', 'state', selection=STATES, type='selection', string='State', readonly=True),
+                'expected_hours': fields.function(
+                    _expected_hours, type='float',
+                    string='Initially Planned Hour(s)', store=True),
+                'effective_hours': fields.function(
+                    _effective_hours, type='float', string='Spent Hour(s)',
+                    store=True),
+                'remaining_hours': fields.function(
+                    _remaining_hours, type='float',
+                    string='Remaining Hour(s)', store=True),
+                'progress': fields.function(
+                    _progress, type='float',
+                    string='Progress (%)', store=True),
+                'stage_id': fields.many2one(
+                    'project.task.type', string='Stage',
+                    domain="[('fold', '=', False)]"),
+                'state': fields.related(
+                    'stage_id', 'state', selection=STATES, type='selection',
+                    string='State', readonly=True),
                 'color': fields.integer('Color Index'),
                 }
     
     _defaults = {
                  'state': 'new',
-                 'date_start': lambda *a: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S'),
-                 'deadline': lambda *a: datetime.strftime(datetime.now(), '%Y-%m-%d'),
+                 'date_start': lambda *a: datetime.strftime(
+                     datetime.now(), '%Y-%m-%d %H:%M:%S'),
+                 'deadline': lambda *a: datetime.strftime(
+                     datetime.now(), '%Y-%m-%d'),
                  }
     
     _constraints = [
-                    (_check_deadline, 'Deadline must be greater than Start Date', ['Start Date', 'Deadline'])]
-    
+                    (_check_deadline,
+                     'Deadline must be greater than Start Date',
+                     ['Start Date', 'Deadline'])]
+
+
 class Task(osv.Model):
 
     _inherit = 'project.task'
 
     def onchange_project(self, cr, uid, ids, project_id, context=None):
-        res = super(Task, self).onchange_project(cr, uid, ids, project_id, context=context)
+        res = super(Task, self).onchange_project(
+            cr, uid, ids, project_id, context=context)
         if project_id:
             project = self.pool.get('project.project').browse(
                 cr, uid, project_id, context=context)
-            if not 'value' in res:
+            if 'value' not in res:
                 res['value'] = {}
             res['value']['is_scrum'] = project.is_scrum
             if not project.is_scrum:
@@ -502,7 +526,7 @@ class Task(osv.Model):
                 res['value']['sprint_id'] = False
                 res['value']['feature_id'] = False
         else:
-            if not 'value' in res:
+            if 'value' not in res:
                 res['value'] = {}
             res['value']['is_scrum'] = False
             res['value']['release_backlog_id'] = False
@@ -543,12 +567,12 @@ class Task(osv.Model):
                           }
                 }
     
-    def _check_related_tasks(self, cr , uid, ids, context=None):
+    def _check_related_tasks(self, cr, uid, ids, context=None):
         tasks = self.browse(cr, uid, ids, context=context)
         for task in tasks:
             for previous_task in task.previous_task_ids:
                 if previous_task.id == task.id or \
-                previous_task in task.next_task_ids:
+                                previous_task in task.next_task_ids:
                     return False
             for next_task in task.next_task_ids:
                 if next_task.id == task.id:
@@ -558,9 +582,11 @@ class Task(osv.Model):
     def write(self, cr, uid, ids, values, context=None):
         if 'stage_id' in values:
             stage_obj = self.pool.get('project.task.type')
-            stage = stage_obj.browse(cr, uid, values['stage_id'], context=context)
+            stage = stage_obj.browse(
+                cr, uid, values['stage_id'], context=context)
             if stage.state == 'done':
-                date_end = datetime.strftime(datetime.now(),'%Y-%m-%d %H:%M:%S')
+                date_end = datetime.strftime(
+                    datetime.now(),'%Y-%m-%d %H:%M:%S')
                 values.update({
                           'date_end': date_end,
                               })
@@ -568,30 +594,46 @@ class Task(osv.Model):
 
     _columns = {
                 'is_scrum': fields.boolean('Scrum'),
-                'sprint_id': fields.many2one('project.scrum.sprint', string='Sprint'),
-                'feature_id': fields.many2one('project.scrum.feature', string='Feature'),
-                'feature_type_id': fields.related('feature_id', 'type_id', type='many2one', string='Feature Type',
+                'sprint_id': fields.many2one(
+                    'project.scrum.sprint', string='Sprint'),
+                'feature_id': fields.many2one(
+                    'project.scrum.feature', string='Feature'),
+                'feature_type_id': fields.related(
+                    'feature_id', 'type_id', type='many2one',
+                    string='Feature Type',
                     relation='project.scrum.feature.type', readonly=True),
-                'previous_task_ids': fields.many2many('project.task', 'project_scrum_task_previous_tasks',
-                    'task_id', 'previous_task_id', string='Previous Tasks', domain="['!',('id','=',id)]"),
-                'next_task_ids': fields.many2many('project.task', 'project_scrum_task_next_tasks',
-                    'task_id', 'next_task_id', string='Next Tasks', domain="['!',('state','in',['done','cancelled']),"
+                'previous_task_ids': fields.many2many(
+                    'project.task', 'project_scrum_task_previous_tasks',
+                    'task_id', 'previous_task_id', string='Previous Tasks',
+                    domain="['!',('id','=',id)]"),
+                'next_task_ids': fields.many2many(
+                    'project.task', 'project_scrum_task_next_tasks',
+                    'task_id', 'next_task_id', string='Next Tasks',
+                    domain="['!',('state','in',['done','cancelled']),"
                     "'!',('id','=',id)]"),
                 }
 
     _defaults = {
-                 'date_start': lambda *a: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S'),
-                 'project_id': lambda slf, cr, uid, ctx: ctx.get('project_id', False),
-                 'release_backlog_id': lambda slf, cr, uid, ctx: ctx.get('release_backlog_id', False),
-                 'sprint_id': lambda slf, cr, uid, ctx: ctx.get('sprint_id', False),
+                 'date_start': lambda *a: datetime.strftime(
+                     datetime.now(), '%Y-%m-%d %H:%M:%S'),
+                 'project_id':
+                 lambda slf, cr, uid, ctx: ctx.get('project_id', False),
+                 'release_backlog_id':
+                 lambda slf, cr, uid, ctx: ctx.get(
+                     'release_backlog_id', False),
+                 'sprint_id':
+                 lambda slf, cr, uid, ctx: ctx.get('sprint_id', False),
                  }
     
     _constraints = [
-                    (_check_related_tasks, 'There was an error checking the relationship between tasks. '
-                     'Please check if you selected an invalid task.', ['Previous Tasks', 'Next Tasks']),
+                    (_check_related_tasks,
+                     'There was an error checking the relationship '
+                     'between tasks. Please check if you selected an '
+                     'invalid task.', ['Previous Tasks', 'Next Tasks']),
                     ]
-    
-class releaseBacklog(osv.Model):
+
+
+class ReleaseBacklog(osv.Model):
     
     _name = 'project.scrum.release.backlog'
     
@@ -603,8 +645,10 @@ class releaseBacklog(osv.Model):
             features = self.browse(cr, uid, id, context=context).feature_ids
             date_end = False
             for feature in features:
-                if feature.date_end and feature.state not in ['draft','cancelled']:
-                    date = datetime.strptime(feature.date_end, '%Y-%m-%d %H:%M:%S')
+                if feature.date_end and \
+                                feature.state not in ['draft', 'cancelled']:
+                    date = datetime.strptime(
+                        feature.date_end, '%Y-%m-%d %H:%M:%S')
                     if not date_end:
                         date_end = date
                     else:
@@ -623,8 +667,10 @@ class releaseBacklog(osv.Model):
             features = self.browse(cr, uid, id, context=context).feature_ids
             date_start = False
             for feature in features:
-                if feature.date_start and feature.state not in ['draft','cancelled']:
-                    date = datetime.strptime(feature.date_start, '%Y-%m-%d %H:%M:%S')
+                if feature.date_start and \
+                                feature.state not in ['draft', 'cancelled']:
+                    date = datetime.strptime(
+                        feature.date_start, '%Y-%m-%d %H:%M:%S')
                     if not date_start:
                         date_start = date
                     else:
@@ -641,8 +687,9 @@ class releaseBacklog(osv.Model):
         res = {}
         for id in ids:
             features = self.browse(cr, uid, id, context=context).feature_ids
-            sum = reduce(lambda result, feature: result + feature.expected_hours,
-                         features, 0.0)
+            sum = reduce(
+                lambda result, feature: result + feature.expected_hours,
+                features, 0.0)
             res[id] = sum
         return res
     
@@ -652,8 +699,9 @@ class releaseBacklog(osv.Model):
         res = {}
         for id in ids:
             features = self.browse(cr, uid, id, context=context).feature_ids
-            sum = reduce(lambda result, feature: result + feature.effective_hours,
-                         features, 0.0)
+            sum = reduce(
+                lambda result, feature: result + feature.effective_hours,
+                features, 0.0)
             res[id] = sum
         return res
     
@@ -684,71 +732,97 @@ class releaseBacklog(osv.Model):
         project = self.browse(cr, uid, ids[0], context=context).project_id
         for stage in project.type_ids:
             if stage.state == 'done':
-                return self.write(cr, uid, ids[0], {'stage_id':stage.id}, context=context)
-        raise osv.except_osv(_('Error'), _('There is no done state configured for'
-                             ' the project %s') % project.name)
+                return self.write(
+                    cr, uid, ids[0], {'stage_id': stage.id}, context=context)
+        raise osv.except_osv(
+            _('Error'), _('There is no done state configured for'
+                          ' the project %s') % project.name)
     
     def do_done(self, cr, uid, ids, context=None):
         sprints = self.browse(cr, uid, ids[0], context=context).sprint_ids
         for sprint in sprints:
             if sprint.state != 'cancelled' and sprint.state != 'done':
-                raise osv.except_osv(_('Error'), _('You can not set as done a release backlog if '
-                                     'all sprints related to it are not cancelled'
-                                     ' or done'))
+                raise osv.except_osv(
+                    _('Error'), _('You can not set as done a release backlog '
+                                  'if all sprints related to it are not '
+                                  'cancelled or done'))
         return self._set_done(cr, uid, ids, context=context)
     
     def _set_cancel(self, cr, uid, ids, context=None):
         project = self.browse(cr, uid, ids[0], context=context).project_id
         for stage in project.type_ids:
             if stage.state == 'cancelled':
-                return self.write(cr, uid, ids[0], {'stage_id':stage.id}, context=context)
-        raise osv.except_osv(_('Error'), _('There is no cancelled state configured for'
-                             ' the project %s') % project.name)
+                return self.write(
+                    cr, uid, ids[0], {'stage_id': stage.id}, context=context)
+        raise osv.except_osv(
+            _('Error'), _('There is no cancelled state configured for'
+                          ' the project %s') % project.name)
     
     def do_cancel(self, cr, uid, ids, context=None):
         sprints = self.browse(cr, uid, ids[0], context=context).sprint_ids
         for sprint in sprints:
             if sprint.state != 'cancelled' and sprint.state != 'done':
-                raise osv.except_osv(_('Error'), _('You can not cancel a release backlog if '
-                                     'all sprints related to it are not cancelled'
-                                     ' or done'))
+                raise osv.except_osv(
+                    _('Error'), _('You can not cancel a release backlog if '
+                                  'all sprints related to it are not cancelled'
+                                  ' or done'))
         return self._set_cancel(cr, uid, ids, context=context)
-    
-    
+
     _columns = {
                 'name': fields.char('Release Name', size=128, required=True),
-                'project_id': fields.many2one('project.project', string='Project', required=True),
-                'feature_ids': fields.one2many('project.scrum.feature', 'release_backlog_id',
+                'project_id': fields.many2one(
+                    'project.project', string='Project', required=True),
+                'feature_ids': fields.one2many(
+                    'project.scrum.feature', 'release_backlog_id',
                     string='Features'),
-                'date_start': fields.function(_date_start, type='datetime', string='Start Date',
-                    help='Calculated Start Date, will be empty if any sprint has no start date.', store=True),
-                'date_end': fields.function(_date_end, type='datetime', string='End Date',
-                    help='Calculated End Date, will be empty if any sprint has no end date.', store=True),
-                'deadline': fields.datetime( string='Deadline',
-                    help='Calculated Deadline, will be empty if any sprint has no deadline.'),
-                'expected_hours': fields.function(_expected_hours, type='float',
-                    string='Initially Planned Hour(s)', help='Total planned hours calculated '
+                'date_start': fields.function(
+                    _date_start, type='datetime', string='Start Date',
+                    help='Calculated Start Date, will be empty if any '
+                         'sprint has no start date.', store=True),
+                'date_end': fields.function(
+                    _date_end, type='datetime', string='End Date',
+                    help='Calculated End Date, will be empty if any '
+                         'sprint has no end date.', store=True),
+                'deadline': fields.datetime(
+                    string='Deadline',
+                    help='Calculated Deadline, will be empty if any '
+                         'sprint has no deadline.'),
+                'expected_hours': fields.function(
+                    _expected_hours, type='float',
+                    string='Initially Planned Hour(s)',
+                    help='Total planned hours calculated '
                     'from sprints.', store=True),
-                'effective_hours': fields.function(_effective_hours, type='float',
-                    string='Spent Hour(s)', help='Total spent hours calculated '
+                'effective_hours': fields.function(
+                    _effective_hours, type='float',
+                    string='Spent Hour(s)',
+                    help='Total spent hours calculated '
                     'from sprints.', store=True),
-                'remaining_hours': fields.function(_remaining_hours, type='float',
-                    string='Remaining Hour(s)', help='Difference between planned '
-                    'hours and spent hours.', store=True),
-                'progress': fields.function(_progress, type='float', string='Progress (%)',
-                    help='Total progress percentage calculated from sprints', store=True),
-                'stage_id': fields.many2one('project.task.type', string='Stage', domain="['&', ('fold', '=', False),"
+                'remaining_hours': fields.function(
+                    _remaining_hours, type='float',
+                    string='Remaining Hour(s)',
+                    help='Difference between planned hours and spent hours.',
+                    store=True),
+                'progress': fields.function(
+                    _progress, type='float', string='Progress (%)',
+                    help='Total progress percentage calculated from sprints',
+                    store=True),
+                'stage_id': fields.many2one(
+                    'project.task.type', string='Stage',
+                    domain="['&', ('fold', '=', False),"
                     " ('project_ids', '=', project_id)]"),
-                'state': fields.related('stage_id', 'state', type='selection', selection=STATES,
+                'state': fields.related(
+                    'stage_id', 'state', type='selection', selection=STATES,
                     string='State', readonly=True),
                 'color': fields.integer('Color Index'),
                 }
     
     _defaults = {
-                 'project_id': lambda self, cr, uid, c: c.get('project_id', False),
+                 'project_id':
+                 lambda self, cr, uid, c: c.get('project_id', False),
                  }
-    
-class project(osv.Model):
+
+
+class Project(osv.Model):
     
     _inherit = 'project.project'
     
@@ -759,12 +833,16 @@ class project(osv.Model):
         res = {}
         for id in ids: 
             backlog_obj = self.pool.get('project.scrum.release.backlog')
-            backlog_ids = backlog_obj.search(cr, uid, [('project_id', '=', id)])
-            features = backlog_obj.browse(cr, uid, backlog_ids, context=context).feature_ids
+            backlog_ids = backlog_obj.search(
+                cr, uid, [('project_id', '=', id)])
+            features = backlog_obj.browse(
+                cr, uid, backlog_ids, context=context).feature_ids
             date_end = False
             for feature in features:
-                if feature.date_end and feature.state not in ['draft', 'cancelled']:
-                    date = datetime.strptime(feature.date_end, '%Y-%m-%d %H:%M:%S')
+                if feature.date_end and \
+                                feature.state not in ['draft', 'cancelled']:
+                    date = datetime.strptime(
+                        feature.date_end, '%Y-%m-%d %H:%M:%S')
                     if not date_end:
                         date_end = date
                     else:
@@ -783,11 +861,14 @@ class project(osv.Model):
         res = {}
         for id in ids:
             backlog_obj = self.pool.get('project.scrum.release.backlog')
-            backlog_ids = backlog_obj.search(cr, uid, [('project_id', '=', id)])
-            features = backlog_obj.browse(cr, uid, backlog_ids, context=context).feature_ids
+            backlog_ids = backlog_obj.search(
+                cr, uid, [('project_id', '=', id)])
+            features = backlog_obj.browse(
+                cr, uid, backlog_ids, context=context).feature_ids
             deadline = False
             for feature in features:
-                if feature.date_end and feature.state not in ['draft', 'cancelled']:
+                if feature.date_end and \
+                                feature.state not in ['draft', 'cancelled']:
                     if feature.deadline:
                         date = datetime.strptime(feature.deadline, '%Y-%m-%d')
                         if not deadline:
@@ -800,17 +881,20 @@ class project(osv.Model):
             else:
                 res[id] = deadline
         return res
-    
-        
+
     _columns = {
                 'is_scrum': fields.boolean('Scrum'),
-                'date_end': fields.function(_date_end, type='datetime',
+                'date_end': fields.function(
+                    _date_end, type='datetime',
                     string='End Date', help='Calculated End Date, will be '
                     'empty if any feature has no end date.'),
-                'deadline': fields.function(_deadline, type='date',
-                    string='Deadline', help='Calculated Deadline, will be empty '
-                    'if any feature has no deadline.'),
-                'release_backlog_ids': fields.one2many('project.scrum.release.backlog',
+                'deadline': fields.function(
+                    _deadline, type='date',
+                    string='Deadline',
+                    help='Calculated Deadline, will be empty if any feature '
+                         'has no deadline.'),
+                'release_backlog_ids': fields.one2many(
+                    'project.scrum.release.backlog',
                     'id', string='Release Backlogs'),
                 }
 
