@@ -12,15 +12,15 @@
             <field name="model">project.project</field>
             <field name="inherit_id" ref="project.edit_project" />
             <field name="arch" type="xml">
-                <xpath expr="//form/sheet/div/div/label[@for='use_tasks']" position="after">
+                <xpath expr="//form/sheet/div/div/div/label[@for='use_tasks']" position="after">
                     <field name="is_scrum" class="oe_inline" attrs="{'invisible': [('use_tasks','=',False)]}" />
                     <label for="is_scrum" attrs="{'invisible': [('use_tasks','=',False)]}" />
-                 </xpath>
-                 <xpath expr="//form/sheet/notebook/page[3]" position="after">
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[3]" position="after">
                     <page string="Release Backlogs" name="release_backlogs">
                         <field name="release_backlog_ids" attrs="{'readonly':['!','|',('state','=','open'),('state','=','pending')]}" context="{'project_id': id}" />
-                     </page>
-                 </xpath>
+                    </page>
+                </xpath>
             </field>
         </record>
 
@@ -32,11 +32,11 @@
             <field name="inherit_id" ref="project.view_task_form2" />
             <field name="arch" type="xml">
 
-                <!-- Non-existent field - project.task doesn't have it anymore-->
-                    <xpath expr="//form/sheet/notebook/page/field[@name='work_ids']"
-                        position="attributes">
-                        <attribute name="attrs">{'readonly': ['|',('state','!=','open')]}</attribute>
-                    </xpath>
+                <!-- Non-existent field - project.task doesn't have it anymore -->
+                <xpath expr="//form/sheet/notebook/page/field[@name='work_ids']"
+                    position="attributes">
+                    <attribute name="attrs">{'readonly': ['|',('state','!=','open')]}</attribute>
+                </xpath>
 
                 <xpath expr="//form/sheet/group/group/field[@name='project_id']"
                     position="after">

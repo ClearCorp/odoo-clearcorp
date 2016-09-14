@@ -2,11 +2,11 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp.osv import fields, osv
+from openerp import fields, models
 from openerp.tools.translate import _
 
 
-class FeatureHours(osv.Model):
+class FeatureHours(models.Model):
     
     _name = 'project.scrum.feature.hours'
 
@@ -31,20 +31,18 @@ class FeatureHours(osv.Model):
             res[task.id] = task.expected_hours - task.effective_hours
         return res
 
-    _columns = {
-                'feature_id': fields.many2one(
+    _fields = {
+                'feature_id': fields.Many2one(
                     'project.scrum.feature', string='Feature', required=True,
                     ondelete='cascade'),
-                'work_type_id': fields.many2one(
+                'work_type_id': fields.Many2one(
                     'project.work.type', string='Work Type'),
-                'expected_hours': fields.float(
+                'expected_hours': fields.Float(
                     'Planned Hour(s)', required=True),
-                'effective_hours': fields.function(
-                    _effective_hours, type='float', string='Spent Hour(s)',
-                    store=True),
-                'remaining_hours': fields.function(
-                    _remaining_hours, type='float', string='Remaining Hour(s)',
-                    store=True),
+                'effective_hours': fields.Float(
+                    'Spent Hour(s)', compute=_effective_hours, store=True),
+                'remaining_hours': fields.Float(
+                    'Remaining Hour(s)', compute=_remaining_hours, store=True),
                 }
     
     _defaults = {
@@ -53,12 +51,12 @@ class FeatureHours(osv.Model):
                  }
 
 
-class Feature(osv.Model):
+class Feature(models.Model):
     
     _inherit = 'project.scrum.feature'
     
-    _columns = {
-                'hour_ids': fields.one2many(
+    _fields = {
+                'hour_ids': fields.One2many(
                     'project.scrum.feature.hours', 'feature_id',
                     string='Feature Hours'),
                 }
@@ -85,10 +83,9 @@ class Feature(osv.Model):
                     task_obj = self.pool.get('project.task')
                     task_id = task_obj.create(cr, uid, values, context=context)
                 except:
-                    raise osv.except_osv(
-                        _('Error'),
-                        _('An error occurred while creating the tasks. '
-                          'Please contact your system administrator.'))
+                    raise Warning(_('An error occurred while creating the '
+                                    'tasks. Please contact your system '
+                                    'administrator.'))
 
     def write(self, cr, uid, ids, values, context=None):
         if 'hour_ids' in values:
@@ -126,7 +123,7 @@ class Feature(osv.Model):
         return super(Feature, self).create(cr, uid, values, context=context)
 
 
-class Task(osv.Model):
+class Task(models.Model):
     
     _inherit = 'project.task'
 
@@ -152,15 +149,14 @@ class Task(osv.Model):
             else:
                 return True
 
-    _columns = {
-                'feature_hour_ids': fields.related(
-                    'feature_id', 'hour_ids', type='one2many',
-                    relation='project.scrum.feature.hours',
-                    string='Feature Hours', readonly=True),
-                'remaining_hours': fields.function(
-                    _remaining_hours, type='float',
-                    string='Remaining Hour(s)', store=True),
+    _fields = {
+                'feature_hour_ids': fields.One2many(
+                    'feature_id', string='Feature Hours',
+                    related='project.scrum.feature.hours', readonly=True),
+                'remaining_hours': fields.Float(
+                    'Remaining Hour(s)', compute=_remaining_hours, store=True),
                 }
+
     _constraints = [
         (_validate_planned_hours, 'Planned hours can\'t be zero',
          ['planned_hours'])

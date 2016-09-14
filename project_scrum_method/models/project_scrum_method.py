@@ -2,9 +2,10 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp.osv import osv, fields
+from openerp import models, fields, api
 from openerp.tools.translate import _
 from datetime import datetime
+from openerp.exceptions import ValidationError
 
 # Mapping between task priority and
 # feature priority
@@ -21,19 +22,20 @@ STATES = [('draft', 'Draft'), ('new', 'New'), ('open', 'In Progress'),
           ('cancelled', 'Cancelled')]
 
 
-class FeatureType(osv.Model):
-    
+class FeatureType(models.Model):
+    # Allows the creation of different types of features. It needs
+    # unique identifiers for each type.
     _name = 'project.scrum.feature.type'
     
-    _columns = {
-                'code': fields.char('Code', size=16, required=True),
-                'name': fields.char('Type Name', size=128, required=True,
+    _fields = {
+                'code': fields.Char('Code', size=16, required=True),
+                'name': fields.Char('Type Name', size=128, required=True,
                                     translate=True)
                 }
     
     _sql_constraints = [('unique_code', 'UNIQUE(code)',
                          'Code must be unique for every feature type.')]
-    
+
     def name_get(self, cr, uid, ids, context=None):
         res = []
         for r in self.read(cr, uid, ids, ['code', 'name'], context=context):
@@ -42,19 +44,19 @@ class FeatureType(osv.Model):
         return res
 
 
-class Feature(osv.Model):
+class Feature(models.Model):
     
     _inherit = 'mail.thread'
     _name = 'project.scrum.feature'
     
     def _date_start(self, cr, uid, ids, field_name, arg, context=None):
-        """Calculate the date_start based on the tasks from sprints 
+        """Calculate the start date based on the tasks from sprints
         related to each feature"""
         res = {}
         for id in ids:
             task_ids = [x.id for x in
-                          self.browse(cr, uid, id,
-                                      context=context).task_ids]
+                        self.browse(
+                            cr, uid, id, context=context).task_ids]
             task_obj = self.pool.get('project.task')
             task_ids = task_obj.search(cr, uid,
                                        [('id', 'in', task_ids),
@@ -185,74 +187,69 @@ class Feature(osv.Model):
     def set_very_high_priority(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids, {'priority': 1}, context=context)
 
-    _columns = {
-                'name': fields.char('Feature Name', size=128, required=True),
-                'code': fields.char('Code', size=16, required=True),
-                'release_backlog_id': fields.many2one(
+    _fields = {
+                'name': fields.Char('Feature Name', size=128, required=True),
+                'code': fields.Char('Code', size=16, required=True),
+                'release_backlog_id': fields.Many2one(
                     'project.scrum.release.backlog',
                     string='Release Backlog',
                     domain="[('project_id', '=', project_id),"
                     "'|',('state','=','open'),('state','=','pending')]"),
-                'project_id': fields.many2one(
+                'project_id': fields.Many2one(
                     'project.project', string='Project', required=True),
-                'description': fields.text('Description'),
-                'partner_id': fields.many2one(
+                'description': fields.Text('Description'),
+                'partner_id': fields.Many2one(
                     'res.partner', string='Product Owner',
                     domain="[('customer','=',True)]",
                     help='Contact or person responsible of keeping the '
                          'business perspective in scrum projects.'),
-                'type_id': fields.many2one(
+                'type_id': fields.Many2one(
                     'project.scrum.feature.type',
                     string='Type'),
-                'priority': fields.selection(
+                'priority': fields.Selection(
                     [(5, '5 - Very Low'), (4, '4 - Low'), (3, '3 - Medium'),
                      (2, '2 - High'), (1, '1 - Very High')],
-                    string='Priority', required=True),
-                'task_ids': fields.one2many(
+                    default=3, string='Priority', required=True),
+                'task_ids': fields.One2many(
                     'project.task', 'feature_id',
                     string='Tasks', readonly=True),
-                'date_start': fields.function(
-                    _date_start, type='datetime',
-                    string='Start Date', store=True),
-                'date_end': fields.function(
-                    _date_end, type='datetime',
-                    string='End Date', store=True),
-                'deadline': fields.date(string='Deadline'),
-                'expected_hours': fields.float(
+                'date_start': fields.Datetime(
+                    'Start Date', compute=_date_start, store=True),
+                'date_end': fields.Datetime(
+                    'End Date', compute=_date_end, store=True),
+                'deadline': fields.Date(string='Deadline'),
+                'expected_hours': fields.Float(
                     'Initially Planned Hour(s)',
                     help='Total planned hours for the development of '
                     'this feature.\nRecommended values '
                     'are:\n 1 h, 2 h, 4 h, or 8 h.'),
-                'effective_hours': fields.function(
-                    _effective_hours, type='float', string='Spent Hour(s)',
+                'effective_hours': fields.Float(
+                    'Hour(s) Spent',
                     help='Total effective hours spent on tasks '
-                         'related to this feature.', store=True),
-                'remaining_hours': fields.function(
-                    _remaining_hours, type='float', string='Remaining Hour(s)',
+                         'related to this feature.',
+                    compute=_effective_hours,
+                    store=True),
+                'remaining_hours': fields.Float(
+                    'Remaining Hour(s)',
                     help='Difference between planned hours and spent hours.',
+                    compute=_remaining_hours,
                     store=True),
-                'progress': fields.function(
-                    _progress, type='float', string='Progress (%)',
+                'progress': fields.Float(
+                    'Progress (%)',
+                    compute=_progress,
                     store=True),
-                'state': fields.selection(
+                'state': fields.Selection(
                     [('draft', 'New'), ('open', 'In Progress'),
                      ('cancelled', 'Cancelled'),
                      ('done', 'Done'), ],
-                    'Status', required=True),
-                'color': fields.integer('Color Index'),
-                'acceptance_requirements_client': fields.text(
+                    default='draft',string='Status', required=True),
+                'color': fields.Integer('Color Index'),
+                'acceptance_requirements_client': fields.Text(
                     'Acceptance requirements by client'),
-                'acceptance_requirements_supplier': fields.text(
+                'acceptance_requirements_supplier': fields.Text(
                     'Funtional acceptance requirements'),
-                'validation_date': fields.date('Validation Date'),
+                'validation_date': fields.Date('Validation Date'),
                 }
-    
-    _defaults = {
-                 'priority': 3,
-                 'state': 'draft',
-                 'release_backlog_id': lambda self, cr, uid, c: c.get(
-                     'release_backlog_id', False),
-                 }
     
     def name_get(self, cr, uid, ids, context=None):
         res = []
@@ -286,12 +283,12 @@ class Feature(osv.Model):
          'Code must be unique for every feature related to a Product Backlog')]
 
 
-class Sprint(osv.Model):
+class Sprint(models.Model):
     
     _name = 'project.scrum.sprint'
     
     def _date_end(self, cr, uid, ids, field_name, arg, context=None):
-        """Calculate End date as the highest End Date from
+        """Calculate end date as the latest date from
         tasks related to this sprint"""
         res = {}
         for id in ids:
@@ -312,7 +309,7 @@ class Sprint(osv.Model):
         return res
     
     def _expected_hours(self, cr, uid, ids, field_name, arg, context=None):
-        """Calculate the expected hours from features  related to this
+        """Calculate the expected hours from features related to this
         sprint."""
         res = {}
         for id in ids:
@@ -352,7 +349,7 @@ class Sprint(osv.Model):
                              tasks, 0.0)
                 res[id] = sum / len(tasks)
             else:
-                # set a zero if no tasks are available
+                # set value to zero if no tasks are available
                 res[id] = 0.0
         return res
     
@@ -379,8 +376,7 @@ class Sprint(osv.Model):
         type = type_obj.search(cr, uid, [('state', '=', 'draft')],
                                context=context, limit=1)[0]
         if not type:
-            raise osv.except_osv(
-                _('Error'), _('There is no ''draft'' state configured.'))
+            raise Warning(_('There is no ''draft'' state configured.'))
         return type
         
     def get_default_stage_id(self, cr, uid, project_id, context=None):
@@ -425,9 +421,8 @@ class Sprint(osv.Model):
         sprint = self.browse(cr, uid, ids[0], context=context)
         for task in sprint.task_ids:
             if task.state not in ['done', 'cancelled']:
-                raise osv.except_osv(
-                    _('Error'), _('All tasks must be done or cancelled '
-                                  'in order to cancel this sprint.'))
+                raise Warning(_('All tasks must be done or cancelled '
+                                'in order to cancel this sprint.'))
         project = sprint.project_id
         id = False
         for stage in project.type_ids:
@@ -441,9 +436,8 @@ class Sprint(osv.Model):
         sprint = self.browse(cr, uid, ids[0], context=context)
         for task in sprint.task_ids:
             if task.state not in ['done', 'cancelled']:
-                raise osv.except_osv(_('Error'), _('All tasks must be done '
-                                                   'or cancelled in order '
-                                                   'to cancel this sprint.'))
+                raise Warning(_('All tasks must be done or cancelled in order '
+                                'to cancel this sprint.'))
         project = sprint.project_id
         id = False
         for stage in project.type_ids:
@@ -452,7 +446,8 @@ class Sprint(osv.Model):
                 break
         self.write(cr, uid, ids[0], {'stage_id': id}, context)
         return True
-    
+
+    @api.constrains('date_start', 'deadline')
     def _check_deadline(self, cr, uid, ids, context=None):
         sprints = self.browse(cr, uid, ids, context=context)
         for sprint in sprints:
@@ -460,55 +455,45 @@ class Sprint(osv.Model):
                 sprint.date_start, '%Y-%m-%d %H:%M:%S')
             deadline = datetime.strptime(sprint.deadline, '%Y-%m-%d')
             if deadline < date_start:
-                return False
-        return True
+                raise ValidationError(
+                    'Deadline must be greater than Start Date')
     
-    _columns = {
-                'name': fields.char('Name', size=128, required=True),
-                'partner_id': fields.many2one(
+    _fields = {
+                'name': fields.Char('Name', size=128, required=True),
+                'partner_id': fields.Many2one(
                     'res.users', string='User', size=128, required=True),
-                'task_ids': fields.one2many(
+                'task_ids': fields.One2many(
                     'project.task', 'sprint_id', string='Tasks'),
-                'date_start': fields.datetime('Start Date', required=True),
-                'date_end': fields.function(
-                    _date_end, type='datetime', string='End Date', store=True),
-                'deadline': fields.date('Deadline', required=True),
-                'expected_hours': fields.function(
-                    _expected_hours, type='float',
-                    string='Initially Planned Hour(s)', store=True),
-                'effective_hours': fields.function(
-                    _effective_hours, type='float', string='Spent Hour(s)',
-                    store=True),
-                'remaining_hours': fields.function(
-                    _remaining_hours, type='float',
-                    string='Remaining Hour(s)', store=True),
-                'progress': fields.function(
-                    _progress, type='float',
-                    string='Progress (%)', store=True),
-                'stage_id': fields.many2one(
+                'date_start': fields.Datetime(
+                    'Start Date',
+                    default=lambda *a: fields.Datetime.now(),
+                    required=True),
+                'date_end': fields.Datetime(
+                    'End Date', compute=_date_end, store=True),
+                'deadline': fields.Date(
+                    'Deadline',
+                    default=lambda *a: fields.Date.today(),
+                    required=True),
+                'expected_hours': fields.Float(
+                    'Initially Planned Hour(s)',
+                    compute=_expected_hours, store=True),
+                'effective_hours': fields.Float(
+                    'Hour(s) Spent', compute=_effective_hours, store=True),
+                'remaining_hours': fields.Float(
+                    'Remaining Hour(s)', compute=_remaining_hours, store=True),
+                'progress': fields.Float(
+                    'Progress (%)', compute=_progress, store=True),
+                'stage_id': fields.Many2one(
                     'project.task.type', string='Stage',
                     domain="[('fold', '=', False)]"),
-                'state': fields.related(
-                    'stage_id', 'state', selection=STATES, type='selection',
-                    string='State', readonly=True),
-                'color': fields.integer('Color Index'),
+                'state': fields.Selection(
+                    STATES, 'State', default='new', related='stage_id',
+                    readonly=True),
+                'color': fields.Integer('Color Index'),
                 }
-    
-    _defaults = {
-                 'state': 'new',
-                 'date_start': lambda *a: datetime.strftime(
-                     datetime.now(), '%Y-%m-%d %H:%M:%S'),
-                 'deadline': lambda *a: datetime.strftime(
-                     datetime.now(), '%Y-%m-%d'),
-                 }
-    
-    _constraints = [
-                    (_check_deadline,
-                     'Deadline must be greater than Start Date',
-                     ['Start Date', 'Deadline'])]
 
 
-class Task(osv.Model):
+class Task(models.Model):
 
     _inherit = 'project.task'
 
@@ -586,27 +571,26 @@ class Task(osv.Model):
                 cr, uid, values['stage_id'], context=context)
             if stage.state == 'done':
                 date_end = datetime.strftime(
-                    datetime.now(),'%Y-%m-%d %H:%M:%S')
+                    datetime.now(), '%Y-%m-%d %H:%M:%S')
                 values.update({
                           'date_end': date_end,
                               })
         return super(Task, self).write(cr, uid, ids, values, context)
 
-    _columns = {
-                'is_scrum': fields.boolean('Scrum'),
-                'sprint_id': fields.many2one(
+    _fields = {
+                'is_scrum': fields.Boolean('Scrum'),
+                'sprint_id': fields.Many2one(
                     'project.scrum.sprint', string='Sprint'),
-                'feature_id': fields.many2one(
+                'feature_id': fields.Many2one(
                     'project.scrum.feature', string='Feature'),
-                'feature_type_id': fields.related(
-                    'feature_id', 'type_id', type='many2one',
-                    string='Feature Type',
-                    relation='project.scrum.feature.type', readonly=True),
-                'previous_task_ids': fields.many2many(
+                'feature_type_id': fields.Many2one(
+                    'type_id', string='Feature Type',
+                    related='project.scrum.feature.type', readonly=True),
+                'previous_task_ids': fields.Many2many(
                     'project.task', 'project_scrum_task_previous_tasks',
                     'task_id', 'previous_task_id', string='Previous Tasks',
                     domain="['!',('id','=',id)]"),
-                'next_task_ids': fields.many2many(
+                'next_task_ids': fields.Many2many(
                     'project.task', 'project_scrum_task_next_tasks',
                     'task_id', 'next_task_id', string='Next Tasks',
                     domain="['!',('state','in',['done','cancelled']),"
@@ -633,7 +617,7 @@ class Task(osv.Model):
                     ]
 
 
-class ReleaseBacklog(osv.Model):
+class ReleaseBacklog(models.Model):
     
     _name = 'project.scrum.release.backlog'
     
@@ -734,18 +718,16 @@ class ReleaseBacklog(osv.Model):
             if stage.state == 'done':
                 return self.write(
                     cr, uid, ids[0], {'stage_id': stage.id}, context=context)
-        raise osv.except_osv(
-            _('Error'), _('There is no done state configured for'
-                          ' the project %s') % project.name)
+        raise Warning(_('There is no done state configured for'
+                        ' the project %s') % project.name)
     
     def do_done(self, cr, uid, ids, context=None):
         sprints = self.browse(cr, uid, ids[0], context=context).sprint_ids
         for sprint in sprints:
             if sprint.state != 'cancelled' and sprint.state != 'done':
-                raise osv.except_osv(
-                    _('Error'), _('You can not set as done a release backlog '
-                                  'if all sprints related to it are not '
-                                  'cancelled or done'))
+                raise Warning(_('You can not set as done a release backlog '
+                                'if all sprints related to it are not '
+                                'cancelled or done'))
         return self._set_done(cr, uid, ids, context=context)
     
     def _set_cancel(self, cr, uid, ids, context=None):
@@ -754,66 +736,61 @@ class ReleaseBacklog(osv.Model):
             if stage.state == 'cancelled':
                 return self.write(
                     cr, uid, ids[0], {'stage_id': stage.id}, context=context)
-        raise osv.except_osv(
-            _('Error'), _('There is no cancelled state configured for'
-                          ' the project %s') % project.name)
+        raise Warning(_('There is no cancelled state configured for'
+                        ' the project %s') % project.name)
     
     def do_cancel(self, cr, uid, ids, context=None):
         sprints = self.browse(cr, uid, ids[0], context=context).sprint_ids
         for sprint in sprints:
             if sprint.state != 'cancelled' and sprint.state != 'done':
-                raise osv.except_osv(
-                    _('Error'), _('You can not cancel a release backlog if '
-                                  'all sprints related to it are not cancelled'
-                                  ' or done'))
+                raise Warning(_('You can not cancel a release backlog if '
+                                'all sprints related to it are not cancelled'
+                                ' or done'))
         return self._set_cancel(cr, uid, ids, context=context)
 
-    _columns = {
-                'name': fields.char('Release Name', size=128, required=True),
-                'project_id': fields.many2one(
+    _fields = {
+                'name': fields.Char('Release Name', size=128, required=True),
+                'project_id': fields.Many2one(
                     'project.project', string='Project', required=True),
-                'feature_ids': fields.one2many(
+                'feature_ids': fields.One2many(
                     'project.scrum.feature', 'release_backlog_id',
                     string='Features'),
-                'date_start': fields.function(
-                    _date_start, type='datetime', string='Start Date',
+                'date_start': fields.Datetime(
+                    'Start Date', compute=_date_start,
                     help='Calculated Start Date, will be empty if any '
                          'sprint has no start date.', store=True),
-                'date_end': fields.function(
-                    _date_end, type='datetime', string='End Date',
+                'date_end': fields.Datetime(
+                    'End Date', compute=_date_end,
                     help='Calculated End Date, will be empty if any '
                          'sprint has no end date.', store=True),
-                'deadline': fields.datetime(
+                'deadline': fields.Datetime(
                     string='Deadline',
                     help='Calculated Deadline, will be empty if any '
                          'sprint has no deadline.'),
-                'expected_hours': fields.function(
-                    _expected_hours, type='float',
-                    string='Initially Planned Hour(s)',
+                'expected_hours': fields.Float(
+                    'Initially Planned Hour(s)', compute=_expected_hours,
                     help='Total planned hours calculated '
                     'from sprints.', store=True),
-                'effective_hours': fields.function(
-                    _effective_hours, type='float',
-                    string='Spent Hour(s)',
+                'effective_hours': fields.Float(
+                    'Spent Hour(s)', compute=_effective_hours,
                     help='Total spent hours calculated '
                     'from sprints.', store=True),
-                'remaining_hours': fields.function(
-                    _remaining_hours, type='float',
-                    string='Remaining Hour(s)',
+                'remaining_hours': fields.Float(
+                    'Remaining Hour(s)', compute=_remaining_hours,
                     help='Difference between planned hours and spent hours.',
                     store=True),
-                'progress': fields.function(
-                    _progress, type='float', string='Progress (%)',
+                'progress': fields.Float(
+                    'Progress (%)', compute=_progress,
                     help='Total progress percentage calculated from sprints',
                     store=True),
-                'stage_id': fields.many2one(
+                'stage_id': fields.Many2one(
                     'project.task.type', string='Stage',
                     domain="['&', ('fold', '=', False),"
                     " ('project_ids', '=', project_id)]"),
-                'state': fields.related(
-                    'stage_id', 'state', type='selection', selection=STATES,
-                    string='State', readonly=True),
-                'color': fields.integer('Color Index'),
+                'state': fields.Selection(
+                    STATES, 'State', related='state',
+                    readonly=True),
+                'color': fields.Integer('Color Index'),
                 }
     
     _defaults = {
@@ -822,7 +799,7 @@ class ReleaseBacklog(osv.Model):
                  }
 
 
-class Project(osv.Model):
+class Project(models.Model):
     
     _inherit = 'project.project'
     
@@ -882,19 +859,17 @@ class Project(osv.Model):
                 res[id] = deadline
         return res
 
-    _columns = {
-                'is_scrum': fields.boolean('Scrum'),
-                'date_end': fields.function(
-                    _date_end, type='datetime',
-                    string='End Date', help='Calculated End Date, will be '
+    _fields = {
+                'is_scrum': fields.Boolean('Scrum'),
+                'date_end': fields.Datetime(
+                    'End Date', compute=_date_end,
+                    help='Calculated End Date, will be '
                     'empty if any feature has no end date.'),
-                'deadline': fields.function(
-                    _deadline, type='date',
-                    string='Deadline',
+                'deadline': fields.Date(
+                    'Deadline', compute=_deadline,
                     help='Calculated Deadline, will be empty if any feature '
                          'has no deadline.'),
-                'release_backlog_ids': fields.one2many(
+                'release_backlog_ids': fields.One2many(
                     'project.scrum.release.backlog',
                     'id', string='Release Backlogs'),
                 }
-
