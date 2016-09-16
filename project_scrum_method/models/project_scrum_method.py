@@ -608,13 +608,14 @@ class Task(models.Model):
             "'!',('id','=',id)]"),
     }
 
-    _defaults = {
-
+    """_defaults = {
+                 # This is not part of this model. Can one change this field
+                 # for a related Feature?
                  'release_backlog_id':
                  lambda slf, cr, uid, ctx: ctx.get(
                      'release_backlog_id', False)
 
-                 }
+                 }"""
 
 
 class ReleaseBacklog(models.Model):
@@ -725,8 +726,8 @@ class ReleaseBacklog(models.Model):
         sprints = self.browse(cr, uid, ids[0], context=context).sprint_ids
         for sprint in sprints:
             if sprint.state != 'cancelled' and sprint.state != 'done':
-                raise Warning(_('You can not set as done a release backlog '
-                                'if all sprints related to it are not '
+                raise Warning(_('You can not set as ''done'' a release '
+                                'backlog if all sprints related to it are not '
                                 'cancelled or done'))
         return self._set_done(cr, uid, ids, context=context)
     
@@ -751,7 +752,8 @@ class ReleaseBacklog(models.Model):
     _fields = {
         'name': fields.Char('Release Name', size=128, required=True),
         'project_id': fields.Many2one(
-            'project.project', string='Project', required=True),
+            'project.project', string='Project', required=True,
+            default=lambda self, cr, uid, c: c.get('project_id', False)),
         'feature_ids': fields.One2many(
             'project.scrum.feature', 'release_backlog_id',
             string='Features'),
@@ -792,11 +794,6 @@ class ReleaseBacklog(models.Model):
             readonly=True),
         'color': fields.Integer('Color Index'),
     }
-    
-    _defaults = {
-                 'project_id':
-                 lambda self, cr, uid, c: c.get('project_id', False),
-                 }
 
 
 class Project(models.Model):

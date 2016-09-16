@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import fields, models
+from openerp.exceptions import ValidationError
 from openerp.tools.translate import _
 
 
@@ -32,23 +33,19 @@ class FeatureHours(models.Model):
         return res
 
     _fields = {
-                'feature_id': fields.Many2one(
-                    'project.scrum.feature', string='Feature', required=True,
-                    ondelete='cascade'),
-                'work_type_id': fields.Many2one(
-                    'project.work.type', string='Work Type'),
-                'expected_hours': fields.Float(
-                    'Planned Hour(s)', required=True),
-                'effective_hours': fields.Float(
-                    'Spent Hour(s)', compute=_effective_hours, store=True),
-                'remaining_hours': fields.Float(
-                    'Remaining Hour(s)', compute=_remaining_hours, store=True),
-                }
-    
-    _defaults = {
-                 'feature_id':
-                 lambda slf, cr, uid, ctx: ctx.get('feature_id', False),
-                 }
+        'feature_id': fields.Many2one(
+            'project.scrum.feature', string='Feature', required=True,
+            ondelete='cascade',
+            default=lambda slf, cr, uid, ctx: ctx.get('feature_id', False)),
+        'work_type_id': fields.Many2one(
+            'project.work.type', string='Work Type'),
+        'expected_hours': fields.Float(
+            'Planned Hour(s)', required=True),
+        'effective_hours': fields.Float(
+            'Spent Hour(s)', compute=_effective_hours, store=True),
+        'remaining_hours': fields.Float(
+            'Remaining Hour(s)', compute=_remaining_hours, store=True),
+    }
 
 
 class Feature(models.Model):
@@ -56,10 +53,10 @@ class Feature(models.Model):
     _inherit = 'project.scrum.feature'
     
     _fields = {
-                'hour_ids': fields.One2many(
-                    'project.scrum.feature.hours', 'feature_id',
-                    string='Feature Hours'),
-                }
+        'hour_ids': fields.One2many(
+            'project.scrum.feature.hours', 'feature_id',
+            string='Feature Hours'),
+    }
     
     def create_tasks(self, cr, uid, context):
         active_ids = context.get('active_ids', [])
@@ -127,6 +124,19 @@ class Task(models.Model):
     
     _inherit = 'project.task'
 
+    _fields = {
+        'feature_hour_ids': fields.One2many(
+            'feature_id', string='Feature Hours',
+            related='project.scrum.feature.hours', readonly=True),
+        'remaining_hours': fields.Float(
+            'Remaining Hour(s)', compute=_remaining_hours, store=True),
+        'state': fields.Selection(
+            [('draft', 'New'), ('open', 'In Progress'),
+             ('cancelled', 'Cancelled'),
+             ('done', 'Done'), ],
+            default='draft', string='Status', required=True)
+    }
+
     def onchange_sprint(self, cr, uid, ids, sprint_id, context=None):
         res = {}
         return res
@@ -142,25 +152,11 @@ class Task(models.Model):
             res[task.id] = remaining
         return res
 
+    @api.constrains('planned_hours')
     def _validate_planned_hours(self, cr, uid, ids, context=None):
         for task in self.browse(cr, uid, ids, context):
             if task.planned_hours == 0.0:
-                return False
-            else:
-                return True
-
-    _fields = {
-                'feature_hour_ids': fields.One2many(
-                    'feature_id', string='Feature Hours',
-                    related='project.scrum.feature.hours', readonly=True),
-                'remaining_hours': fields.Float(
-                    'Remaining Hour(s)', compute=_remaining_hours, store=True),
-                }
-
-    _constraints = [
-        (_validate_planned_hours, 'Planned hours can\'t be zero',
-         ['planned_hours'])
-    ]
+                raise ValidationError('Planned hours can\'t be zero')
 
     def create(self, cr, uid, values, context=None):
         if 'project_id' in values:
@@ -203,7 +199,3 @@ class Task(models.Model):
                     values['planned_hours'] = sum
             super(Task, self).write(cr, uid, task.id, values, context)
         return True
-
-    _defaults = {
-        'state': 'draft',
-        }
