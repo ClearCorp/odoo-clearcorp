@@ -27,12 +27,10 @@ class FeatureType(models.Model):
     # unique identifiers for each type.
     _name = 'project.scrum.feature.type'
     
-    _fields = {
-        'code': fields.Char('Code', size=16, required=True),
-        'name': fields.Char('Type Name', size=128, required=True,
-                            translate=True)
-    }
-    
+    code = fields.Char('Code', size=16, required=True)
+    name = fields.Char('Type Name', size=128, required=True,
+                        translate=True)
+
     _sql_constraints = [('unique_code', 'UNIQUE(code)',
                          'Code must be unique for every feature type.')]
 
@@ -458,38 +456,36 @@ class Sprint(models.Model):
                 raise ValidationError(
                     'Deadline must be greater than Start Date')
     
-    _fields = {
-        'name': fields.Char('Name', size=128, required=True),
-        'partner_id': fields.Many2one(
-            'res.users', string='User', size=128, required=True),
-        'task_ids': fields.One2many(
-            'project.task', 'sprint_id', string='Tasks'),
-        'date_start': fields.Datetime(
-            'Start Date',
-            required=True),
-        'date_end': fields.Datetime(
-            'End Date', compute=_date_end, store=True),
-        'deadline': fields.Date(
-            'Deadline',
-            default=lambda *a: fields.Date.today(),
-            required=True),
-        'expected_hours': fields.Float(
-            'Initially Planned Hour(s)',
-            compute=_expected_hours, store=True),
-        'effective_hours': fields.Float(
-            'Hour(s) Spent', compute=_effective_hours, store=True),
-        'remaining_hours': fields.Float(
-            'Remaining Hour(s)', compute=_remaining_hours, store=True),
-        'progress': fields.Float(
-            'Progress (%)', compute=_progress, store=True),
-        'stage_id': fields.Many2one(
-            'project.task.type', string='Stage',
-            domain="[('fold', '=', False)]"),
-        'state': fields.Selection(
-            STATES, 'State', default='new', related='stage_id',
-            readonly=True),
-        'color': fields.Integer('Color Index'),
-    }
+    name = fields.Char('Name', size=128, required=True)
+    partner_id = fields.Many2one(
+        'res.users', string='User', size=128, required=True)
+    task_ids = fields.One2many(
+        'project.task', 'sprint_id', string='Tasks')
+    date_start = fields.Datetime(
+        'Start Date',
+        required=True)
+    date_end = fields.Datetime(
+        'End Date', compute=_date_end, store=True)
+    deadline = fields.Date(
+        'Deadline',
+        default=lambda *a: fields.Date.today(),
+        required=True)
+    expected_hours = fields.Float(
+        'Initially Planned Hour(s)',
+        compute=_expected_hours, store=True)
+    effective_hours = fields.Float(
+        'Hour(s) Spent', compute=_effective_hours, store=True)
+    remaining_hours = fields.Float(
+        'Remaining Hour(s)', compute=_remaining_hours, store=True)
+    progress = fields.Float(
+        'Progress (%)', compute=_progress, store=True)
+    stage_id = fields.Many2one(
+        'project.task.type', string='Stage',
+        domain="[('fold', '=', False)]")
+    state = fields.Selection(
+        STATES, 'State', default='new', related='stage_id',
+        readonly=True)
+    color = fields.Integer('Color Index')
 
 
 class Task(models.Model):
@@ -749,51 +745,51 @@ class ReleaseBacklog(models.Model):
                                 ' or done'))
         return self._set_cancel(cr, uid, ids, context=context)
 
-    _fields = {
-        'name': fields.Char('Release Name', size=128, required=True),
+
+        'name': fields.Char('Release Name', size=128, required=True)
         'project_id': fields.Many2one(
             'project.project', string='Project', required=True,
-            default=lambda self, cr, uid, c: c.get('project_id', False)),
+            default=lambda self, cr, uid, c: c.get('project_id', False))
         'feature_ids': fields.One2many(
             'project.scrum.feature', 'release_backlog_id',
-            string='Features'),
+            string='Features')
         'date_start': fields.Datetime(
             'Start Date', compute=_date_start,
             help='Calculated Start Date, will be empty if any '
-                 'sprint has no start date.', store=True),
+                 'sprint has no start date.', store=True)
         'date_end': fields.Datetime(
             'End Date', compute=_date_end,
             help='Calculated End Date, will be empty if any '
-                 'sprint has no end date.', store=True),
+                 'sprint has no end date.', store=True)
         'deadline': fields.Datetime(
             string='Deadline',
             help='Calculated Deadline, will be empty if any '
-                 'sprint has no deadline.'),
+                 'sprint has no deadline.')
         'expected_hours': fields.Float(
             'Initially Planned Hour(s)', compute=_expected_hours,
             help='Total planned hours calculated '
-            'from sprints.', store=True),
+            'from sprints.', store=True)
         'effective_hours': fields.Float(
             'Spent Hour(s)', compute=_effective_hours,
             help='Total spent hours calculated '
-            'from sprints.', store=True),
+            'from sprints.', store=True)
         'remaining_hours': fields.Float(
             'Remaining Hour(s)', compute=_remaining_hours,
             help='Difference between planned hours and spent hours.',
-            store=True),
+            store=True)
         'progress': fields.Float(
             'Progress (%)', compute=_progress,
             help='Total progress percentage calculated from sprints',
-            store=True),
+            store=True)
         'stage_id': fields.Many2one(
             'project.task.type', string='Stage',
             domain="['&', ('fold', '=', False),"
-            " ('project_ids', '=', project_id)]"),
+            " ('project_ids', '=', project_id)]")
         'state': fields.Selection(
             STATES, 'State', related='state',
             readonly=True),
-        'color': fields.Integer('Color Index'),
-    }
+        'color': fields.Integer('Color Index')
+
 
 
 class Project(models.Model):
@@ -856,17 +852,15 @@ class Project(models.Model):
                 res[id] = deadline
         return res
 
-    _fields = {
-        'is_scrum': fields.Boolean('Scrum'),
-        'date_end': fields.Datetime(
-            'End Date', compute=_date_end,
-            help='Calculated End Date, will be '
-            'empty if any feature has no end date.'),
-        'deadline': fields.Date(
-            'Deadline', compute=_deadline,
-            help='Calculated Deadline, will be empty if any feature '
-                 'has no deadline.'),
-        'release_backlog_ids': fields.One2many(
-            'project.scrum.release.backlog',
-            'id', string='Release Backlogs'),
-    }
+    is_scrum = fields.Boolean('Scrum')
+    date_end = fields.Datetime(
+        'End Date', compute=_date_end,
+        help='Calculated End Date, will be '
+        'empty if any feature has no end date.')
+    deadline = fields.Date(
+        'Deadline', compute=_deadline,
+        help='Calculated Deadline, will be empty if any feature '
+             'has no deadline.')
+    release_backlog_ids = fields.One2many(
+        'project.scrum.release.backlog',
+        'id', string='Release Backlogs')

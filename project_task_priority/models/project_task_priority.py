@@ -6,7 +6,7 @@
 from openerp import models, fields
 
 
-class task(models.Model):
+class Task(models.Model):
 
     _inherit = 'project.task'
 

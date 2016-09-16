@@ -2,7 +2,7 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import fields, models
+from openerp import fields, models, api
 from openerp.exceptions import ValidationError
 from openerp.tools.translate import _
 
@@ -124,19 +124,6 @@ class Task(models.Model):
     
     _inherit = 'project.task'
 
-    _fields = {
-        'feature_hour_ids': fields.One2many(
-            'feature_id', string='Feature Hours',
-            related='project.scrum.feature.hours', readonly=True),
-        'remaining_hours': fields.Float(
-            'Remaining Hour(s)', compute=_remaining_hours, store=True),
-        'state': fields.Selection(
-            [('draft', 'New'), ('open', 'In Progress'),
-             ('cancelled', 'Cancelled'),
-             ('done', 'Done'), ],
-            default='draft', string='Status', required=True)
-    }
-
     def onchange_sprint(self, cr, uid, ids, sprint_id, context=None):
         res = {}
         return res
@@ -199,3 +186,16 @@ class Task(models.Model):
                     values['planned_hours'] = sum
             super(Task, self).write(cr, uid, task.id, values, context)
         return True
+
+    _fields = {
+        'feature_hour_ids': fields.One2many(
+            'feature_id', string='Feature Hours',
+            related='project.scrum.feature.hours', readonly=True),
+        'remaining_hours': fields.Float(
+            'Remaining Hour(s)', compute=_remaining_hours, store=True),
+        'state': fields.Selection(
+            [('draft', 'New'), ('open', 'In Progress'),
+             ('cancelled', 'Cancelled'),
+             ('done', 'Done'), ],
+            default='draft', string='Status', required=True)
+    }
