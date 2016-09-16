@@ -28,10 +28,10 @@ class FeatureType(models.Model):
     _name = 'project.scrum.feature.type'
     
     _fields = {
-                'code': fields.Char('Code', size=16, required=True),
-                'name': fields.Char('Type Name', size=128, required=True,
-                                    translate=True)
-                }
+        'code': fields.Char('Code', size=16, required=True),
+        'name': fields.Char('Type Name', size=128, required=True,
+                            translate=True)
+    }
     
     _sql_constraints = [('unique_code', 'UNIQUE(code)',
                          'Code must be unique for every feature type.')]
@@ -188,68 +188,68 @@ class Feature(models.Model):
         return self.write(cr, uid, ids, {'priority': 1}, context=context)
 
     _fields = {
-                'name': fields.Char('Feature Name', size=128, required=True),
-                'code': fields.Char('Code', size=16, required=True),
-                'release_backlog_id': fields.Many2one(
-                    'project.scrum.release.backlog',
-                    string='Release Backlog',
-                    domain="[('project_id', '=', project_id),"
-                    "'|',('state','=','open'),('state','=','pending')]"),
-                'project_id': fields.Many2one(
-                    'project.project', string='Project', required=True),
-                'description': fields.Text('Description'),
-                'partner_id': fields.Many2one(
-                    'res.partner', string='Product Owner',
-                    domain="[('customer','=',True)]",
-                    help='Contact or person responsible of keeping the '
-                         'business perspective in scrum projects.'),
-                'type_id': fields.Many2one(
-                    'project.scrum.feature.type',
-                    string='Type'),
-                'priority': fields.Selection(
-                    [(5, '5 - Very Low'), (4, '4 - Low'), (3, '3 - Medium'),
-                     (2, '2 - High'), (1, '1 - Very High')],
-                    default=3, string='Priority', required=True),
-                'task_ids': fields.One2many(
-                    'project.task', 'feature_id',
-                    string='Tasks', readonly=True),
-                'date_start': fields.Datetime(
-                    'Start Date', compute=_date_start, store=True),
-                'date_end': fields.Datetime(
-                    'End Date', compute=_date_end, store=True),
-                'deadline': fields.Date(string='Deadline'),
-                'expected_hours': fields.Float(
-                    'Initially Planned Hour(s)',
-                    help='Total planned hours for the development of '
-                    'this feature.\nRecommended values '
-                    'are:\n 1 h, 2 h, 4 h, or 8 h.'),
-                'effective_hours': fields.Float(
-                    'Hour(s) Spent',
-                    help='Total effective hours spent on tasks '
-                         'related to this feature.',
-                    compute=_effective_hours,
-                    store=True),
-                'remaining_hours': fields.Float(
-                    'Remaining Hour(s)',
-                    help='Difference between planned hours and spent hours.',
-                    compute=_remaining_hours,
-                    store=True),
-                'progress': fields.Float(
-                    'Progress (%)',
-                    compute=_progress,
-                    store=True),
-                'state': fields.Selection(
-                    [('draft', 'New'), ('open', 'In Progress'),
-                     ('cancelled', 'Cancelled'),
-                     ('done', 'Done'), ],
-                    default='draft',string='Status', required=True),
-                'color': fields.Integer('Color Index'),
-                'acceptance_requirements_client': fields.Text(
-                    'Acceptance requirements by client'),
-                'acceptance_requirements_supplier': fields.Text(
-                    'Funtional acceptance requirements'),
-                'validation_date': fields.Date('Validation Date'),
-                }
+        'name': fields.Char('Feature Name', size=128, required=True),
+        'code': fields.Char('Code', size=16, required=True),
+        'release_backlog_id': fields.Many2one(
+            'project.scrum.release.backlog',
+            string='Release Backlog',
+            domain="[('project_id', '=', project_id),"
+            "'|',('state','=','open'),('state','=','pending')]"),
+        'project_id': fields.Many2one(
+            'project.project', string='Project', required=True),
+        'description': fields.Text('Description'),
+        'partner_id': fields.Many2one(
+            'res.partner', string='Product Owner',
+            domain="[('customer','=',True)]",
+            help='Contact or person responsible of keeping the '
+                 'business perspective in scrum projects.'),
+        'type_id': fields.Many2one(
+            'project.scrum.feature.type',
+            string='Type'),
+        'priority': fields.Selection(
+            [(5, '5 - Very Low'), (4, '4 - Low'), (3, '3 - Medium'),
+             (2, '2 - High'), (1, '1 - Very High')],
+            default=3, string='Priority', required=True),
+        'task_ids': fields.One2many(
+            'project.task', 'feature_id',
+            string='Tasks', readonly=True),
+        'date_start': fields.Datetime(
+            'Start Date', compute=_date_start, store=True),
+        'date_end': fields.Datetime(
+            'End Date', compute=_date_end, store=True),
+        'deadline': fields.Date(string='Deadline'),
+        'expected_hours': fields.Float(
+            'Initially Planned Hour(s)',
+            help='Total planned hours for the development of '
+            'this feature.\nRecommended values '
+            'are:\n 1 h, 2 h, 4 h, or 8 h.'),
+        'effective_hours': fields.Float(
+            'Hour(s) Spent',
+            help='Total effective hours spent on tasks '
+                 'related to this feature.',
+            compute=_effective_hours,
+            store=True),
+        'remaining_hours': fields.Float(
+            'Remaining Hour(s)',
+            help='Difference between planned hours and spent hours.',
+            compute=_remaining_hours,
+            store=True),
+        'progress': fields.Float(
+            'Progress (%)',
+            compute=_progress,
+            store=True),
+        'state': fields.Selection(
+            [('draft', 'New'), ('open', 'In Progress'),
+             ('cancelled', 'Cancelled'),
+             ('done', 'Done'), ],
+            default='draft', string='Status', required=True),
+        'color': fields.Integer('Color Index'),
+        'acceptance_requirements_client': fields.Text(
+            'Acceptance requirements by client'),
+        'acceptance_requirements_supplier': fields.Text(
+            'Funtional acceptance requirements'),
+        'validation_date': fields.Date('Validation Date'),
+    }
     
     def name_get(self, cr, uid, ids, context=None):
         res = []
@@ -391,20 +391,20 @@ class Sprint(models.Model):
         task_obj = self.pool.get('project.task')
         for feature in sprint.feature_ids:
             values = {
-                      'project_id': sprint.project_id.id,
-                      'release_backlog_id': sprint.release_backlog_id.id,
-                      'sprint_id': sprint.id,
-                      'feature_id': feature.id,
-                      'user_id': uid,
-                      'planned_hours': feature.expected_hours,
-                      'remaining_hours': feature.expected_hours,
-                      'date_start': sprint.date_start,
-                      'date_end': sprint.deadline,
-                      'date_deadline': sprint.deadline,
-                      'priority': PRIORITY[feature.priority],
-                      'description': feature.description,
-                      'name': feature.code + ' ' + feature.name,
-                      }
+                'project_id': sprint.project_id.id,
+                'release_backlog_id': sprint.release_backlog_id.id,
+                'sprint_id': sprint.id,
+                'feature_id': feature.id,
+                'user_id': uid,
+                'planned_hours': feature.expected_hours,
+                'remaining_hours': feature.expected_hours,
+                'date_start': sprint.date_start,
+                'date_end': sprint.deadline,
+                'date_deadline': sprint.deadline,
+                'priority': PRIORITY[feature.priority],
+                'description': feature.description,
+                'name': feature.code + ' ' + feature.name,
+            }
             task_obj.create(cr, uid, values, context=context)
         return True
     
@@ -459,38 +459,37 @@ class Sprint(models.Model):
                     'Deadline must be greater than Start Date')
     
     _fields = {
-                'name': fields.Char('Name', size=128, required=True),
-                'partner_id': fields.Many2one(
-                    'res.users', string='User', size=128, required=True),
-                'task_ids': fields.One2many(
-                    'project.task', 'sprint_id', string='Tasks'),
-                'date_start': fields.Datetime(
-                    'Start Date',
-                    default=lambda *a: fields.Datetime.now(),
-                    required=True),
-                'date_end': fields.Datetime(
-                    'End Date', compute=_date_end, store=True),
-                'deadline': fields.Date(
-                    'Deadline',
-                    default=lambda *a: fields.Date.today(),
-                    required=True),
-                'expected_hours': fields.Float(
-                    'Initially Planned Hour(s)',
-                    compute=_expected_hours, store=True),
-                'effective_hours': fields.Float(
-                    'Hour(s) Spent', compute=_effective_hours, store=True),
-                'remaining_hours': fields.Float(
-                    'Remaining Hour(s)', compute=_remaining_hours, store=True),
-                'progress': fields.Float(
-                    'Progress (%)', compute=_progress, store=True),
-                'stage_id': fields.Many2one(
-                    'project.task.type', string='Stage',
-                    domain="[('fold', '=', False)]"),
-                'state': fields.Selection(
-                    STATES, 'State', default='new', related='stage_id',
-                    readonly=True),
-                'color': fields.Integer('Color Index'),
-                }
+        'name': fields.Char('Name', size=128, required=True),
+        'partner_id': fields.Many2one(
+            'res.users', string='User', size=128, required=True),
+        'task_ids': fields.One2many(
+            'project.task', 'sprint_id', string='Tasks'),
+        'date_start': fields.Datetime(
+            'Start Date',
+            required=True),
+        'date_end': fields.Datetime(
+            'End Date', compute=_date_end, store=True),
+        'deadline': fields.Date(
+            'Deadline',
+            default=lambda *a: fields.Date.today(),
+            required=True),
+        'expected_hours': fields.Float(
+            'Initially Planned Hour(s)',
+            compute=_expected_hours, store=True),
+        'effective_hours': fields.Float(
+            'Hour(s) Spent', compute=_effective_hours, store=True),
+        'remaining_hours': fields.Float(
+            'Remaining Hour(s)', compute=_remaining_hours, store=True),
+        'progress': fields.Float(
+            'Progress (%)', compute=_progress, store=True),
+        'stage_id': fields.Many2one(
+            'project.task.type', string='Stage',
+            domain="[('fold', '=', False)]"),
+        'state': fields.Selection(
+            STATES, 'State', default='new', related='stage_id',
+            readonly=True),
+        'color': fields.Integer('Color Index'),
+    }
 
 
 class Task(models.Model):
@@ -539,30 +538,33 @@ class Task(models.Model):
             feature = self.pool.get('project.scrum.feature').browse(
                 cr, uid, feature_id, context=context)
             return {
-                    'value': {
-                              'planned_hours': feature.expected_hours,
-                              'priority': PRIORITY[feature.priority],
-                              }
-                    }
+                'value': {
+                    'planned_hours': feature.expected_hours,
+                    'priority': PRIORITY[feature.priority],
+                }
+            }
         else:
             return {
                 'value': {
-                          'planned_hours': False,
-                          'priority': '2',
-                          }
+                    'planned_hours': False,
+                    'priority': '2',
                 }
-    
+            }
+
+    @api.constrains('previous_task_ids', 'next_task_ids')
     def _check_related_tasks(self, cr, uid, ids, context=None):
         tasks = self.browse(cr, uid, ids, context=context)
+        validation_error = "There was an error checking the relationship" \
+                           "between tasks. Please check if you selected " \
+                           "an invalid task."
         for task in tasks:
             for previous_task in task.previous_task_ids:
                 if previous_task.id == task.id or \
                                 previous_task in task.next_task_ids:
-                    return False
+                    raise ValidationError(validation_error)
             for next_task in task.next_task_ids:
                 if next_task.id == task.id:
-                    return False
-        return True
+                    raise ValidationError(validation_error)
 
     def write(self, cr, uid, ids, values, context=None):
         if 'stage_id' in values:
@@ -578,43 +580,41 @@ class Task(models.Model):
         return super(Task, self).write(cr, uid, ids, values, context)
 
     _fields = {
-                'is_scrum': fields.Boolean('Scrum'),
-                'sprint_id': fields.Many2one(
-                    'project.scrum.sprint', string='Sprint'),
-                'feature_id': fields.Many2one(
-                    'project.scrum.feature', string='Feature'),
-                'feature_type_id': fields.Many2one(
-                    'type_id', string='Feature Type',
-                    related='project.scrum.feature.type', readonly=True),
-                'previous_task_ids': fields.Many2many(
-                    'project.task', 'project_scrum_task_previous_tasks',
-                    'task_id', 'previous_task_id', string='Previous Tasks',
-                    domain="['!',('id','=',id)]"),
-                'next_task_ids': fields.Many2many(
-                    'project.task', 'project_scrum_task_next_tasks',
-                    'task_id', 'next_task_id', string='Next Tasks',
-                    domain="['!',('state','in',['done','cancelled']),"
-                    "'!',('id','=',id)]"),
-                }
+        'date_start': fields.Datetime(
+            'Starting Date', select=True, copy=False,
+            default=lambda *a: datetime.strftime(
+                datetime.now(), '%Y-%m-%d %H:%M:%S')),
+        'is_scrum': fields.Boolean('Scrum'),
+        'project_id': fields.Many2one(
+            'project.project', 'Project', ondelete='set null',
+            select=True, track_visibility='onchange', change_default=True,
+            default=lambda slf, cr, uid, ctx: ctx.get('project_id', False)),
+        'sprint_id': fields.Many2one(
+            'project.scrum.sprint', string='Sprint',
+            default=lambda slf, cr, uid, ctx: ctx.get('sprint_id', False)),
+        'feature_id': fields.Many2one(
+            'project.scrum.feature', string='Feature'),
+        'feature_type_id': fields.Many2one(
+            'type_id', string='Feature Type',
+            related='project.scrum.feature.type', readonly=True),
+        'previous_task_ids': fields.Many2many(
+            'project.task', 'project_scrum_task_previous_tasks',
+            'task_id', 'previous_task_id', string='Previous Tasks',
+            domain="['!',('id','=',id)]"),
+        'next_task_ids': fields.Many2many(
+            'project.task', 'project_scrum_task_next_tasks',
+            'task_id', 'next_task_id', string='Next Tasks',
+            domain="['!',('state','in',['done','cancelled']),"
+            "'!',('id','=',id)]"),
+    }
 
     _defaults = {
-                 'date_start': lambda *a: datetime.strftime(
-                     datetime.now(), '%Y-%m-%d %H:%M:%S'),
-                 'project_id':
-                 lambda slf, cr, uid, ctx: ctx.get('project_id', False),
+
                  'release_backlog_id':
                  lambda slf, cr, uid, ctx: ctx.get(
-                     'release_backlog_id', False),
-                 'sprint_id':
-                 lambda slf, cr, uid, ctx: ctx.get('sprint_id', False),
+                     'release_backlog_id', False)
+
                  }
-    
-    _constraints = [
-                    (_check_related_tasks,
-                     'There was an error checking the relationship '
-                     'between tasks. Please check if you selected an '
-                     'invalid task.', ['Previous Tasks', 'Next Tasks']),
-                    ]
 
 
 class ReleaseBacklog(models.Model):
@@ -749,49 +749,49 @@ class ReleaseBacklog(models.Model):
         return self._set_cancel(cr, uid, ids, context=context)
 
     _fields = {
-                'name': fields.Char('Release Name', size=128, required=True),
-                'project_id': fields.Many2one(
-                    'project.project', string='Project', required=True),
-                'feature_ids': fields.One2many(
-                    'project.scrum.feature', 'release_backlog_id',
-                    string='Features'),
-                'date_start': fields.Datetime(
-                    'Start Date', compute=_date_start,
-                    help='Calculated Start Date, will be empty if any '
-                         'sprint has no start date.', store=True),
-                'date_end': fields.Datetime(
-                    'End Date', compute=_date_end,
-                    help='Calculated End Date, will be empty if any '
-                         'sprint has no end date.', store=True),
-                'deadline': fields.Datetime(
-                    string='Deadline',
-                    help='Calculated Deadline, will be empty if any '
-                         'sprint has no deadline.'),
-                'expected_hours': fields.Float(
-                    'Initially Planned Hour(s)', compute=_expected_hours,
-                    help='Total planned hours calculated '
-                    'from sprints.', store=True),
-                'effective_hours': fields.Float(
-                    'Spent Hour(s)', compute=_effective_hours,
-                    help='Total spent hours calculated '
-                    'from sprints.', store=True),
-                'remaining_hours': fields.Float(
-                    'Remaining Hour(s)', compute=_remaining_hours,
-                    help='Difference between planned hours and spent hours.',
-                    store=True),
-                'progress': fields.Float(
-                    'Progress (%)', compute=_progress,
-                    help='Total progress percentage calculated from sprints',
-                    store=True),
-                'stage_id': fields.Many2one(
-                    'project.task.type', string='Stage',
-                    domain="['&', ('fold', '=', False),"
-                    " ('project_ids', '=', project_id)]"),
-                'state': fields.Selection(
-                    STATES, 'State', related='state',
-                    readonly=True),
-                'color': fields.Integer('Color Index'),
-                }
+        'name': fields.Char('Release Name', size=128, required=True),
+        'project_id': fields.Many2one(
+            'project.project', string='Project', required=True),
+        'feature_ids': fields.One2many(
+            'project.scrum.feature', 'release_backlog_id',
+            string='Features'),
+        'date_start': fields.Datetime(
+            'Start Date', compute=_date_start,
+            help='Calculated Start Date, will be empty if any '
+                 'sprint has no start date.', store=True),
+        'date_end': fields.Datetime(
+            'End Date', compute=_date_end,
+            help='Calculated End Date, will be empty if any '
+                 'sprint has no end date.', store=True),
+        'deadline': fields.Datetime(
+            string='Deadline',
+            help='Calculated Deadline, will be empty if any '
+                 'sprint has no deadline.'),
+        'expected_hours': fields.Float(
+            'Initially Planned Hour(s)', compute=_expected_hours,
+            help='Total planned hours calculated '
+            'from sprints.', store=True),
+        'effective_hours': fields.Float(
+            'Spent Hour(s)', compute=_effective_hours,
+            help='Total spent hours calculated '
+            'from sprints.', store=True),
+        'remaining_hours': fields.Float(
+            'Remaining Hour(s)', compute=_remaining_hours,
+            help='Difference between planned hours and spent hours.',
+            store=True),
+        'progress': fields.Float(
+            'Progress (%)', compute=_progress,
+            help='Total progress percentage calculated from sprints',
+            store=True),
+        'stage_id': fields.Many2one(
+            'project.task.type', string='Stage',
+            domain="['&', ('fold', '=', False),"
+            " ('project_ids', '=', project_id)]"),
+        'state': fields.Selection(
+            STATES, 'State', related='state',
+            readonly=True),
+        'color': fields.Integer('Color Index'),
+    }
     
     _defaults = {
                  'project_id':
@@ -860,16 +860,16 @@ class Project(models.Model):
         return res
 
     _fields = {
-                'is_scrum': fields.Boolean('Scrum'),
-                'date_end': fields.Datetime(
-                    'End Date', compute=_date_end,
-                    help='Calculated End Date, will be '
-                    'empty if any feature has no end date.'),
-                'deadline': fields.Date(
-                    'Deadline', compute=_deadline,
-                    help='Calculated Deadline, will be empty if any feature '
-                         'has no deadline.'),
-                'release_backlog_ids': fields.One2many(
-                    'project.scrum.release.backlog',
-                    'id', string='Release Backlogs'),
-                }
+        'is_scrum': fields.Boolean('Scrum'),
+        'date_end': fields.Datetime(
+            'End Date', compute=_date_end,
+            help='Calculated End Date, will be '
+            'empty if any feature has no end date.'),
+        'deadline': fields.Date(
+            'Deadline', compute=_deadline,
+            help='Calculated Deadline, will be empty if any feature '
+                 'has no deadline.'),
+        'release_backlog_ids': fields.One2many(
+            'project.scrum.release.backlog',
+            'id', string='Release Backlogs'),
+    }
