@@ -8,7 +8,6 @@ from openerp import models, fields, api
 class WorkType(models.Model):
     
     _name = 'project.work.type'
-    
     _order = 'sequence'
     
     name = fields.Char('name', size=128, required=True)
