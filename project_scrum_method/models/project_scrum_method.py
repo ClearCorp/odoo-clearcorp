@@ -454,7 +454,7 @@ class Sprint(models.Model):
         'Remaining Hour(s)', compute=_remaining_hours, store=True)
     progress = fields.Float('Progress (%)', compute=_progress, store=True)
     stage_id = fields.Many2one(
-        'project.task.type', string='Stage',
+        'project.task.type', string='Stage', #related='state',
         domain="[('fold', '=', False)]")
     state = fields.Selection(
         STATES, 'State', default='new', related='stage_id',
@@ -558,12 +558,12 @@ class Task(models.Model):
         'project.project', string='Project', ondelete='set null', select=True,
         track_visibility='onchange', change_default=True,
         default=lambda self: self.env['project.project'].
-            browse(self._context.get('project_id', False)))
+        browse(self._context.get('project_id', False)))
         #default=lambda slf, cr, uid, ctx: ctx.get('project_id', False))
     sprint_id = fields.Many2one(
         'project.scrum.sprint', string='Sprint',
         default=lambda self: self.env['project.scrum.sprint'].
-            browse(self._context.get('sprint_id', False)))
+        browse(self._context.get('sprint_id', False)))
         #default=lambda slf, cr, uid, ctx: ctx.get('sprint_id', False))
     feature_id = fields.Many2one('project.scrum.feature', string='Feature')
     feature_type_id = fields.Many2one(
@@ -755,12 +755,11 @@ class ReleaseBacklog(models.Model):
         help='Total progress percentage calculated from sprints',
         store=True)
     stage_id = fields.Many2one(
-        'project.task.type', string='Stage', related='state',
+        'project.task.type', string='Stage', #related='state',
         domain="['&', ('fold', '=', False),"
         " ('project_ids', '=', project_id)]")
     state = fields.Selection(
-        STATES, 'State',# related='stage_id',
-        readonly=True)
+        STATES, 'State', related='stage_id', readonly=True)
     color = fields.Integer('Color Index')
 
 

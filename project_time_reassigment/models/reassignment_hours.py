@@ -14,18 +14,17 @@ class OriginTask(models.Model):
     origin_task_id = fields.Many2one('project.task', string="Name")
     reassignment_hour = fields.Float('Reassignment Hour')
     reassignment_hour_id = fields.Many2one('project.reassignment.hours')
-    project_origin_task = fields.Many2one('project.project', string='Project',
-                                          related='origin_task_id.project_id',
-                                          readonly=True)
-    user_origin_task = fields.Many2one('res.users', string='User',
-                                       related='origin_task_id.user_id',
-                                       readonly=True)
-    ph_origin_task = fields.Float('Planned hours',
-                                  related='origin_task_id.planned_hours',
-                                  readonly=True)
-    rh_origin_task = fields.Float('Remaining hours',
-                                  related='origin_task_id.remaining_hours',
-                                  readonly=True)
+    project_origin_task = fields.Many2one(
+        'project.project', string='Project',
+        related='origin_task_id.project_id', readonly=True)
+    user_origin_task = fields.Many2one(
+        'res.users', string='User', related='origin_task_id.user_id',
+        readonly=True)
+    ph_origin_task = fields.Float(
+        'Planned hours', related='origin_task_id.planned_hours', readonly=True)
+    rh_origin_task = fields.Float(
+        'Remaining hours', related='origin_task_id.remaining_hours',
+        readonly=True)
 
     @api.onchange('origin_task_id')
     def onchange_origin_task_id(self):
@@ -39,24 +38,24 @@ class ReassignmentHours(models.Model):
     _name = 'project.reassignment.hours'
 
     target_task = fields.Many2one('project.task', string="Target Task")
-    origin_task_ids = fields.One2many('project.origin.task',
-                                      'reassignment_hour_id',
-                                      string="Origin Task")
+    origin_task_ids = fields.One2many(
+        'project.origin.task', 'reassignment_hour_id', string="Origin Task")
     project_id = fields.Integer('Project')
     type_task_id = fields.Integer('Task type')
     total_time_reassignment = fields.Float(
         'Total Time Reassignment',
         compute='_compute_total_time_reassignment',
         inverse='_inverse_total_time_reassignment')
-    inv_total_time_reassignment = fields.Float('Set Total Time Reassignment',
-                                               default=0)
+    inv_total_time_reassignment = fields.Float(
+        'Set Total Time Reassignment',
+        default=0)
     date = fields.Date('Date', required=True)
-    reason = fields.Many2one('project.reassignment.reason', string='Reason',
-                             required=True)
+    reason = fields.Many2one(
+        'project.reassignment.reason', string='Reason', required=True)
     detail = fields.Text('Detail', size=200, required=True)
-    state = fields.Selection([('draft', 'Draft'),
-                              ('reassignment', 'Reassignment')],
-                             string='State', default='draft')
+    state = fields.Selection(
+        [('draft', 'Draft'), ('reassignment', 'Reassignment')],
+        string='State', default='draft')
 
     @api.onchange('target_task')
     def onchange_target_task(self):
