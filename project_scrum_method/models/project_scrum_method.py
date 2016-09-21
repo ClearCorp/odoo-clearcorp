@@ -12,7 +12,8 @@ from openerp.exceptions import ValidationError
 PRIORITY = {5: '4', 4: '3', 3: '2', 2: '1', 1: '0'}
 
 STATES = [('draft', 'Draft'), ('new', 'New'), ('open', 'In Progress'),
-          ('pending', 'Pending'), ('done', 'Done'), ('cancelled', 'Cancelled')]
+          ('pending', 'Pending'), ('ready', 'Ready'), ('done', 'Done'),
+          ('cancelled', 'Cancelled')]
 
 
 class FeatureType(models.Model):
@@ -235,8 +236,8 @@ class Feature(models.Model):
         return res
     
     def name_search(
-            self, cr, uid, name='', args=None,
-            operator='ilike', context=None, limit=50):
+            self, cr, uid, name='', args=None, operator='ilike',
+            context=None, limit=50):
         ids = []
         if name:
             ids = self.search(cr, uid,
@@ -454,10 +455,12 @@ class Sprint(models.Model):
         'Remaining Hour(s)', compute=_remaining_hours, store=True)
     progress = fields.Float('Progress (%)', compute=_progress, store=True)
     stage_id = fields.Many2one(
-        'project.task.type', string='Stage', #related='state',
-        domain="[('fold', '=', False)]")
+        'project.task.type', string='Stage', domain="[('fold', '=', False)]")
+
+    # The relation calls the variable (stage_id) and the field in the related
+    # model (project.task.type -> state)
     state = fields.Selection(
-        STATES, 'State', default='new', related='stage_id',
+        STATES, 'State', default='new', related='stage_id.state',
         readonly=True)
     color = fields.Integer('Color Index')
 
@@ -725,7 +728,7 @@ class ReleaseBacklog(models.Model):
         'project.project', string='Project', required=True,
         default=lambda self: self.env['project.project'].
         browse(self._context.get('project_id', False)))
-    #lambda self, cr, uid, c: c.get('project_id', False))
+    # lambda self, cr, uid, c: c.get('project_id', False))
     feature_ids = fields.One2many(
         'project.scrum.feature', 'release_backlog_id', string='Features')
     date_start = fields.Datetime(
@@ -755,11 +758,11 @@ class ReleaseBacklog(models.Model):
         help='Total progress percentage calculated from sprints',
         store=True)
     stage_id = fields.Many2one(
-        'project.task.type', string='Stage', #related='state',
+        'project.task.type', string='Stage',
         domain="['&', ('fold', '=', False),"
         " ('project_ids', '=', project_id)]")
     state = fields.Selection(
-        STATES, 'State', related='stage_id', readonly=True)
+        STATES, 'State', related='stage_id.state', readonly=True)
     color = fields.Integer('Color Index')
 
 

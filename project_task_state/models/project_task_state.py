@@ -2,7 +2,7 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 
 _TASK_STATE = [('draft', 'New'), ('open', 'In Progress'),
                ('pending', 'Pending'), ('ready', 'Ready'),
@@ -12,8 +12,8 @@ _TASK_STATE = [('draft', 'New'), ('open', 'In Progress'),
 class ProjectTaskType(models.Model):
 
     _inherit = 'project.task.type'
-    state = fields.Selection(_TASK_STATE, 'Related Status', required=True,
-                             default='open')
+    state = fields.Selection(
+        _TASK_STATE, 'Related Status', required=True, default='open')
 
     @api.multi
     def mark_done(self):
