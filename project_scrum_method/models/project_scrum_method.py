@@ -570,8 +570,8 @@ class Task(models.Model):
         #default=lambda slf, cr, uid, ctx: ctx.get('sprint_id', False))
     feature_id = fields.Many2one('project.scrum.feature', string='Feature')
     feature_type_id = fields.Many2one(
-        'type_id', string='Feature Type',
-        related='project.scrum.feature.type', readonly=True)
+        'project.scrum.feature.type', string='Feature Type',
+        related='type_id', readonly=True)
     previous_task_ids = fields.Many2many(
         'project.task', 'project_scrum_task_previous_tasks',
         'task_id', 'previous_task_id', string='Previous Tasks',
@@ -581,15 +581,6 @@ class Task(models.Model):
         'task_id', 'next_task_id', string='Next Tasks',
         domain="['!',('state','in',['done','cancelled']),"
         "'!',('id','=',id)]")
-
-    """_defaults = {
-                 # This is not part of this model. Can one change this field
-                 # for a related Feature?
-                 'release_backlog_id':
-                 lambda slf, cr, uid, ctx: ctx.get(
-                     'release_backlog_id', False)
-
-                 }"""
 
 
 class ReleaseBacklog(models.Model):
@@ -767,15 +758,15 @@ class ReleaseBacklog(models.Model):
 
 
 class Project(models.Model):
-    
+
     _inherit = 'project.project'
-    
+
     def _date_end(self, cr, uid, ids, field_name, arg, context=None):
-        """Calculates the product backlog date_end getting the 
-        estimated end_date from features related to 
+        """Calculates the product backlog date_end getting the
+        estimated end_date from features related to
         each product backlog."""
         res = {}
-        for id in ids: 
+        for id in ids:
             backlog_obj = self.pool.get('project.scrum.release.backlog')
             backlog_ids = backlog_obj.search(
                 cr, uid, [('project_id', '=', id)])
@@ -791,16 +782,16 @@ class Project(models.Model):
                         date_end = date
                     else:
                         if date_end < date:
-                            date_end = date 
+                            date_end = date
             if date_end:
                 res[id] = datetime.strftime(date_end, '%Y-%m-%d %H:%M:%S')
             else:
                 res[id] = date_end
         return res
-    
+
     def _deadline(self, cr, uid, ids, field_name, arg, context=None):
-        """Calculates the product backlog deadline getting the 
-        estimated end_date from features related to 
+        """Calculates the product backlog deadline getting the
+        estimated end_date from features related to
         each product backlog."""
         res = {}
         for id in ids:
