@@ -16,6 +16,7 @@
     "depends": [
                  'project',
                  'project_task_state',
+                 'project_timesheet'
                  ],
     "data": [
         'security/ir.model.access.csv',

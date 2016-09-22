@@ -16,9 +16,7 @@
 		<menuitem id="menu_sprint" parent="menu_scrum" name="Sprints"
 			action="action_sprint" sequence="40" />
 
-		<menuitem id="menu_feature_type" parent="base.menu_definitions"
+		<menuitem id="menu_feature_type" parent="project.menu_project_config"
 			name="Feature Types" action="action_feature_type" sequence="10" />
-		
-        
 	</data>
 </openerp>

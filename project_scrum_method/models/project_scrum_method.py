@@ -570,8 +570,8 @@ class Task(models.Model):
         #default=lambda slf, cr, uid, ctx: ctx.get('sprint_id', False))
     feature_id = fields.Many2one('project.scrum.feature', string='Feature')
     feature_type_id = fields.Many2one(
-        'project.scrum.feature.type', string='Feature Type',
-        related='type_id', readonly=True)
+        'project.scrum.feature', string='Feature Type',
+        related='feature_id.type_id', readonly=True)
     previous_task_ids = fields.Many2many(
         'project.task', 'project_scrum_task_previous_tasks',
         'task_id', 'previous_task_id', string='Previous Tasks',
