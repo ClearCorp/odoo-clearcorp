@@ -321,8 +321,7 @@
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers"
-                            groups="base.group_user" />
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
                         <field name="message_ids" widget="mail_thread" />
                     </div>
                 </form>
@@ -429,7 +428,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="oe_clear"></div>
+                                <div class="oe_clear"/>
                             </div>
                         </t>
                     </templates>
@@ -485,7 +484,7 @@
                     <header>
                         <button name="set_done" type="object"
                             string="Done" states="open,pending"
-                            confirm="Are you sure you want to set as done this sprint?" />
+                            confirm="Are you sure you want to set this sprint as done?" />
                         <button name="set_cancel" type="object"
                             string="Cancel" states="open,pending"
                             confirm="Are you sure you want to cancel this sprint?" />
@@ -587,7 +586,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="oe_clear"></div>
+                                <div class="oe_clear"/>
                             </div>
                         </t>
                     </templates>
