@@ -181,9 +181,11 @@ class Task(models.Model):
             super(Task, self).write(cr, uid, task.id, values, context)
         return True
 
+    # Relates this variable to project.scrum.feature.hour_ids through
+    # project.scrum.feature.hours.feature_id
     feature_hour_ids = fields.One2many(
-        'feature_id', string='Feature Hours',
-        related='project.scrum.feature.hours', readonly=True)
+        string='Feature Hours',
+        related='feature_id.hour_ids', readonly=True)
     remaining_hours = fields.Float(
         'Remaining Hour(s)', compute=_remaining_hours, store=True)
     state = fields.Selection(

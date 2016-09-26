@@ -4,7 +4,6 @@
 
 <openerp>
     <data>
-        <!-- views -->
         <!-- project.project -->
         <!-- form -->
         <record id="view_project_form" model="ir.ui.view">
@@ -16,7 +15,7 @@
                     <field name="is_scrum" class="oe_inline" attrs="{'invisible': [('use_tasks','=',False)]}" />
                     <label for="is_scrum" attrs="{'invisible': [('use_tasks','=',False)]}" />
                 </xpath>
-                <xpath expr="//form/sheet/notebook/page[3]" position="after">
+                <xpath expr="//form/sheet/notebook" position="inside">
                     <page string="Release Backlogs" name="release_backlogs">
                         <field name="release_backlog_ids" attrs="{'readonly':['!','|',('state','=','open'),('state','=','pending')]}" context="{'project_id': id}" />
                     </page>
@@ -24,8 +23,7 @@
             </field>
         </record>
 
-        <!-- project.task -->
-        <!-- form -->
+        <!-- project.task form -->
        <record id="view_task_form" model="ir.ui.view">
             <field name="name">view.task.form</field>
             <field name="model">project.task</field>
@@ -58,8 +56,8 @@
 
                 <!-- Sequence page -->
                 <xpath
-                    expr="//form/sheet/notebook/page[2]"
-                    position="after">
+                    expr="//form/sheet/notebook"
+                    position="inside">
                     <page string="Sequence" name="sequence">
                         <separator string="Previous Tasks" />
                         <field name="previous_task_ids"
@@ -77,8 +75,7 @@
             </field>
        </record>
        
-        <!-- Search -->
-
+        <!-- project.task search -->
         <record id="view_scrum_task_search" model="ir.ui.view">
             <field name="name">Task Search</field>
             <field name="model">project.task</field>
@@ -96,19 +93,18 @@
             </field>
         </record>
 
-        <!-- project.scrum.release.backlog -->
-        <!-- form -->
+        <!-- project.scrum.release.backlog form -->
         <record id="view_release_backlog_form" model="ir.ui.view">
             <field name="name">view.release.backlog.form</field>
             <field name="model">project.scrum.release.backlog</field>
             <field name="type">form</field>
             <field name="priority" eval="16" />
             <field name="arch" type="xml">
-                <form string="Release Backlog" version="7.0">
+                <form string="Release Backlog" version="9.0">
                     <header>
                         <button name="do_done" type="object"
                             string="Done" states="open,pending" class="oe_highlight"
-                            confirm="Are you sure you want to set as done this release backlog?" />
+                            confirm="Are you sure you want to set this release backlog as done?" />
                         <button name="do_cancel" type="object"
                             string="Cancel" states="open,pending"
                             confirm="Are you sure you want to cancel this release backlog?" />
@@ -147,7 +143,7 @@
             </field>
         </record>
 
-        <!-- tree -->
+        <!-- project.scrum.release.backlog tree -->
         <record id="view_release_backlog_tree" model="ir.ui.view">
             <field name="name">view.release.backlog.tree</field>
             <field name="model">project.scrum.release.backlog</field>
@@ -169,7 +165,7 @@
             </field>
         </record>
 
-        <!-- kanban -->
+        <!-- project.scrum.release.backlog kanban -->
         <record model="ir.ui.view" id="view_release_backlog_kanban">
             <field name="name">view.release.backlog.kanban</field>
             <field name="model">project.scrum.release.backlog</field>
@@ -183,50 +179,28 @@
                             <div
                                 t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
                                 <div
-                                    class="oe_dropdown_toggle oe_dropdown_kanban">
-                                    <span class="oe_e">í</span>
+                                    class="oe_dropdown_toggle oe_dropdown_kanban  pull-right">
+                                    <span class="fa fa-bars fa-lg"/>
                                     <ul class="oe_dropdown_menu">
-                                        <t
-                                            t-if="widget.view.is_action_enabled('edit')">
-                                            <li>
-                                                <a type="edit">Edit...</a>
-                                            </li>
-                                        </t>
-                                        <t
-                                            t-if="widget.view.is_action_enabled('delete')">
-                                            <li>
-                                                <a type="delete">Delete</a>
-                                            </li>
-                                        </t>
-                                        <li>
-                                            <ul class="oe_kanban_colorpicker"
-                                                data-field="color" />
-                                        </li>
+                                        <!-- New editable and deletable setting for kanban views -->
+                                        <t t-if="widget.editable"><li><a type="edit">Edit Release Backlog</a></li></t>
+                                        <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color" /></li>
                                     </ul>
                                 </div>
                                 <div class="oe_kanban_content">
-                                    <div>
-                                        <b>
-                                            <field name="name" />
-                                        </b>
-                                    </div>
-                                    <div>
-                                        <field name="project_id" />
-                                        <br />
-                                        <t
-                                            t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
-                                            t-set="red">oe_kanban_text_red</t>
+                                    <div><b><field name="name" /></b></div>
+                                    <div><field name="project_id" /><br />
+                                        <t t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
+                                           t-set="red">oe_kanban_text_red</t>
                                         <span t-attf-class="#{red || ''}">
-                                            <i>
-                                                <field name="deadline" />
-                                            </i>
+                                            <i><field name="deadline" /></i>
                                         </span>
                                     </div>
                                     <div class="oe_kanban_footer_left">
                                         <span title="Remaining Hours">
-                                            <span class="oe_e">N</span>
-                                            <t
-                                                t-esc="Math.round(record.remaining_hours.raw_value)" />
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <t t-esc="Math.round(record.remaining_hours.raw_value)" />
                                         </span>
                                     </div>
                                 </div>
@@ -238,7 +212,7 @@
             </field>
         </record>
 
-        <!-- search -->
+        <!-- project.scrum.release.backlog search -->
         <record id="view_release_backlog_search" model="ir.ui.view">
             <field name="name">view.release.backlog.search</field>
             <field name="model">project.scrum.release.backlog</field>
@@ -273,15 +247,14 @@
             </field>
         </record>
 
-        <!-- project.scrum.feature -->
-        <!-- form -->
+        <!-- project.scrum.feature form -->
         <record id="view_feature_form" model="ir.ui.view">
             <field name="name">view.feature.form</field>
             <field name="model">project.scrum.feature</field>
             <field name="type">form</field>
             <field name="priority" eval="16" />
             <field name="arch" type="xml">
-                <form string="Feature" version="7.0">
+                <form string="Feature" version="9.0">
                     <header>
                         <button name="set_open" type="object"
                             string="Open" class="oe_highlight"
@@ -356,7 +329,7 @@
             </field>
         </record>
 
-        <!-- tree -->
+        <!-- project.scrum.feature tree -->
         <record id="view_feature_tree" model="ir.ui.view">
             <field name="name">view.feature.tree</field>
             <field name="model">project.scrum.feature</field>
@@ -381,7 +354,7 @@
             </field>
         </record>
 
-        <!-- kanban -->
+        <!-- project.scrum.feature kanban -->
         <record model="ir.ui.view" id="view_feature_kanban">
             <field name="name">view.feature.kanban</field>
             <field name="model">project.scrum.feature</field>
@@ -396,94 +369,63 @@
                         <t t-name="kanban-box">
                             <div
                                 t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
-                                <div
-                                    class="oe_dropdown_toggle oe_dropdown_kanban">
-                                    <span class="oe_e">í</span>
-                                    <ul class="oe_dropdown_menu">
-                                        <t
-                                            t-if="widget.view.is_action_enabled('edit')">
-                                            <li>
-                                                <a type="edit">Edit...</a>
-                                            </li>
-                                        </t>
-                                        <t
-                                            t-if="widget.view.is_action_enabled('delete')">
-                                            <li>
-                                                <a type="delete">Delete</a>
-                                            </li>
-                                        </t>
-                                        <li>
-                                            <ul class="oe_kanban_colorpicker"
-                                                data-field="color" />
-                                        </li>
-                                    </ul>
+                                <div class="oe_dropdown_toggle oe_dropdown_kanban  pull-right">
+                                     <span class="fa fa-bars fa-lg"/>
+                                     <ul class="oe_dropdown_menu">
+                                        <!-- New editable and deletable setting for kanban views -->
+                                        <t t-if="widget.editable"><li><a type="edit">Edit Feature</a></li></t>
+                                        <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color" /></li>
+                                     </ul>
                                 </div>
                                 <div class="oe_kanban_content">
-                                    <div>
-                                        <b>
-                                            <field name="code" />
-                                            -
-                                            <field name="name" />
-                                        </b>
-                                    </div>
+                                    <div><b><field name="code" />-<field name="name" /></b></div>
                                     <div>
                                         <!-- <field name="project_id" /> -->
                                         <br />
-                                        <t
-                                            t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
-                                            t-set="red">oe_kanban_text_red</t>
-                                        <span t-attf-class="#{red || ''}">
-                                            <i>
-                                                <field name="deadline" />
-                                            </i>
-                                        </span>
+                                        <t t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
+                                           t-set="red">oe_kanban_text_red</t>
+                                        <span t-attf-class="#{red || ''}"><i><field name="deadline" /></i></span>
                                     </div>
                                     <div class="oe_kanban_bottom_right">
                                         <div class="oe_bottom_elems">
                                             <div class="oe_star">
-                                                <a
-                                                    t-if="record.priority.raw_value == 5"
-                                                    type="object"
-                                                    string="Very Low"
-                                                    name="set_low_priority"
-                                                    class="oe_e oe_star_gray">7</a>
-                                                <a
-                                                    t-if="record.priority.raw_value == 4"
-                                                    type="object"
-                                                    string="Low"
-                                                    name="set_medium_priority"
-                                                    class="oe_e oe_star_blue">7</a>
-                                                <a
-                                                    t-if="record.priority.raw_value == 3"
-                                                    type="object"
-                                                    string="Medium"
-                                                    name="set_high_priority"
-                                                    class="oe_e oe_star_green">7</a>
-                                                <a
-                                                    t-if="record.priority.raw_value == 2"
-                                                    type="object"
-                                                    string="High"
-                                                    name="set_very_high_priority"
-                                                    class="oe_e oe_star_yellow">7</a>
-                                                <a
-                                                    t-if="record.priority.raw_value == 1"
-                                                    type="object"
-                                                    string="Very High"
-                                                    name="set_very_low_priority"
-                                                    class="oe_e oe_star_red">7</a>
+                                                <a t-if="record.priority.raw_value == 5"
+                                                   type="object"
+                                                   string="Very Low"
+                                                   name="set_low_priority"
+                                                   class="oe_e oe_star_gray">7</a>
+                                                <a t-if="record.priority.raw_value == 4"
+                                                   type="object"
+                                                   string="Low"
+                                                   name="set_medium_priority"
+                                                   class="oe_e oe_star_blue">7</a>
+                                                <a t-if="record.priority.raw_value == 3"
+                                                   type="object"
+                                                   string="Medium"
+                                                   name="set_high_priority"
+                                                   class="oe_e oe_star_green">7</a>
+                                                <a t-if="record.priority.raw_value == 2"
+                                                   type="object"
+                                                   string="High"
+                                                   name="set_very_high_priority"
+                                                   class="oe_e oe_star_yellow">7</a>
+                                                <a t-if="record.priority.raw_value == 1"
+                                                   type="object"
+                                                   string="Very High"
+                                                   name="set_very_low_priority"
+                                                   class="oe_e oe_star_red">7</a>
                                             </div>
-                                            <img
-                                                t-att-src="kanban_image('res.partner', 'image_small', record.partner_id.raw_value)"
-                                                t-att-title="record.partner_id.value"
-                                                width="24" height="24"
-                                                class="oe_kanban_avatar" />
+                                            <img t-att-src="kanban_image('res.partner', 'image_small', record.partner_id.raw_value)"
+                                                 t-att-title="record.partner_id.value"
+                                                 width="24" height="24"
+                                                 class="oe_kanban_avatar" />
                                         </div>
                                     </div>
                                     <div class="oe_kanban_footer_left">
                                         <span title="Remaining Hours">
-                                            <span class="oe_e">N</span>
-                                            <t
-                                                t-esc="Math.round(record.remaining_hours.raw_value)" />
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <t t-esc="Math.round(record.remaining_hours.raw_value)" />
                                         </span>
                                     </div>
                                 </div>
@@ -495,7 +437,7 @@
             </field>
         </record>
 
-        <!-- search -->
+        <!-- project.scrum.feature search -->
         <record id="view_feature_search" model="ir.ui.view">
             <field name="name">view.feature.search</field>
             <field name="model">project.scrum.feature</field>
@@ -532,15 +474,14 @@
             </field>
         </record>
 
-        <!-- project.scrum.sprint -->
-        <!-- form -->
+        <!-- project.scrum.sprint form -->
         <record id="view_sprint_form" model="ir.ui.view">
             <field name="name">view.sprint.form</field>
             <field name="model">project.scrum.sprint</field>
             <field name="type">form</field>
             <field name="priority" eval="16" />
             <field name="arch" type="xml">
-                <form string="Sprint" version="7.0">
+                <form string="Sprint" version="9.0">
                     <header>
                         <button name="set_done" type="object"
                             string="Done" states="open,pending"
@@ -585,7 +526,7 @@
             </field>
         </record>
 
-        <!-- tree -->
+        <!-- project.scrum.sprint tree -->
         <record id="view_sprint_tree" model="ir.ui.view">
             <field name="name">view.sprint.tree</field>
             <field name="model">project.scrum.sprint</field>
@@ -608,7 +549,7 @@
             </field>
         </record>
 
-        <!-- kanban -->
+        <!-- project.scrum.sprint kanban -->
         <record model="ir.ui.view" id="view_sprint_kanban">
             <field name="name">view.sprint.kanban</field>
             <field name="model">project.scrum.sprint</field>
@@ -619,52 +560,30 @@
                     <field name="remaining_hours" sum="Remaining Hours" />
                     <templates>
                         <t t-name="kanban-box">
-                            <div
-                                t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
-                                <div
-                                    class="oe_dropdown_toggle oe_dropdown_kanban">
-                                    <span class="oe_e">í</span>
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_dropdown_toggle oe_dropdown_kanban pull-right">
+                                    <span class="fa fa-bars fa-lg"/>
                                     <ul class="oe_dropdown_menu">
-                                        <t
-                                            t-if="widget.view.is_action_enabled('edit')">
-                                            <li>
-                                                <a type="edit">Edit...</a>
-                                            </li>
-                                        </t>
-                                        <t
-                                            t-if="widget.view.is_action_enabled('delete')">
-                                            <li>
-                                                <a type="delete">Delete</a>
-                                            </li>
-                                        </t>
-                                        <li>
-                                            <ul class="oe_kanban_colorpicker"
-                                                data-field="color" />
-                                        </li>
+                                        <!-- New editable and deletable setting for kanban views -->
+                                        <t t-if="widget.editable"><li><a type="edit">Edit Sprint</a></li></t>
+                                        <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color" /></li>
                                     </ul>
                                 </div>
                                 <div class="oe_kanban_content">
-                                    <div>
-                                        <b>
-                                            <field name="name" />
-                                        </b>
+                                    <div><b><field name="name" /></b>
                                     </div>
-                                    <div>
-                                        <br />
-                                        <t
-                                            t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
-                                            t-set="red">oe_kanban_text_red</t>
+                                    <div><br />
+                                        <t t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
+                                           t-set="red">oe_kanban_text_red</t>
                                         <span t-attf-class="#{red || ''}">
-                                            <i>
-                                                <field name="deadline" />
-                                            </i>
+                                            <i><field name="deadline" /></i>
                                         </span>
                                     </div>
                                     <div class="oe_kanban_footer_left">
                                         <span title="Remaining Hours">
-                                            <span class="oe_e">N</span>
-                                            <t
-                                                t-esc="Math.round(record.remaining_hours.raw_value)" />
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <t t-esc="Math.round(record.remaining_hours.raw_value)" />
                                         </span>
                                     </div>
                                 </div>
@@ -676,7 +595,7 @@
             </field>
         </record>
 
-        <!-- calendar -->
+        <!-- project.scrum.sprint calendar -->
         <record id="view_sprint_calendar" model="ir.ui.view">
             <field name="name">view.sprint.calendar</field>
             <field name="model">project.scrum.sprint</field>
@@ -690,7 +609,7 @@
             </field>
         </record>
 
-        <!-- gantt -->
+        <!-- project.scrum.sprint gantt -->
         <record id="view_sprint_gantt" model="ir.ui.view">
             <field name="name">view.sprint.gantt</field>
             <field name="model">project.scrum.sprint</field>
@@ -707,7 +626,7 @@
             </field>
         </record>
 
-        <!-- search -->
+        <!-- project.scrum.sprint search -->
         <record id="view_sprint_search" model="ir.ui.view">
             <field name="name">view.sprint.search</field>
             <field name="model">project.scrum.sprint</field>
@@ -734,15 +653,14 @@
             </field>
         </record>
 
-        <!-- project.scrum.feature.type -->
-        <!-- form -->
+        <!-- project.scrum.feature.type form -->
         <record id="view_feature_type_form" model="ir.ui.view">
             <field name="name">view.feature.type.form</field>
             <field name="model">project.scrum.feature.type</field>
             <field name="type">form</field>
             <field name="priority" eval="16" />
             <field name="arch" type="xml">
-                <form string="Feature Type" version="7.0">
+                <form string="Feature Type" version="9.0">
                     <sheet>
                         <group>
                             <group>
@@ -757,7 +675,7 @@
             </field>
         </record>
 
-        <!-- tree -->
+        <!-- project.scrum.feature.type tree -->
         <record id="view_feature_type_tree" model="ir.ui.view">
             <field name="name">view.feature.type.tree</field>
             <field name="model">project.scrum.feature.type</field>

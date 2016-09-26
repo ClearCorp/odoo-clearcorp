@@ -52,7 +52,7 @@ class Project(models.Model):
 
     @api.multi
     def write(self, values):
-        if ('state' in values.keys()):
+        if 'state' in values.keys():
             state_history_obj = self.env['project.state.history']
             state_to = values['state']
             for project in self:

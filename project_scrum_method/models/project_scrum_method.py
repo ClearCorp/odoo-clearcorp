@@ -11,7 +11,7 @@ from openerp.exceptions import ValidationError
 # feature priority
 PRIORITY = {5: '4', 4: '3', 3: '2', 2: '1', 1: '0'}
 
-STATES = [('draft', 'Draft'), ('new', 'New'), ('open', 'In Progress'),
+STATES = [('draft', 'New'), ('open', 'In Progress'),
           ('pending', 'Pending'), ('ready', 'Ready'), ('done', 'Done'),
           ('cancelled', 'Cancelled')]
 
@@ -460,7 +460,7 @@ class Sprint(models.Model):
     # The relation calls the variable (stage_id) and the field in the related
     # model (project.task.type -> state)
     state = fields.Selection(
-        STATES, 'State', default='new', related='stage_id.state',
+        STATES, 'State', default='draft', related='stage_id.state',
         readonly=True)
     color = fields.Integer('Color Index')
 
@@ -569,6 +569,9 @@ class Task(models.Model):
         browse(self._context.get('sprint_id', False)))
         #default=lambda slf, cr, uid, ctx: ctx.get('sprint_id', False))
     feature_id = fields.Many2one('project.scrum.feature', string='Feature')
+
+    # The relation calls the variable (feature_id) and the field in the related
+    # model (project.scrum.feature -> type_id)
     feature_type_id = fields.Many2one(
         'project.scrum.feature.type', string='Feature Type',
         related='feature_id.type_id', readonly=True)
@@ -752,6 +755,9 @@ class ReleaseBacklog(models.Model):
         'project.task.type', string='Stage',
         domain="['&', ('fold', '=', False),"
         " ('project_ids', '=', project_id)]")
+
+    # Relates state to project.task.type state through stage_id's Many2one
+    # relationship
     state = fields.Selection(
         STATES, 'State', related='stage_id.state', readonly=True)
     color = fields.Integer('Color Index')

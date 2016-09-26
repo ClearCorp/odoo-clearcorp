@@ -4,6 +4,9 @@
 
 from openerp import models, fields, api, _
 
+# Added draft state and new state to coincide with project_scrum_method
+# STATES
+
 _TASK_STATE = [('draft', 'New'), ('open', 'In Progress'),
                ('pending', 'Pending'), ('ready', 'Ready'),
                ('done', 'Done'), ('cancelled', 'Cancelled')]

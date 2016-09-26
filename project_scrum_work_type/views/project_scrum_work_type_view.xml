@@ -4,7 +4,6 @@
 
 <openerp>
 	<data>
-    
 
 		<!-- project.scrum.feature -->
 		<!-- form -->
@@ -44,7 +43,7 @@
 			<field name="priority" eval="100" />
 			<field name="arch" type="xml">
 				<xpath expr="//form/sheet/notebook/page[@name='sequence']"
-					position="before">
+					position="after">
 					<page string="Feature Hours" name="feature_hours"
                         attrs="{'invisible': [('feature_id','=',False)]}">
 						<field name="feature_hour_ids">
