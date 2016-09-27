@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+
+    <record id="account_analytic_account_invoice_form_inherit2" model="ir.ui.view">
+            <field name="name">account.analytic.account.invoice.form.inherit2</field>
+            <field name="model">account.analytic.account</field>
+            <field name="priority" eval="40" />
+            <field name="inherit_id"
+                ref="account_analytic_analysis.account_analytic_account_form_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div/button[@name='recurring_create_invoice']" 
+                       position="after">
+                       <div>
+                            <label for="journal_invoice" string="Invoice Journal" attrs="{'invisible': [('recurring_invoices','!=',True)]}"/>
+                            <field name="journal_invoice"  attrs="{'invisible': [('recurring_invoices','!=',True)]}" class="oe_inline"/>
+                       </div>
+                </xpath>
+           </field>
+       </record>
+       
+
+</data>
+</openerp>

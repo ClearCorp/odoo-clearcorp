@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+    <data>
+        <!-- project.scrum.feature -->
+        <!-- form -->
+        <record id="view_feature_form" model="ir.ui.view">
+            <field name="name">view.feature.form</field>
+            <field name="model">project.scrum.feature</field>
+            <field name="inherit_id" ref="project_scrum_method.view_feature_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='set_cancel']"
+                    position="after">
+                    <button name="set_quote_pending" type="object"
+                        string="Quote Pending" class="oe_highlight" />
+                    <button name="set_quoted" type="object"
+                        string="Quoted" />
+                </xpath>
+                <xpath expr="//page[@name='description']" position="after">
+                    <field name="tickets_ids" widget="one2many_list"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="account_analytic_account_invoice_form_inherit2"
+            model="ir.ui.view">
+            <field name="name">account.analytic.account.invoice.form.inherit2
+            </field>
+            <field name="model">account.analytic.account</field>
+            <field name="priority" eval="40" />
+            <field name="inherit_id"
+                ref="account_analytic_analysis.account_analytic_account_form_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div/button[@name='recurring_create_invoice']"
+                    position="after">
+                    <div>
+                        <label for="currency_invoice" string="Invoice currency"
+                            attrs="{'invisible': [('recurring_invoices','!=',True)]}" />
+                        <field name="currency_invoice"
+                            attrs="{'invisible': [('recurring_invoices','!=',True)]}"
+                            class="oe_inline" />
+                    </div>
+                </xpath>
+            </field>
+
+        </record>
+        <record model="ir.ui.view" id="project_issue_form_view_invoice">
+            <field name="name">Project Issue Tracker Form</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.project_issue_form_view" />
+            <field name="priority" eval="150" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@string='Extra Info']"
+                    position="before">
+                    <page string="Approvals" name="prepaycontracts">
+                        <field name="prepaid_hours_approval_id" widget="one2many_list" mode="tree"
+                            context="{
+                                'issue_id': active_id, 
+                                'approval_id': prepaid_hours_approval_id,
+                                'active_ids': active_ids
+                                }">
+                            <tree string="Approvals" name="approvals">
+                                <field name="ticket_id"/>
+                                <field name="user_id"/>
+                                <field name="date"/>
+                                <field name="sequence"/>
+                                <field name="state" widget="selection"/>
+                                <field name="approval_values" />
+                                <field name="approval_line_ids"/>
+                            </tree>
+                        </field>
+                        <div style="padding-bottom:16px">
+                            <h2 style="display:inline; margin-right:24px">Approval 1</h2>
+                            <span>
+                                Estado
+                                <button style="margin-left:16px"
+                                    name="" string="Approve" />
+                            </span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="text-align:right">Sin Bolsa</th>
+                                    <th style="text-align:right">Bolsa 1</th>
+                                    <th style="text-align:right">Bolsa 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Horas Bolsa</td>
+                                    <td style="text-align:right">-</td>
+                                    <td style="text-align:right">10</td>
+                                    <td style="text-align:right">20</td>
+                                </tr>
+                                <tr>
+                                    <td>Horas Consumidas</td>
+                                    <td style="text-align:right">-</td>
+                                    <td style="text-align:right">8</td>
+                                    <td style="text-align:right">15</td>
+                                </tr>
+                                <tr style="border-top:1px solid black">
+                                    <td style="padding-bottom:16px">
+                                        <b>Horas Restantes</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>-</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>2</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>5</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>Horas por aprobar</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>14</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>12</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>5</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>Horas requeridas</b>
+                                        <ul style="list-style-type:none">
+                                            <li>Analisis Funcional
+                                                remoto</li>
+                                            <li>Desarrollo remoto</li>
+                                            <li>Desarrollo Extra remoto
+                                            </li>
+                                            <li>Analisis tecnico remoto
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>7</b>
+                                        <ul style="list-style-type:none">
+                                            <li>2</li>
+                                            <li>2</li>
+                                            <li>2</li>
+                                            <li>1</li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>4</b>
+                                        <ul style="list-style-type:none">
+                                            <li>1</li>
+                                            <li>1</li>
+                                            <li>1</li>
+                                            <li>1</li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>5</b>
+                                        <ul style="list-style-type:none">
+                                            <li>1</li>
+                                            <li>2</li>
+                                            <li>1</li>
+                                            <li>1</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>Horas extra</b>
+                                        <ul style="list-style-type:none">
+                                            <li>Analisis Funcional
+                                                remoto</li>
+                                            <li>Desarrollo remoto</li>
+                                            <li>Desarrollo Extra remoto
+                                            </li>
+                                            <li>Analisis tecnico remoto
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>7</b>
+                                        <ul style="list-style-type:none">
+                                            <li>2</li>
+                                            <li>2</li>
+                                            <li>2</li>
+                                            <li>1</li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>4</b>
+                                        <ul style="list-style-type:none">
+                                            <li>1</li>
+                                            <li>1</li>
+                                            <li>1</li>
+                                            <li>1</li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>5</b>
+                                        <ul style="list-style-type:none">
+                                            <li>1</li>
+                                            <li>2</li>
+                                            <li>1</li>
+                                            <li>1</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>Monto extra</b>
+                                        <ul style="list-style-type:none">
+                                            <li>Analisis Funcional
+                                                remoto</li>
+                                            <li>Desarrollo remoto</li>
+                                            <li>Desarrollo Extra remoto
+                                            </li>
+                                            <li>Analisis tecnico remoto
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>70000</b>
+                                        <ul style="list-style-type:none">
+                                            <li>20000</li>
+                                            <li>23254</li>
+                                            <li>20121</li>
+                                            <li>10000</li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>40000</b>
+                                        <ul style="list-style-type:none">
+                                            <li>10000</li>
+                                            <li>10000</li>
+                                            <li>10000</li>
+                                            <li>10000</li>
+                                        </ul>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>50000</b>
+                                        <ul style="list-style-type:none">
+                                            <li>10000</li>
+                                            <li>20000</li>
+                                            <li>10000</li>
+                                            <li>10000</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

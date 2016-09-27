@@ -12,7 +12,7 @@
     "depends" : [
                    'project_scrum_method',
                    'project_work_type',
-                   'project_timesheet'
+                   'project_timesheet',
                    'hr',
                  ],
     "data" : [
