@@ -3,8 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": 'Project issue approved',
-    "version": '8.0.1.0',
+    "name": 'Subscription Issue Approval',
+    "version": '9.0.1.0',
     "author": 'ClearCorp',
     "summary": """ Issue approved""",
     'category': 'Projects',
@@ -15,8 +15,10 @@
     'license': 'AGPL-3',
     'website': 'http://clearcorp.cr',
     'depends': [
-        'base', 'project_prepaid_hours', 'project_scrum_method',
-        'project_scrum_work_type'
+        'base', 'subscription_prepaid_hours', 'project_scrum_method',
+        'project_scrum_feature_work_est'
     ],
-    'data': ['views/project_issue_approved.xml']
+    'data': [
+        'views/subscription_issue_approval_view.xml'
+    ]
 }

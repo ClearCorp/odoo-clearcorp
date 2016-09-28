@@ -9,6 +9,7 @@ class ProjectScrumFeature(models.Model):
 
     _inherit = 'project.scrum.feature'
 
+    # Adds two quote states to feature state
     state = fields.Selection([('draft', 'New'), ('open', 'In Progress'),
                              ('cancelled', 'Cancelled'), ('done', 'Done'),
                              ('quote_pending', 'Quote Pending'),
