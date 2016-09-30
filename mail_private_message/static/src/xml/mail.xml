@@ -2,7 +2,7 @@
 <!-- vim:fdl=1:
 -->
 <templates id="template" xml:space="preserve">
-    <t t-tname="ComposeMessagePrivacity" t-extend="mail.compose_message">
+    <t t-tname="ComposeMessagePrivacy" t-extend="mail.compose_message">
         <t t-jquery="button.oe_post" t-operation="after">
             <t t-if="widget.options.display_log_button">
                 <button class="oe_post_private">

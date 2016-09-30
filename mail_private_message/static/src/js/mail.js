@@ -39,7 +39,7 @@ openerp.mail_private_message = function(session) {
                 }),
                 'type': 'comment',
                 'content_subtype': 'plaintext',
-                'privacity': 'private',
+                'privacy': 'private',
             };
             if (log) {
                 values['subtype'] = false;

@@ -11,7 +11,7 @@ class Compose(models.TransientModel):
 
     @api.onchange('notify')
     def _load_partners(self):
-        if (not self.notify):
+        if not self.notify:
             self.partner_ids = self.env['res.partner']
             return
         follower_obj = self.env['mail.followers']

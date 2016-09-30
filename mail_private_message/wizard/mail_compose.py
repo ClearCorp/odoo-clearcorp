@@ -9,9 +9,9 @@ class Compose(models.TransientModel):
 
     _inherit = 'mail.compose.message'
 
-    privacity = fields.Selection(
+    privacy = fields.Selection(
         [('public', 'Public'), ('private', 'Private')],
-        'Privacity', default='public')
+        'Privacy', default='public')
     notify = fields.Boolean(default=True)
 
     @api.multi
@@ -28,5 +28,5 @@ class Compose(models.TransientModel):
     def get_mail_values(self, wizard, res_ids):
         res = super(Compose, self).get_mail_values(wizard, res_ids)
         for res_id in res.keys():
-            res[res_id].update({'privacity': wizard.privacity})
+            res[res_id].update({'privacy': wizard.privacy})
         return res

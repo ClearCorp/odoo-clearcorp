@@ -11,8 +11,13 @@
     'category': 'Project Management',
     'sequence': 4,
     'website': 'http://clearcorp.co.cr',
-    'depends': ['base', 'project', 'project_task_state'],
-    'data': ['data/project_deadline_tag.xml', 'data/project_deadline_auto_action.xml'],
+    'depends': [
+        'base', 'project', 'project_task_state', 'base_action_rule'
+    ],
+    'data': [
+        'data/project_deadline_tag.xml',
+        'data/project_deadline_auto_action.xml'
+    ],
     'auto_install': False,
     'application': False,
     'installable': True,

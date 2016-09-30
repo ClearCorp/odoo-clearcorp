@@ -6,7 +6,9 @@ from openerp import models, api
 
 
 class Notification(models.Model):
-
+    # The mail.notification class was eliminated in v9. The candidates for this
+    # functionality are found in res_partner, mail_channel and mail_message.
+    # Run new message functions to find out what is used.
     _inherit = 'mail.notification'
 
     @api.model
@@ -16,7 +18,7 @@ class Notification(models.Model):
             partner_obj = self.env['res.partner']
             message = self.env['mail.message'].browse(message_id)
             partners_to_notify = self.env.context.get('partners_to_notify', [])
-            if message.privacity == 'private':
+            if message.privacy == 'private':
                 user_obj = self.pool.get('res.users')
                 clean_partners = []
                 # clean partners to notify only internal users

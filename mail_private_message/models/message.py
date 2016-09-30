@@ -9,16 +9,16 @@ class MailMessage(models.Model):
 
     _inherit = 'mail.message'
 
-    privacity = fields.Selection(
+    privacy = fields.Selection(
         [('private', 'Private'), ('public', 'Public')],
-        'Privacity', default='public')
+        'Privacy', default='public')
 
     @api.model
     def _notify(self, newid, force_send=False, user_signature=True):
 
         message = self.sudo().browse(newid)
 
-        if message.privacity != 'private':
+        if message.privacy != 'private':
             return super(MailMessage, self)._notify(
                 newid, force_send=force_send, user_signature=user_signature)
 
@@ -42,16 +42,16 @@ class MailMessage(models.Model):
                 if message.subtype_id.id in [st.id for st in fo.subtype_ids]
             )
 
-        # remove me from notified partners, unless the message
-        # is written on my own wall
+        # remove current user from notified partners, unless the message
+        # is written on her own wall
         if message.subtype_id and message.author_id and \
                 message.model == 'res.partner' and \
                 message.res_id == message.author_id.id:
-            partners_to_notify |= set([message.author_id.id])
+            partners_to_notify |= message.author_id.id
         elif message.author_id:
-            partners_to_notify -= set([message.author_id.id])
+            partners_to_notify -= message.author_id.id
 
-        # all partner_ids of the mail.message have to be notified
+        # all partner_ids of mail.message have to be notified
         # regardless of the above (even the author if explicitly added!)
         if message.partner_ids:
             partners_to_notify |= set([p.id for p in message.partner_ids])
@@ -70,11 +70,12 @@ class MailMessage(models.Model):
         )
         message.refresh()
 
-        # An error appear when a user receive a notification without notifying
-        # the parent message -> add a read notification for the parent
+        # An error appears when a user receives a notification without
+        #  notifying the parent message -> add a read notification for
+        # the parent
         if message.parent_id:
             # all notified_partner_ids of the mail.message have
-            # to be notified for the parented messages
+            # to be notified of the parented messages
             partners_to_parent_notify = set(
                 message.notified_partner_ids).difference(
                     message.parent_id.notified_partner_ids)

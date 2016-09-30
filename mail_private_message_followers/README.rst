@@ -8,7 +8,7 @@ Mail Private Message Followers
 
 Features
 
-* Loads followers in partner_ids field into the compose message wizard
+* Loads followers in partner_ids field into the compose message wizard.
 
 Credits
 =======
