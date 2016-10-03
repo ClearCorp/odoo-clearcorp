@@ -27,25 +27,24 @@
 
         <!-- account.analytic.account -->
         <!-- Form -->
-        <record id="analytic_analytic_account_form2" model="ir.ui.view">
+        <record id="subscription_view_type_form" model="ir.ui.view">
             <field name="name">Invoice</field>
-            <field name="model">account.analytic.account</field>
+            <field name="model">sale.subscription</field>
             <field name="priority" eval="160" />
             <field name="inherit_id"
-                ref="analytic.view_account_analytic_account_form" />
+                ref="sale_contract.sale_subscription_view_form" />
             <field name="arch" type="xml">
                 <xpath expr="//notebook" position="inside">
                     <page string="Invoice Configuration">
                         <div>
-                            <label for="invoice_type_id" string="Invoice Type" class="oe_inline" />
-                            <field name="invoice_type_id" string="Invoice Type" class="oe_inline">
+                            <label for="invoice_type_ids" string="Invoice Type" class="oe_inline" />
+                            <field name="invoice_type_ids" string="Invoice Type" class="oe_inline">
                                 <tree editable="bottom">
                                     <field name="name" />
                                     <field name="product_price"/>
                                     <field name="product_id"/>
                                     <field name="price"
                                         attrs="{'readonly': [('product_price','=',True)]}" />
-                                    <field name="contract_type_id"/>
                                 </tree>
                             </field>
                         </div>

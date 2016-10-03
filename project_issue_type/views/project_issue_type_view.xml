@@ -18,24 +18,31 @@
             </field>
         </record>
 
-        <!-- Adds ticket configuration to analytic account form-->
-        <record id="analytic_analytic_account_form2" model="ir.ui.view">
-            <field name="name">Invoice</field>
-            <field name="model">account.analytic.account</field>
+        <!-- Adds ticket configuration to sale subscription form. It also allows
+        the user to change the associated analytic account, so that it refers
+        to a specific client. -->
+        <record id="subscription_view_issue_type_form" model="ir.ui.view">
+            <field name="name">Issue View</field>
+            <field name="model">sale.subscription</field>
             <field name="priority" eval="160" />
-            <field name="inherit_id" ref="analytic.view_account_analytic_account_form" />
+            <field name="inherit_id" ref="sale_contract.sale_subscription_view_form" />
             <field name="arch" type="xml">
+                <!-- Adds the ticket configuration page -->
                 <xpath expr="//notebook" position="inside">
-                    <page string="Tickets Configuration" name="tickets_page" >
+                    <page string="Ticket Configuration" name="tickets_page" >
                         <label for="ticket_invoice_type_ids" string="Ticket Type" class="oe_inline" />
                         <field name="ticket_invoice_type_ids" string="Ticket Type">
                             <tree editable="bottom">
                                 <field name="name" />
                                 <field name="warranty"/>
-                                <field name="contract_type_id" />
                             </tree>
                         </field>
                     </page>
+                </xpath>
+
+                <!-- Allows the edition of the related analytic account (the client's account). -->
+                <xpath expr="//notebook/page/group/field[@name='analytic_account_id']" position="attributes">
+                    <attribute name="readonly">0</attribute>
                 </xpath>
             </field>
         </record>
@@ -43,7 +50,7 @@
         <!-- Allows the creation and editing of new issue types -->
         <record id="action_issue_type" model="ir.actions.act_window">
             <field name="name">Issue Types</field>
-            <field name="res_model">ticket.invoice.type.name</field>
+            <field name="res_model">ticket.invoice.type</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>

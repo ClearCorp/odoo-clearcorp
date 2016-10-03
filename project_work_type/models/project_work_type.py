@@ -24,8 +24,9 @@ class InvoiceType (models.Model):
     product_price = fields.Boolean('Use product price')
     product_id = fields.Many2one('product.product')
     price = fields.Float('Price')
-    # This should point to the client's Subscription contract
-    contract_type_id = fields.Many2one('sale.subscription')
+    # This relates the client's Subscription (contract) with the different
+    # invoice types.
+    contract_type_ids = fields.Many2many('sale.subscription')
     
     @api.one
     @api.onchange('name')
@@ -37,15 +38,11 @@ class InvoiceType (models.Model):
 class Task(models.Model):
     
     _inherit = 'project.task'
-
     work_type_id = fields.Many2one(
-        'project.work.type', 'Type of task', required=True)
+        'project.work.type', 'Task Type', required=True)
 
 
-class AccountAnalitic(models.Model):
+class SaleSubscription(models.Model):
 
-    _inherit = 'account.analytic.account'
-    
-    invoice_type_id = fields.One2many(
-        'invoice.type', 'contract_type_id',
-        string='Invoice Type', required=True)
+    _inherit = 'sale.subscription'
+    invoice_type_ids = fields.Many2many('invoice.type')

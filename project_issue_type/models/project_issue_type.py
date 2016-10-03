@@ -5,8 +5,8 @@
 from openerp import models, fields, api
 
 
-class TicketInvoiceTypeName (models.Model):
-    _name = 'ticket.invoice.type.name'
+class TicketInvoiceType (models.Model):
+    _name = 'ticket.invoice.type'
 
     name = fields.Char('Name', required='True')
     ticket_type = fields.Selection(
@@ -14,15 +14,10 @@ class TicketInvoiceTypeName (models.Model):
          ('service_request', 'Service Request'),
          ('issue', 'Issue'), ('problem', 'Problem')],
         string='Issue Type', default='issue', required=True)
-
-
-class TicketInvoiceType (models.Model):
-    _name = 'ticket.invoice.type'
-    
-    name = fields.Many2one('ticket.invoice.type.name', required='True')
     warranty = fields.Boolean('Warranty?')
-    # This points to the client's Subscription (contract)
-    contract_type_id = fields.Many2one('sale.subscription')
+    # This relates the client's Subscription (contract) with the different
+    # ticket invoice types.
+    contract_type_ids = fields.Many2many('sale.subscription')
 
 
 class ProjectIssue(models.Model):
@@ -33,7 +28,8 @@ class ProjectIssue(models.Model):
     def _compute_invoice_ticket(self):
         if self.project_id:
             for ticket_kind in self.project_id.\
-                    analytic_account_id.ticket_invoice_type_ids:
+                    analytic_account_id.\
+                    subscription_ids.ticket_invoice_type_ids:
                 if ticket_kind.name == self.issue_type.name:
                     if ticket_kind.warranty:
                         self.invoiced = 'warranty'
@@ -52,10 +48,7 @@ class ProjectIssue(models.Model):
         compute='_compute_invoice_ticket', store=True)
 
 
-class AccountAnalitic(models.Model):
+class SaleSubscription(models.Model):
 
-    _inherit = 'account.analytic.account'
-    
-    ticket_invoice_type_ids = fields.One2many('ticket.invoice.type',
-                                              'contract_type_id',
-                                              string='Ticket Type')
+    _inherit = 'sale.subscription'
+    ticket_invoice_type_ids = fields.Many2many('ticket.invoice.type')
