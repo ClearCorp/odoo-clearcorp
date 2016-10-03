@@ -10,7 +10,7 @@
     'summary': 'Project Issue',
     'author': 'ClearCorp',
     'website': 'http://clearcorp.cr',
-    'depends': ['project_issue',],
+    'depends': ['project_issue', 'sale_contract'],
     'data': ['views/project_issue_type_view.xml','security/ir.model.access.csv'],
     'test' : [],
     'demo': [],

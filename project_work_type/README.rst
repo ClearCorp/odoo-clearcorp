@@ -2,18 +2,17 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==================
-Project Issue Type
-==================
+=================
+Project Work Type
+=================
 
-This module was written to extend the functionality of project_issue to create
-different types of issues. Works with Enterprise version only. Relates an
-existing subscription with an issue type.
+This module was written to extend the functionality of project_tasks to further
+classify tasks. Works with Enterprise version only. Relates an
+existing subscription with a work type.
 
 Contributors
 ------------
 
-* Lesmed Gutierrez <lesmed.gutierrez@clearcorp.co.cr>
 * Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 

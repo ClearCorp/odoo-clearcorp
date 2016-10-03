@@ -24,7 +24,8 @@ class InvoiceType (models.Model):
     product_price = fields.Boolean('Use product price')
     product_id = fields.Many2one('product.product')
     price = fields.Float('Price')
-    contract_type_id = fields.Many2one('contract.type')
+    # This should point to the client's Subscription contract
+    contract_type_id = fields.Many2one('sale.subscription')
     
     @api.one
     @api.onchange('name')

@@ -11,7 +11,11 @@
     'category': 'Project Management',
     'sequence': 4,
     'website' : 'http://clearcorp.co.cr',
-    'depends' : ['base','project'],
+    'depends' : [
+        'base',
+        'project',
+        'sale_contract'
+    ],
     'data': [
              'security/project_security.xml', 'views/project_work_type_view.xml',
              'security/ir.model.access.csv'],

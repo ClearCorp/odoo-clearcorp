@@ -32,6 +32,7 @@
                             <tree editable="bottom">
                                 <field name="name" />
                                 <field name="warranty"/>
+                                <field name="contract_type_id" />
                             </tree>
                         </field>
                     </page>

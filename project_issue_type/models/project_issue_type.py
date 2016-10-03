@@ -21,7 +21,8 @@ class TicketInvoiceType (models.Model):
     
     name = fields.Many2one('ticket.invoice.type.name', required='True')
     warranty = fields.Boolean('Warranty?')
-    contract_type_id = fields.Many2one('contract.type')
+    # This points to the client's Subscription (contract)
+    contract_type_id = fields.Many2one('sale.subscription')
 
 
 class ProjectIssue(models.Model):
@@ -47,7 +48,7 @@ class ProjectIssue(models.Model):
          ('warranty', 'Warranty'),
          ('2beinvoice', 'To be Invoiced'),
          ('invoiced', 'Invoiced')],
-        string="Invoice", help="is a invoiced task",
+        string="Invoice", help="It's an invoiced task",
         compute='_compute_invoice_ticket', store=True)
 
 
