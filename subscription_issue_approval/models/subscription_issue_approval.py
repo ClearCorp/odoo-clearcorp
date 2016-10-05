@@ -6,11 +6,11 @@ from openerp import models, fields
 from datetime import date
 
 
-class account_analitic_account(models.Model):
+class SaleSubscription(models.Model):
 
-    _inherit = 'account.analytic.account'
+    _inherit = 'sale.subscription'
 
-    currency_invoice = fields.Many2one('res.currency')
+    invoice_currency = fields.Many2one('res.currency')
 
 
 class ProjectIssue(models.Model):
@@ -18,29 +18,29 @@ class ProjectIssue(models.Model):
     _inherit = 'project.issue'
 
     prepaid_hours_approval_id = fields.One2many(
-        'account.analytic.prepaid_hours_approval', 'ticket_id',
-        string="Group approved")
+        'sale.subscription.prepaid_hours_approval', 'ticket_id',
+        string="Group Approved")
 
     def _get_prepaid_hours(self):
         self.feature_id.work_type
 
     def _values(self, prepaid_hours_id):
         used_time = 0
-        tobeapprove_time = 0
+        to_be_approved_time = 0
         approval_lines_obj = self.env[
-            'account.analytic.prepaid_hours_approval_line'].search(
+            'sale.subscription.prepaid_hours_approval_line'].search(
                 [('prepaid_hours_id', '=', prepaid_hours_id)])
         for approval_line in approval_lines_obj:
             if approval_line.approval_id.state == 'approved':
                     used_time = used_time + approval_line.requested_hours
             else:
                 if approval_line.approval_id.state == '2b_approved':
-                    tobeapprove_time = tobeapprove_time +\
+                    to_be_approved_time = to_be_approved_time +\
                         approval_line.requested_hours
         remaining_time = prepaid_hours_id.quantity - used_time
         return {
             'used_time': used_time,
-            'tobeapprove_time': tobeapprove_time,
+            'to_be_approved_time': to_be_approved_time,
             'remaining_time': remaining_time,
         }
 
@@ -51,14 +51,14 @@ class ProjectIssue(models.Model):
 
     def _create_approval_values(self, approval_id, prepaid_hours_id):
         _approval_values_obj = self.env[
-            'account.analytic.prepaid_hours_approved_values']
+            'sale.subscription.prepaid_hours_approved_values']
         values = self._values(prepaid_hours_id)
         _approval_values_values = {
             'prepaid_hours_id': prepaid_hours_id,
             'prepaid_hours': prepaid_hours_id.quantity,
-            'expent_hours': values['used_time'],
+            'spent_hours': values['used_time'],
             'remaining_hours': values['remaining_time'],
-            'tobe_approve': values['tobeapprove_time'],
+            'to_be_approved': values['to_be_approved_time'],
             'requested_hours': self.feature_id.expected_hours,
             'extra_hours': values['remaining_time'] -
             self.feature_id.expected_hours,
@@ -68,7 +68,7 @@ class ProjectIssue(models.Model):
 
     def _create_approval_line(self, approval_id):
         approval_line_obj = self.env[
-            'account.analytic.prepaid_hours_approval_line']
+            'sale.subscription.prepaid_hours_approval_line']
         for hour_type in self.feature_id.hour_ids:
             print "\n\n", hour_type
             approval_line_values = {}
@@ -90,7 +90,7 @@ class ProjectIssue(models.Model):
 
     def _create_approvals(self):
         today = date.today().strftime('%Y-%m-%d')
-        approval_obj = self.env['account.analytic.prepaid_hours_approval']
+        approval_obj = self.env['sale.subscription.prepaid_hours_approval']
         approval_values = {
             'ticket_id': self.id,
             'user_id': self.user_id.id,

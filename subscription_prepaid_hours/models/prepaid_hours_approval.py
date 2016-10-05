@@ -65,16 +65,16 @@ _TABLE = """
             </tr>
         </tbody>
     </table>
-    </group>"""
+</group>"""
 
 
 class PrepaidHoursApproval(models.Model):
-    _name = 'account.analytic.prepaid_hours_approval'
+    _name = 'sale.subscription.prepaid_hours_approval'
 
     @api.model
     def _default_sequence(self):
         approval_sequence =\
-            self.env['account.analytic.prepaid_hours_approval'].search_count(
+            self.env['sale.subscription.prepaid_hours_approval'].search_count(
                 [('ticket_id', '=', self.id)])
         return approval_sequence + 1
 
@@ -82,57 +82,68 @@ class PrepaidHoursApproval(models.Model):
     sequence = fields.Integer('sequence', default=_default_sequence)
     user_id = fields.Many2one('res.partner', string='User')
     date = fields.Date('Date')
-    state = fields.Selection([('2b_approved', 'To approved'),
+    state = fields.Selection([('2b_approved', 'To be approved'),
                               ('approved', 'Approved'),
                               ('rejected', 'Rejected')],
                              string='State', default='2b_approved')
     approval_line_ids = fields.One2many(
-        'account.analytic.prepaid_hours_approval_line', 'approval_id',
-        string='Approval lines')
+        'sale.subscription.prepaid_hours_approval_line', 'approval_id',
+        string='Approval Lines')
     approval_values = fields.One2many(
-        'account.analytic.prepaid_hours_approved_values', 'approval_id',
-        string='Approval values')
+        'sale.subscription.prepaid_hours_approved_values', 'approval_id',
+        string='Approval Values')
 
     def _get_approval_line_by_prepaid_hours(self, ticket):
+        # Gets work_type ids from ticket
         wt_feature_ids = [hours.work_type_id.id
                           for hours in ticket.feature_id.hour_ids]
-        invoice_types_ids = self.env['invoice.type'].search(
-            [('contract_type_id', '=', ticket.project_id.analytic_account_id.id
-              ),
+
+        # Gets invoice_type is related to the ticket's project account
+        # This should be the client's subscription
+        invoice_type_ids = self.env['invoice.type'].search(
+            [('contract_type_id',
+              '=', ticket.project_id.analytic_account_id.id),
              ('name', 'in', wt_feature_ids)], order='price desc')
+
         data = []
-        for line in invoice_types_ids:
+        for line in invoice_type_ids:
             data.append(
                 {'wt_id': line.name.id,
                  'prepaid': line.prepaid_hours_id.id,
                  'price':
                  line.product_id.lst_price if line.product_price
                     else line.price})
-        wt_contract = [it.prepaid_hours_id.id for it in invoice_types_ids]
-        print "\n line-bolsa", wt_feature_ids, wt_contract, data
+        wt_contract = [it.prepaid_hours_id.id for it in invoice_type_ids]
+        print "\nInvoice Lines", wt_feature_ids, wt_contract, data
 
-    def _get_consumed_hours(self, ticket_id, approval_id):
+    def _get_current_month_consumed_hours(self, ticket_id):
         date = fields.Date.from_string(fields.Date.today())
         analityc_id = ticket_id.project_id.analytic_account_id.id
-        query = """select id, date from account_analytic_prepaid_hours
+
+        query = """select id, date from sale_subscription_prepaid_hours
                     where extract(month from date) = %s and
                     extract(year from date) = %s and
-                    analitic_account_id = %s""" % (date.month, date.year,
-                                                   analityc_id)
+                    subscription_id = %s""" % (date.month, date.year,
+                                               analityc_id)
+
         query2 = """
-                select id, date from account_analytic_prepaid_hours_approval
+                select id, date from sale_subscription_prepaid_hours_approval
                     where extract(month from date) = %s and
                     extract (year from date) = %s and
                     ticket_id = %s and
                     state = '%s'""" % (date.month, date.year, ticket_id.id,
                                        'approved')
         self._cr.execute(query)
-        prepaid_hours = self.env['account.analytic.prepaid_hours'].browse(
+
+        prepaid_hours = self.env['sale.subscription.prepaid_hours'].browse(
             [ids['id'] for ids in self._cr.dictfetchall()])
+
         self._cr.execute(query2)
-        approvals = self.env['account.analytic.prepaid_hours_approval'].browse(
+
+        approvals = self.env['sale.subscription.prepaid_hours_approval'].browse(
             [ids['id'] for ids in self._cr.dictfetchall()])
-        print "-----", date, query, prepaid_hours, approvals, "--------"
+
+        print "-----", date, prepaid_hours, approvals, "--------"
         self._get_approval_line_by_prepaid_hours(ticket_id)
 
     def _get_approval_lines(self, issue_id):
@@ -163,6 +174,7 @@ class PrepaidHoursApproval(models.Model):
             prepaid_hours['quantity'] += quantity
             name = '<th style="text-align:right; width:25%s">%s</th>' % (
                 '%', prepaid.name)
+            # Check for correct concatenation
             prepaid_hours['names'] += name
         print "\nprepaid: ", prepaid_hours,
         return prepaid_hours
@@ -170,7 +182,7 @@ class PrepaidHoursApproval(models.Model):
     def _get_table(self):
         ticket_id = self.env['project.issue'].browse(
             self._context.get('issue_id'))
-        self._get_consumed_hours(ticket_id, 0)
+        self._get_current_month_consumed_hours(ticket_id, 0)
         approvals = ticket_id.prepaid_hours_approval_id
         _TABLE = """<group col="1" colspan="1">"""
         for approval in approvals:
@@ -240,7 +252,7 @@ class PrepaidHoursApproval(models.Model):
                 </tr>
             </tbody>
         </table>
-        </group><br/>
+    </group><br/>
         """
         _TABLE += "</group>"
         return _TABLE

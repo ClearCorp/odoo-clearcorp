@@ -8,11 +8,11 @@ from datetime import date
 import datetime
 
 
-class account_analitic_account(models.Model):
+class SaleSubscription(models.Model):
 
-    _inherit = 'account.analytic.account'
+    _inherit = 'sale.subscription'
 
-    journal_invoice = fields.Many2one('account.journal')
+    invoice_journal = fields.Many2one('account.journal')
 
     def get_product(self, work_type):
             product = self.invoice_type_id.search([('name', '=', work_type)])
@@ -37,14 +37,14 @@ class account_analitic_account(models.Model):
     def action_invoice_lines_approvals_create(
             self, invoice_id, account_invoice_id, account_analytic_id):
         invoice_line_obj = self.env['account.invoice.line']
-        prepaid = self.env['account.analytic.prepaid_hours_approval'].search(
+        prepaid = self.env['sale.subscription.prepaid_hours_approval'].search(
             [('state', '=', 'approved')])
         for approval in prepaid:
             if approval.ticket_id.project_id.analytic_account_id.id ==\
                     account_analytic_id:
                 prepaid_line =\
                     self.env[
-                        'account.analytic.prepaid_hours_approval_line'].search(
+                        'sale.subscription.prepaid_hours_approval_line'].search(
                             [('approval_id', '=', approval.id)])
                 for line in prepaid_line:
                     invoice_line_vals = {
@@ -84,7 +84,7 @@ class account_analitic_account(models.Model):
     def action_invoice_create(self):
         today = date.today().strftime('%Y-%m-%d')
         invoice_obj = self.env['account.invoice']
-        for account in self.env['account.analytic.account'].search(
+        for account in self.env['sale.subscription.account'].search(
                 [('state', 'in', ['open', 'pending']),
                  ('recurring_invoices', '=', True),
                  ('recurring_next_date', '<=',  today)]):
