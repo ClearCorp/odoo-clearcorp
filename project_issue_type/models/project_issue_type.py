@@ -14,9 +14,12 @@ class TicketInvoiceType (models.Model):
          ('service_request', 'Service Request'),
          ('issue', 'Issue'), ('problem', 'Problem')],
         string='Issue Type', default='issue', required=True)
-    warranty = fields.Boolean('Warranty?')
+    # Determines if the issue is covered by the warranty
+    warranty = fields.Boolean('Covered by the warranty?')
+
     # This relates the client's Subscription (contract) with the different
     # ticket invoice types.
+    # todo check this isn't presented in the view
     contract_type_ids = fields.Many2many('sale.subscription')
 
 
@@ -26,6 +29,7 @@ class ProjectIssue(models.Model):
     @api.one
     @api.depends("project_id")
     def _compute_invoice_ticket(self):
+        # Sets invoiced status
         if self.project_id:
             for ticket_kind in self.project_id.\
                     analytic_account_id.\
@@ -44,7 +48,7 @@ class ProjectIssue(models.Model):
          ('warranty', 'Warranty'),
          ('2beinvoice', 'To be Invoiced'),
          ('invoiced', 'Invoiced')],
-        string="Invoice", help="It's an invoiced task",
+        string="Invoice", help="Task Invoice Status",
         compute='_compute_invoice_ticket', store=True)
 
 

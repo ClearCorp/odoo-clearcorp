@@ -98,8 +98,8 @@ class PrepaidHoursApproval(models.Model):
         wt_feature_ids = [hours.work_type_id.id
                           for hours in ticket.feature_id.hour_ids]
 
-        # Gets invoice_type is related to the ticket's project account
-        # This should be the client's subscription
+        # Gets invoice_type is related to the ticket's project account,
+        # this should return the client's subscription
         invoice_type_ids = self.env['invoice.type'].search(
             [('contract_type_id',
               '=', ticket.project_id.analytic_account_id.id),
@@ -174,7 +174,7 @@ class PrepaidHoursApproval(models.Model):
             prepaid_hours['quantity'] += quantity
             name = '<th style="text-align:right; width:25%s">%s</th>' % (
                 '%', prepaid.name)
-            # Check for correct concatenation
+            # todo Check for correct concatenation
             prepaid_hours['names'] += name
         print "\nprepaid: ", prepaid_hours,
         return prepaid_hours

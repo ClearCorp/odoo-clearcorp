@@ -7,7 +7,8 @@ Project Issue Type
 ==================
 
 This module was written to extend the functionality of project_issue to create
-different types of issues. Works with Enterprise version only.
+different types of issues. Works with Enterprise version only (sale_contract)
+dependency.
 
 Contributors
 ------------
