@@ -9,11 +9,11 @@ from datetime import date
 class PrepaidHoursType(models.Model):
     # Classifies prepaid hours as development, support, or training.
     # This classification is a product, so the price of hours can be
-    # defined using pricelists.
+    # defined using price lists.
 
     # Extra hours are needed for approval and invoicing. They don't have a
     # related prepaid hours object.
-    # todo Load extra hours data in data file.
+    # todo Load Extra hours data in data file.
     _name = 'sale.subscription.prepaid_hours_type'
     _inherit = 'product.product'
 
@@ -49,7 +49,7 @@ class PrepaidHours(models.Model):
 
 
 class AssignedPrepaidHours(models.Model):
-    # Represents assigned hours to a specific Feature.
+    # Represents assigned hours to a specific Issue.
     _name = 'sale.subscription.prepaid_hours.assigned'
 
     # Date when the work hours were assigned
@@ -58,10 +58,14 @@ class AssignedPrepaidHours(models.Model):
     # Amount of hours assigned
     quantity = fields.Float('Amount of Hours', required=True)
 
-    # Specific "hour bag" to use
+    # Specific "hour bag" used
     prepaid_hours_id = fields.Many2one(
         'sale.subscription.prepaid_hours',
         required=True)
+
+    # Issue related to this hour assignment
+    assigned_hours_id = fields.Many2one(
+        'project.issue', string='Assigned Hours')
 
 
 class PrepaidHoursApprovedValues(models.Model):
@@ -69,12 +73,14 @@ class PrepaidHoursApprovedValues(models.Model):
     # here. This is presented to the client, who then chooses what to do. Once
     # presented, this should not change. This object is only one of the current
     # "hour bags".
+    # Several proposals could be added and only the one approved by the client
+    # will become an actual approval line.
     _name = 'sale.subscription.prepaid_hours_approved_values'
 
     # The type of hours
     prepaid_hours_id = fields.Many2one('sale.subscription.prepaid_hours')
 
-    # Amount of approved hours in the term
+    # Amount of prepaid hours in the current term
     prepaid_hours = fields.Float('Prepaid Hours')
 
     # Hours already spent in this term
@@ -84,13 +90,10 @@ class PrepaidHoursApprovedValues(models.Model):
     remaining_hours = fields.Float('Remaining Hours')
 
     # Total of hours that require approval (this time)
-    # todo Check the interpretation of this field
-    hours_to_be_approved = fields.Float('Hours Awaiting Approval')
-
-    # Amount of hours requested for a Feature
-    requested_hours = fields.Float('Requested Hours')
+    hours_to_be_approved = fields.Float('Requested Hours Awaiting Approval')
 
     # Additional hours not included in the "hour bag"
+    # If hours are not obtained from a bag, they are always extra
     extra_hours = fields.Float('Additional Hours Requested')
 
     # The additional cost of said hours.
@@ -101,12 +104,14 @@ class PrepaidHoursApprovedValues(models.Model):
 
 
 class PrepaidHoursApprovalLines(models.Model):
+    # When an approval is issued, this is the content of the specific view.
+    # A line summarizes an approval, like invoice lines.
     _name = 'sale.subscription.prepaid_hours_approval_line'
 
     prepaid_hours_id = fields.Many2one('sale.subscription.prepaid_hours')
     approval_id = fields.Many2one('sale.subscription.prepaid_hours_approval')
     work_type_id = fields.Many2one('project.work.type')
-    requested_hours = fields.Float('Feature hours')
+    requested_hours = fields.Float('Requested Hours')
     extra_hours = fields.Float('Additional Hours Required')
     extra_amount = fields.Float('Additional Amount Required')
 
@@ -146,3 +151,10 @@ class InvoiceType(models.Model):
 
     prepaid_hours_id = fields.Many2one(
         'sale.subscription.prepaid_hours', string="Prepaid hours")
+
+
+class ProjectIssue(models.Model):
+    _inherit = 'project.issue'
+    approved_hours_id = fields.One2many(
+        'sale.subscription.prepaid_hours.assigned', 'assigned_hours_id',
+        string='Approved Hours for this Issue')
