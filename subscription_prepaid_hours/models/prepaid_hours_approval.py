@@ -68,7 +68,7 @@ _TABLE = """
 </group>"""
 
 
-class PrepaidHoursApproval(models.Model):
+class HourApproval(models.Model):
     _name = 'sale.subscription.prepaid_hours_approval'
 
     @api.model
@@ -118,13 +118,13 @@ class PrepaidHoursApproval(models.Model):
 
     def _get_current_month_consumed_hours(self, ticket_id):
         date = fields.Date.from_string(fields.Date.today())
-        analityc_id = ticket_id.project_id.analytic_account_id.id
+        analytic_id = ticket_id.project_id.analytic_account_id.id
 
         query = """select id, date from sale_subscription_prepaid_hours
                     where extract(month from date) = %s and
                     extract(year from date) = %s and
                     subscription_id = %s""" % (date.month, date.year,
-                                               analityc_id)
+                                               analytic_id)
 
         query2 = """
                 select id, date from sale_subscription_prepaid_hours_approval
@@ -270,7 +270,7 @@ class PrepaidHoursApproval(models.Model):
 
         if self._context is None:
             self._context = {}
-        res = super(PrepaidHoursApproval, self).fields_view_get(
+        res = super(HourApproval, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar,
             submenu=False)
         doc = etree.fromstring(res['arch'])

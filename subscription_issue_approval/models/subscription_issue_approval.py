@@ -17,9 +17,15 @@ class ProjectIssue(models.Model):
 
     _inherit = 'project.issue'
 
+    # Related approvals.
     prepaid_hours_approval_id = fields.One2many(
         'sale.subscription.prepaid_hours_approval', 'ticket_id',
         string="Group Approved")
+
+    # Approved hours for this issue.
+    approved_hours_id = fields.One2many(
+        'sale.subscription.prepaid_hours_assigned', 'assigned_hours_id',
+        string='Approved Hours for this Issue')
 
     def _get_prepaid_hours(self):
         self.feature_id.work_type

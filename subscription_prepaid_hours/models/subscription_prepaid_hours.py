@@ -37,7 +37,7 @@ class PrepaidHours(models.Model):
     # Amount of hours of a certain type
     quantity = fields.Float('Amount of Hours', required=True)
 
-    # One subscription has many prepaid hours
+    # One subscription has several prepaid hours
     subscription_id = fields.Many2one(
         'sale.subscription', string='Subscription')
 
@@ -48,9 +48,9 @@ class PrepaidHours(models.Model):
     active = fields.Boolean('Active', default=True)
 
 
-class AssignedPrepaidHours(models.Model):
+class HourAssignment(models.Model):
     # Represents assigned hours to a specific Issue.
-    _name = 'sale.subscription.prepaid_hours.assigned'
+    _name = 'sale.subscription.prepaid_hours_assigned'
 
     # Date when the work hours were assigned
     date = fields.Datetime('Date:', required=True)
@@ -68,7 +68,7 @@ class AssignedPrepaidHours(models.Model):
         'project.issue', string='Assigned Hours')
 
 
-class PrepaidHoursApprovedValues(models.Model):
+class ProposedHourValues(models.Model):
     # When the use of hours is going to be approved the details are stored
     # here. This is presented to the client, who then chooses what to do. Once
     # presented, this should not change. This object is only one of the current
@@ -103,7 +103,7 @@ class PrepaidHoursApprovedValues(models.Model):
     approval_id = fields.Many2one('sale.subscription.prepaid_hours_approval')
 
 
-class PrepaidHoursApprovalLines(models.Model):
+class ApprovalLines(models.Model):
     # When an approval is issued, this is the content of the specific view.
     # A line summarizes an approval, like invoice lines.
     _name = 'sale.subscription.prepaid_hours_approval_line'
@@ -129,7 +129,7 @@ class SaleSubscription(models.Model):
         prepaid_hours_id =\
             self.env['sale.subscription.prepaid_hours'].search([])
         prepaid_hours_assigned =\
-            self.env['sale.subscription.prepaid_hours.assigned']
+            self.env['sale.subscription.prepaid_hours_assigned']
         for contract in contracts:
             for qty_qroup in prepaid_hours_id:
                 if qty_qroup.analitic_account_id.id == contract.id:
@@ -151,10 +151,3 @@ class InvoiceType(models.Model):
 
     prepaid_hours_id = fields.Many2one(
         'sale.subscription.prepaid_hours', string="Prepaid hours")
-
-
-class ProjectIssue(models.Model):
-    _inherit = 'project.issue'
-    approved_hours_id = fields.One2many(
-        'sale.subscription.prepaid_hours.assigned', 'assigned_hours_id',
-        string='Approved Hours for this Issue')

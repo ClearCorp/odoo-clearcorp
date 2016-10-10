@@ -11,7 +11,9 @@
     'category': 'Projects',
     'sequence': 10,
     'website': 'http://clearcorp.cr',
-    'depends': ['base', 'project_work_type', 'account_analytic_analysis'],
+    'depends': [
+        'base', 'project_work_type', 'account_analytic_analysis',
+        'sale_contract'],
     'data': [
         'views/subscription_prepaid_hours_view.xml',
         'data/subscription_prepaid_hours_data.xml'
