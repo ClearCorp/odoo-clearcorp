@@ -13,6 +13,7 @@ class SaleSubscription(models.Model):
     _inherit = 'sale.subscription'
 
     invoice_journal = fields.Many2one('account.journal')
+    invoice_currency = fields.Many2one('res.currency')
 
     def get_product(self, work_type):
             product = self.invoice_type_id.search([('name', '=', work_type)])

@@ -6,13 +6,6 @@ from openerp import models, fields
 from datetime import date
 
 
-class SaleSubscription(models.Model):
-
-    _inherit = 'sale.subscription'
-
-    invoice_currency = fields.Many2one('res.currency')
-
-
 class ProjectIssue(models.Model):
 
     _inherit = 'project.issue'
@@ -26,6 +19,15 @@ class ProjectIssue(models.Model):
     approved_hours_id = fields.One2many(
         'sale.subscription.prepaid_hours_assigned', 'assigned_hours_id',
         string='Approved Hours for this Issue')
+
+    def start_approval(self, vals):
+        # Creates a new approval
+        approval = self._create_approval()
+        # Creates a new approval line, minus a few fields
+        self._create_approval_line(approval.id)
+
+
+        # Creates
 
     def _get_prepaid_hours(self):
         self.feature_id.work_type
@@ -65,7 +67,9 @@ class ProjectIssue(models.Model):
             'spent_hours': values['used_time'],
             'remaining_hours': values['remaining_time'],
             'to_be_approved': values['to_be_approved_time'],
-            'requested_hours': self.feature_id.expected_hours,
+            # There has to be a related feature, where the time has been
+            # estimated.
+            'requested_hours': self.task_id.feature_id.expected_hours,
             'extra_hours': values['remaining_time'] -
             self.feature_id.expected_hours,
             # 'extra_amount':,
@@ -75,9 +79,12 @@ class ProjectIssue(models.Model):
     def _create_approval_line(self, approval_id):
         approval_line_obj = self.env[
             'sale.subscription.prepaid_hours_approval_line']
-        for hour_type in self.feature_id.hour_ids:
+        subscription_obj = self.env['sale.subscription']
+        # Loops over the types of work that have to be done
+        for hour_type in self.task_id.feature_id.hour_ids:
             print "\n\n", hour_type
             approval_line_values = {}
+            # Get analytic account id for the subscription
             _ana_acc = self.project_id.analytic_account_id
             prepaid_hours_id = False
             wt = hour_type.work_type_id
@@ -94,7 +101,8 @@ class ProjectIssue(models.Model):
             res = approval_line_obj.create(approval_line_values)
             print "\n create approval line: ", res
 
-    def _create_approvals(self):
+    def _create_approval(self):
+        # Creates a new approval
         today = date.today().strftime('%Y-%m-%d')
         approval_obj = self.env['sale.subscription.prepaid_hours_approval']
         approval_values = {
@@ -104,5 +112,4 @@ class ProjectIssue(models.Model):
             'state': '2b_approved',
         }
         res = approval_obj.create(approval_values)
-        self._create_approval_line(res.id)
         return res
