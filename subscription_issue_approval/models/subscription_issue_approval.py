@@ -77,6 +77,10 @@ class ProjectIssue(models.Model):
         }
 
     def _create_approval_line(self, approval_id):
+        # Loops over the types of work needed and compares it to the types
+        # in a clients subscription.
+        # It has to check the correct client's Subscription and it needs
+        # a related Feature
         approval_line_obj = self.env[
             'sale.subscription.prepaid_hours_approval_line']
         subscription_obj = self.env['sale.subscription']
