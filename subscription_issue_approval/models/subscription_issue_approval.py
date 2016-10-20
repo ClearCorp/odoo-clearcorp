@@ -20,11 +20,33 @@ class ProjectIssue(models.Model):
         'sale.subscription.prepaid_hours_assigned', 'assigned_hours_id',
         string='Approved Hours for this Issue')
 
-    def start_approval(self, vals):
+    # Features that will solve this issue.
+    feature_id = fields.One2many(
+        'project.scrum.feature', 'feature_id', string='Features')
+
+    def start_approval(self):
         # Creates a new approval
         approval = self._create_approval()
         # Creates a new approval line, minus a few fields
         self._create_approval_line(approval.id)
+
+    def create_formatted_proposal(self, vals):
+        # Creates a proposal for the client to approve.
+        # It loops over the different prepaid hours in a subscription
+        # to subtract the hours for its proposed use.
+        # vals contain all the types of hours required.
+
+        proposed_values_obj = self.env[
+            'sale.subscription.prepaid_hours_approved_values']
+        client_id = self.company_id or self.partner_id
+        client_subscription = self.env['sale.subscription'].search(client_id)
+
+
+
+
+
+
+        # Calls Hour Approval class for the formatting
 
 
         # Creates
@@ -58,10 +80,10 @@ class ProjectIssue(models.Model):
             [('name', '=', '')]).product_price
 
     def _create_approval_values(self, approval_id, prepaid_hours_id):
-        _approval_values_obj = self.env[
+        approval_values_obj = self.env[
             'sale.subscription.prepaid_hours_approved_values']
         values = self._values(prepaid_hours_id)
-        _approval_values_values = {
+        approval_values_values = {
             'prepaid_hours_id': prepaid_hours_id,
             'prepaid_hours': prepaid_hours_id.quantity,
             'spent_hours': values['used_time'],
@@ -78,21 +100,23 @@ class ProjectIssue(models.Model):
 
     def _create_approval_line(self, approval_id):
         # Loops over the types of work needed and compares it to the types
-        # in a clients subscription.
+        # in a client's subscription.
         # It has to check the correct client's Subscription and it needs
-        # a related Feature
+        # a related Feature.
         approval_line_obj = self.env[
             'sale.subscription.prepaid_hours_approval_line']
-        subscription_obj = self.env['sale.subscription']
+        client_id = self.company_id or self.partner_id
+        client_subscription = self.env['sale.subscription'].search(client_id)
         # Loops over the types of work that have to be done
-        for hour_type in self.task_id.feature_id.hour_ids:
+        for hour_type in self.feature_id.hour_ids:
             print "\n\n", hour_type
             approval_line_values = {}
-            # Get analytic account id for the subscription
-            _ana_acc = self.project_id.analytic_account_id
             prepaid_hours_id = False
             wt = hour_type.work_type_id
-            for invoice_type in _ana_acc.invoice_type_id:
+            # Loops over subscription's issue_type_ids
+            for invoice_type in client_subscription.invoice_type_id:
+                # Selects the correct type of work and its corresponding
+                # prepaid hours id
                 if wt.id == invoice_type.name.id:
                     prepaid_hours_id = invoice_type.prepaid_hours_id.id
             approval_line_values.update({

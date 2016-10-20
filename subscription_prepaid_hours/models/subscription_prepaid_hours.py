@@ -6,33 +6,18 @@ from openerp import models, fields, api
 from datetime import date
 
 
-class PrepaidHoursType(models.Model):
-    # Classifies prepaid hours as development, support, or training.
-    # This classification is a product, so the price of hours can be
-    # defined using price lists.
-
-    # Extra hours are needed for approval and invoicing. They don't have a
-    # related prepaid hours object.
-    # todo Load Extra hours data in data file.
-    _name = 'sale.subscription.prepaid_hours_type'
-    _inherit = 'product.product'
-
-    hour_type = fields.Selection(
-        [('dev', 'Development Hours'),
-         ('sup', 'Support Hours'),
-         ('tra', 'Training Hours'),
-         ],
-        string='Hour Type', required=True)
-
-
 class PrepaidHours(models.Model):
     # Represents the prepaid hours clients can have in their subscription
     # (the client's "hour bag").
     _name = 'sale.subscription.prepaid_hours'
 
-    name = fields.Many2one(
-        'sale.subscription.prepaid_hours_type', string='Type of Hour',
-        required=True)
+    # Classifies prepaid hours as development, support, or training.
+    name = fields.Selection(
+        [('dev', 'Development Hours'),
+         ('sup', 'Support Hours'),
+         ('tra', 'Training Hours'),
+         ],
+        string='Hour Type', required=True)
 
     # Amount of hours of a certain type
     quantity = fields.Float('Amount of Hours', required=True)
