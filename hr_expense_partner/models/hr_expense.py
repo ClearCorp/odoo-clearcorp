@@ -11,13 +11,10 @@ class HrExpenseExpense(models.Model):
 
     def _prepare_move_line(self, line):
         res = super(HrExpenseExpense, self)._prepare_move_line(line)
-        """if self.payment_mode == 'company_account':
-            emp_account = self.bank_journal_id.default_credit_account_id.id
-        else:
-            emp_account = self.employee_id.address_home_id.\
-                property_account_payable_id.id"""
         if self.product_id:
-            account = self.product_id.product_tmpl_id._get_product_accounts()['expense'].id
+            account = \
+                self.product_id.product_tmpl_id._get_product_accounts()
+            ['expense'].id
         else:
             account = self.env['ir.property'].with_context(
                 force_company=self.company_id.id).get(
