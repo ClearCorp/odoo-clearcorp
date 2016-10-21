@@ -29,4 +29,3 @@ class HrExpenseExpense(models.Model):
     supplier_reference = fields.Char(
         string='Supplier Reference', readonly=True,
         states={'draft': [('readonly', False)]}, index=True)
-    
