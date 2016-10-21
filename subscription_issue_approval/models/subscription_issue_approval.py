@@ -25,21 +25,25 @@ class ProjectIssue(models.Model):
         'project.scrum.feature', 'feature_id', string='Features')
 
     def start_approval(self):
+        # Starts the approval - proposal - client's go ahead - invoice cycle.
         # Creates a new approval
         approval = self._create_approval()
         # Creates a new approval line, minus a few fields
         self._create_approval_line(approval.id)
+        self._create_proposed_hour_values(approval.id)
 
     def create_formatted_proposal(self, vals):
-        # Creates a proposal for the client to approve.
+        # Creates a proposal table for the client to approve. It needs an
+        # approval that is still in 2bapproved state.
         # It loops over the different prepaid hours in a subscription
         # to subtract the hours for its proposed use.
-        # vals contain all the types of hours required.
+        # vals contain all the types of hours required (amounts) and the
+        # approval_id.
+        return
 
-        proposed_values_obj = self.env[
-            'sale.subscription.prepaid_hours_approved_values']
-        client_id = self.company_id or self.partner_id
-        client_subscription = self.env['sale.subscription'].search(client_id)
+
+
+
 
 
 
@@ -55,21 +59,22 @@ class ProjectIssue(models.Model):
         self.feature_id.work_type
 
     def _values(self, prepaid_hours_id):
-        used_time = 0
+        time_already_approved = 0
         to_be_approved_time = 0
         approval_lines_obj = self.env[
             'sale.subscription.prepaid_hours_approval_line'].search(
                 [('prepaid_hours_id', '=', prepaid_hours_id)])
         for approval_line in approval_lines_obj:
             if approval_line.approval_id.state == 'approved':
-                    used_time = used_time + approval_line.requested_hours
+                    time_already_approved = time_already_approved + \
+                                            approval_line.requested_hours
             else:
                 if approval_line.approval_id.state == '2b_approved':
                     to_be_approved_time = to_be_approved_time +\
                         approval_line.requested_hours
-        remaining_time = prepaid_hours_id.quantity - used_time
+        remaining_time = prepaid_hours_id.quantity - time_already_approved
         return {
-            'used_time': used_time,
+            'time_already_approved': time_already_approved,
             'to_be_approved_time': to_be_approved_time,
             'remaining_time': remaining_time,
         }
@@ -79,24 +84,29 @@ class ProjectIssue(models.Model):
         _price = self.project_id.analytic_account_id.invoice_type_id.search(
             [('name', '=', '')]).product_price
 
-    def _create_approval_values(self, approval_id, prepaid_hours_id):
+    def _create_proposed_hour_values(self, approval_id):
+        # Fills proposed hour values for a given approval.
+        client_id = self.company_id or self.partner_id
+        client_subscription = self.env['sale.subscription'].search(client_id)
         approval_values_obj = self.env[
             'sale.subscription.prepaid_hours_approved_values']
-        values = self._values(prepaid_hours_id)
-        approval_values_values = {
-            'prepaid_hours_id': prepaid_hours_id,
-            'prepaid_hours': prepaid_hours_id.quantity,
-            'spent_hours': values['used_time'],
-            'remaining_hours': values['remaining_time'],
-            'to_be_approved': values['to_be_approved_time'],
-            # There has to be a related feature, where the time has been
-            # estimated.
-            'requested_hours': self.task_id.feature_id.expected_hours,
-            'extra_hours': values['remaining_time'] -
-            self.feature_id.expected_hours,
-            # 'extra_amount':,
-            'approval_id': approval_id,
-        }
+
+        # Processes the different hour bags a client's subscription has, to
+        # create proposed_hour_values.
+        for hour_bag in client_subscription.prepaid_hours_id:
+            issue_values = self._values(hour_bag)
+            proposal_values = {
+                'prepaid_hours_id': hour_bag,
+                'prepaid_hours': hour_bag.quantity,
+                'time_already_approved': issue_values['time_already_approved'],
+                # There has to be a related feature, where the time has been
+                # estimated.
+                'requested_hours': self.task_id.feature_id.expected_hours,
+                'extra_hours': values['remaining_time'] -
+                self.feature_id.expected_hours,
+                # 'extra_amount':,
+                'approval_id': approval_id,
+            }
 
     def _create_approval_line(self, approval_id):
         # Loops over the types of work needed and compares it to the types

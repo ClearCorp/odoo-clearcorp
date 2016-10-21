@@ -43,6 +43,12 @@ class HourAssignment(models.Model):
     # Amount of hours assigned
     quantity = fields.Float('Amount of Hours', required=True)
 
+    # Hours already spent in this term
+    spent_hours = fields.Float('Spent Hours')
+
+    # Remaining hours in the term
+    remaining_hours = fields.Float('Remaining Hours')
+
     # Specific "hour bag" used
     prepaid_hours_id = fields.Many2one(
         'sale.subscription.prepaid_hours',
@@ -69,7 +75,7 @@ class ProposedHourValues(models.Model):
     prepaid_hours = fields.Float('Prepaid Hours')
 
     # Hours already spent in this term
-    spent_hours = fields.Float('Spent Hours')
+    time_already_approved = fields.Float('Hours Previously Approved')
 
     # Remaining hours in the term
     remaining_hours = fields.Float('Remaining Hours')
