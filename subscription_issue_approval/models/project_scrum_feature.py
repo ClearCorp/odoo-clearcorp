@@ -16,8 +16,6 @@ class ProjectScrumFeature(models.Model):
                              ('quoted', 'Quoted')],
                              'Status', required=True)
 
-    feature_id = fields.Many2one('project.issue', string='Related Issue')
-
     @api.multi
     def set_quote_pending(self):
         print "set quote pending"

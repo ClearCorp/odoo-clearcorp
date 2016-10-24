@@ -20,9 +20,9 @@ class ProjectIssue(models.Model):
         'sale.subscription.prepaid_hours_assigned', 'assigned_hours_id',
         string='Approved Hours for this Issue')
 
-    # Features that will solve this issue.
-    feature_id = fields.One2many(
-        'project.scrum.feature', 'feature_id', string='Features')
+    # Feature that will solve this issue. There should be a unique feature
+    # related to a unique issue, but there isn't a one to one related field.
+    feature_id = fields.Many2one('project.scrum.feature', string='Feature')
 
     def start_approval(self):
         # Starts the approval - proposal - client's go ahead - invoice cycle.
@@ -41,18 +41,7 @@ class ProjectIssue(models.Model):
         # approval_id.
         return
 
-
-
-
-
-
-
-
-
-
         # Calls Hour Approval class for the formatting
-
-
         # Creates
 
     def _get_prepaid_hours(self):
@@ -79,10 +68,20 @@ class ProjectIssue(models.Model):
             'remaining_time': remaining_time,
         }
 
-    def _calculate_extra_amount(self):
-        _type = self.feature_id
-        _price = self.project_id.analytic_account_id.invoice_type_id.search(
-            [('name', '=', '')]).product_price
+    def _calculate_extra_amount(self, subscription, hours):
+        # Calculates the amount the client has to pay for the extra hours
+        # required to attend an issue.
+        extra_amount = 0.0
+
+        # The unit cost is obtained through the client's subscription.
+        invoice_types = subscription.invoice_type_ids
+
+        # Only the 'extra' type is relevant
+        for product in invoice_types:
+            if invoice_types.general_work_type == 'extra':
+                extra_amount += invoice_types.price * hours
+
+        return extra_amount
 
     def _create_proposed_hour_values(self, approval_id):
         # Fills proposed hour values for a given approval.
@@ -94,19 +93,21 @@ class ProjectIssue(models.Model):
         # Processes the different hour bags a client's subscription has, to
         # create proposed_hour_values.
         for hour_bag in client_subscription.prepaid_hours_id:
+            # The hour_bag should be active.
             issue_values = self._values(hour_bag)
+            extra_hours = issue_values['remaining_time'] - \
+                          self.feature_id.expected_hours
             proposal_values = {
                 'prepaid_hours_id': hour_bag,
                 'prepaid_hours': hour_bag.quantity,
                 'time_already_approved': issue_values['time_already_approved'],
-                # There has to be a related feature, where the time has been
-                # estimated.
-                'requested_hours': self.task_id.feature_id.expected_hours,
-                'extra_hours': values['remaining_time'] -
-                self.feature_id.expected_hours,
-                # 'extra_amount':,
+                'requested_hours': self.feature_id.expected_hours,
+                'extra_hours': extra_hours,
+                'extra_amount': self._calculate_extra_amount(client_subscription, extra_hours),
                 'approval_id': approval_id,
             }
+            proposal = approval_values_obj.create(proposal_values)
+            print "\n Proposal values: ", proposal
 
     def _create_approval_line(self, approval_id):
         # Loops over the types of work needed and compares it to the types

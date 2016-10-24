@@ -5,6 +5,11 @@
 from openerp import models, fields, api
 from datetime import date
 
+_PREPAID_HOURS_META_CLASS = [('dev', 'Development Hours'),
+                             ('sup', 'Support Hours'),
+                             ('tra', 'Training Hours')
+                             ]
+
 
 class PrepaidHours(models.Model):
     # Represents the prepaid hours clients can have in their subscription
@@ -13,11 +18,7 @@ class PrepaidHours(models.Model):
 
     # Classifies prepaid hours as development, support, or training.
     name = fields.Selection(
-        [('dev', 'Development Hours'),
-         ('sup', 'Support Hours'),
-         ('tra', 'Training Hours'),
-         ],
-        string='Hour Type', required=True)
+        _PREPAID_HOURS_META_CLASS, string='Hour Type', required=True)
 
     # Amount of hours of a certain type
     quantity = fields.Float('Amount of Hours', required=True)
@@ -142,3 +143,10 @@ class InvoiceType(models.Model):
 
     prepaid_hours_id = fields.Many2one(
         'sale.subscription.prepaid_hours', string="Prepaid hours")
+
+    # Added the 'extra' type to charge the additional hours according
+    # to company prices
+    _PREPAID_HOURS_META_CLASS.append(('extra', 'Additional Hours'))
+    general_work_type = fields.Selection(
+        _PREPAID_HOURS_META_CLASS, string="General Hour Type"
+    )
