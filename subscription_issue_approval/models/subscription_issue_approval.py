@@ -22,6 +22,8 @@ class ProjectIssue(models.Model):
 
     # Feature that will solve this issue. There should be a unique feature
     # related to a unique issue, but there isn't a one to one related field.
+    # This relates many issues to one feature, but it's not meant to be used
+    # that way.
     feature_id = fields.Many2one('project.scrum.feature', string='Feature')
 
     def start_approval(self):
@@ -49,7 +51,7 @@ class ProjectIssue(models.Model):
 
     def _values(self, prepaid_hours_id):
         time_already_approved = 0
-        to_be_approved_time = 0
+        time_to_be_approved = 0
         approval_lines_obj = self.env[
             'sale.subscription.prepaid_hours_approval_line'].search(
                 [('prepaid_hours_id', '=', prepaid_hours_id)])
@@ -59,27 +61,31 @@ class ProjectIssue(models.Model):
                                             approval_line.requested_hours
             else:
                 if approval_line.approval_id.state == '2b_approved':
-                    to_be_approved_time = to_be_approved_time +\
+                    time_to_be_approved = time_to_be_approved +\
                         approval_line.requested_hours
         remaining_time = prepaid_hours_id.quantity - time_already_approved
         return {
             'time_already_approved': time_already_approved,
-            'to_be_approved_time': to_be_approved_time,
+            'to_be_approved_time': time_to_be_approved,
             'remaining_time': remaining_time,
         }
 
-    def _calculate_extra_amount(self, subscription, hours):
+    def _calculate_extra_amount(self, prepaid_hours, hours):
         # Calculates the amount the client has to pay for the extra hours
-        # required to attend an issue.
+        # required to attend an issue. The extra amount will be 0 if there
+        # isn't a related (development, support or training) invoice type.
         extra_amount = 0.0
 
         # The unit cost is obtained through the client's subscription.
-        invoice_types = subscription.invoice_type_ids
+        invoice_types = prepaid_hours.subscription_id.invoice_type_ids
 
-        # Only the 'extra' type is relevant
+        # Only if invoice_type.is_extra is true its price is taken into
+        # account. If there is more than 1 invoice_type labeled as 'extra'
+        # for a general_work_type, the calculation could be wrong.
         for product in invoice_types:
-            if invoice_types.general_work_type == 'extra':
-                extra_amount += invoice_types.price * hours
+            if product.is_extra and \
+                            prepaid_hours.name == product.general_work_type:
+                extra_amount += product.price * hours
 
         return extra_amount
 
@@ -103,7 +109,10 @@ class ProjectIssue(models.Model):
                 'time_already_approved': issue_values['time_already_approved'],
                 'requested_hours': self.feature_id.expected_hours,
                 'extra_hours': extra_hours,
-                'extra_amount': self._calculate_extra_amount(client_subscription, extra_hours),
+                # There is an extra amount to be calculated according to the
+                # type of extra hour that depends on the type of bag.
+                'extra_amount': self._calculate_extra_amount(
+                    hour_bag, extra_hours),
                 'approval_id': approval_id,
             }
             proposal = approval_values_obj.create(proposal_values)

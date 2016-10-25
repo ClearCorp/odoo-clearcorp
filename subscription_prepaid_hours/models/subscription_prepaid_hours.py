@@ -144,9 +144,12 @@ class InvoiceType(models.Model):
     prepaid_hours_id = fields.Many2one(
         'sale.subscription.prepaid_hours', string="Prepaid hours")
 
-    # Added the 'extra' type to charge the additional hours according
-    # to company prices
-    _PREPAID_HOURS_META_CLASS.append(('extra', 'Additional Hours'))
+    # Uses a more general classification for invoice types, to ease the
+    # creation of issue estimates.
     general_work_type = fields.Selection(
         _PREPAID_HOURS_META_CLASS, string="General Hour Type"
     )
+
+    # This is a product not included in the client's subscription so the price
+    # could differ from the one included in the contract's prepaid hours.
+    is_extra = fields.Boolean('Additional Hours Outside Contract')
