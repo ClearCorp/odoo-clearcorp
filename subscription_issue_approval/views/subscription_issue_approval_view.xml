@@ -2,6 +2,40 @@
 
 <openerp>
     <data>
+        <!-- Summary of approvals for a client's contract (sale.subscription) -->
+        <!-- TODO check if this view should be in the subscription -->
+       <!-- Form -->
+       <record id="view_prepaid_hours_approval_form" model="ir.ui.view">
+            <field name="name">view.prepaid.hours.form</field>
+            <field name="model">sale.subscription.prepaid_hours_approval</field>
+            <field name="type">form</field>
+            <field name="priority" eval="16"/>
+            <field name="inherit_id" ref="sale_contract.sale_subscription_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Issue Approvals">
+                        <form name="Approvals">
+                            <sheet>
+                                <group>
+                                    <group>
+                                        <field name="ticket_id"/>
+                                        <field name="user_id"/>
+                                        <field name="sequence"/>
+                                    </group>
+                                    <group>
+                                        <field name="date"/>
+                                        <field name="state"/>
+                                    </group>
+                                    <field name="approval_line_ids" widget="one2many_list" class="oe_inline"/>
+                                    <field name="approval_values" widget="one2many_list" class="oe_inline"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </page>
+                </xpath>
+            </field>
+       </record>
+
         <!-- project.scrum.feature -->
         <!-- form -->
         <record id="view_feature_form" model="ir.ui.view">
@@ -21,6 +55,8 @@
                 </xpath>
             </field>
         </record>
+
+
         <record id="account_analytic_account_invoice_form_inherit2"
             model="ir.ui.view">
             <field name="name">account.analytic.account.invoice.form.inherit2
@@ -43,6 +79,8 @@
             </field>
 
         </record>
+
+
         <record model="ir.ui.view" id="project_issue_form_view_invoice">
             <field name="name">Project Issue Tracker Form</field>
             <field name="model">project.issue</field>

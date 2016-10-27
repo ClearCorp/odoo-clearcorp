@@ -1,87 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <openerp>
-<data>
+    <data>
 
-
-<!-- account.analytic.account -->
+        <!-- Adds prepaid_hours_id to invoice configuration in sale.subscription view -->
         <!-- Form -->
-        <record id="analytic_analytic_account_form2" model="ir.ui.view">
-            <field name="name">Invoice</field>
-            <field name="model">account.analytic.account</field>
+        <record id="subscription_view_invoice_form" model="ir.ui.view">
+            <field name="name">Invoice Configuration Prepaid Id</field>
+            <field name="model">sale.subscription</field>
             <field name="priority" eval="160" />
             <field name="inherit_id"
-                ref="project_work_type.analytic_analytic_account_form2" />
+                ref="project_work_type.subscription_view_invoice_type_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//notebook/page[@string='Invoice Configuration']"
-                    position="replace">
-                    <page string="Invoice Configuration">
-                        <div>
-                            <label for="invoice_type_id" string="Invoice Type" class="oe_inline" />
-                            <field name="invoice_type_id" string="Invoice Type" class="oe_inline">
-                                <tree editable="bottom">
-                                    <field name="name" />
-                                    <field name="product_price"/>
-                                    <field name="product_id"/>
-                                    <field name="price"
-                                        attrs="{'readonly': [('product_price','=',True)]}" />
-                                   <field name="prepaid_hours_id"/>
-                                </tree>
-                            </field>
-                        </div>
-                    </page>
+                <xpath expr="//notebook/page/div/field/tree/field[@name='price']"
+                    position="after">
+                    <field name="prepaid_hours_id"/>
                 </xpath>
             </field>
         </record>
-        
-        <record id="analytic_analytic_account_form3" model="ir.ui.view">
-            <field name="name">Hours groups</field>
-            <field name="model">account.analytic.account</field>
+
+        <!-- Adds prepaid hours tree to a client's subscription. The tree is
+         editable and allows the creation/update/removal of prepaid hours.-->
+        <record id="subscription_view_prepaid_hours_form" model="ir.ui.view">
+            <field name="name">Prepaid Hours</field>
+            <field name="model">sale.subscription</field>
             <field name="priority" eval="160" />
             <field name="inherit_id"
-                ref="analytic.view_account_analytic_account_form" />
+                ref="sale_contract.sale_subscription_view_form" />
             <field name="arch" type="xml">
-                <xpath expr="//form/sheet/notebook/page[@name='contract_page']" position="after">
-                    <page string="Hours Groups" name="hours_group">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Prepaid Hours" name="prepaid_hours">
                         <field name="prepaid_hours_id">
                             <tree editable="bottom">
                                 <field name="name"/>
                                 <field name="quantity"/>
-                                <field name="date" />
+                                <field name="date"/>
+                                <field name="active"/>
                             </tree>
                         </field>
                     </page>
                 </xpath>
            </field>
        </record>
-       
-       <!-- prepaid hours -->
-       <!-- Form -->
-       <record id="view_prepaid_hours_approval_form" model="ir.ui.view">
-            <field name="name">view.prepaid.hours.form</field>
-            <field name="model">account.analytic.prepaid_hours_approval</field>
-            <field name="type">form</field>
-            <field name="priority" eval="16" />
-            <field name="arch" type="xml">
-                <form name="Approvals">
-                    <sheet>
-                        <group>
-                            <group>
-                                <field name="ticket_id" />
-                                <field name="user_id" />
-                                <field name="sequence" />
-                            </group>
-                            <group>
-                                <field name="date" />
-                                <field name="state" />
-                            </group>
-                            <field name="approval_line_ids" widget="one2many_list" class="oe_inline" />
-<!--                             <field name="approval_values"  widget="one2many_list" class="oe_inline"/> -->
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-       </record>
+
        <!-- approval line -->
        <!-- Tree -->
        <record id="view_prepaid_hours_approval_line_tree" model="ir.ui.view">
@@ -90,7 +51,7 @@
             <field name="type">tree</field>
             <field name="priority" eval="16" />
             <field name="arch" type="xml">
-                <tree string="Approval Lines" name="approva lines">
+                <tree string="Approval Lines" name="approval lines">
                     <field name="prepaid_hours_id" />
                     <field name="work_type_id" />
                     <field name="approval_id" />
@@ -100,6 +61,7 @@
                 </tree>
             </field>
        </record>
+
        <!-- approval values -->
        <!-- Tree -->
        <record id="view_prepaid_hours_approved_values_tree" model="ir.ui.view">
@@ -121,5 +83,5 @@
                 </tree>
             </field>
        </record>
-</data>
+    </data>
 </openerp>
