@@ -4,68 +4,7 @@
 
 from openerp import models, fields, api
 from lxml import etree
-
-
-_TABLE = """
-<group>
-    <div style="padding-bottom:16px">
-        <h2 style="display:inline; margin-right:24px">Approval</h2>
-        <span>
-            Estado
-            <button style="margin-left:16px"
-                name="_approve_approval" string="Approve"
-                context="{'approval_id': 1}"/>
-        </span>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th style="text-align:right">%s</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Horas Bolsa</td>
-                <td style="text-align:right">%s</td>
-            </tr>
-            <tr>
-                <td>Horas Consumidas</td>
-                <td style="text-align:right">-</td>
-            </tr>
-            <tr style="border-top:1px solid black">
-                <td style="padding-bottom:16px">
-                    <b>Horas Restantes</b>
-                </td>
-                <td style="text-align:right">
-                    <b>-</b>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Horas por aprobar</b>
-                </td>
-                <td style="text-align:right">
-                    <b>SUMA DE OTROS APPROVALS</b>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Horas requeridas</b>
-                    <ul style="list-style-type:none">
-                        <li>%s</li>
-                    </ul>
-                </td>
-                <td style="text-align:right">
-                    <b>SUMA</b>
-                    <ul style="list-style-type:none">
-                        <li>%s</li>
-                    </ul>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</group>"""
+from table_format import APP_ID, PREPAID_NAME, PREPAID_TIME, FOOTER
 
 
 class HourApproval(models.Model):
@@ -98,11 +37,11 @@ class HourApproval(models.Model):
         wt_feature_ids = [hours.work_type_id.id
                           for hours in ticket.feature_id.hour_ids]
 
-        # Gets invoice_type is related to the ticket's project account,
+        # Gets invoice_type related to the ticket's project contract,
         # this should return the client's subscription
         invoice_type_ids = self.env['invoice.type'].search(
-            [('contract_type_id',
-              '=', ticket.project_id.analytic_account_id.id),
+            [('contract_type_ids',
+              '=', ticket.project_id.analytic_account_id.subscription_ids.id),
              ('name', 'in', wt_feature_ids)], order='price desc')
 
         data = []
@@ -182,35 +121,14 @@ class HourApproval(models.Model):
     def _get_table(self):
         ticket_id = self.env['project.issue'].browse(
             self._context.get('issue_id'))
-        self._get_current_month_consumed_hours(ticket_id, 0)
+        self._get_current_month_consumed_hours(ticket_id)
         approvals = ticket_id.prepaid_hours_approval_id
         _TABLE = """<group col="1" colspan="1">"""
         for approval in approvals:
             print approval.id
-            _TABLE += """
-    <group>
-        <div style="padding-bottom:16px">
-            <h2 style="display:inline; margin-right:24px">Approval</h2>
-            <span>
-                Estado
-                <button style="margin-left:16px"
-                    name="do_approve_approval" string="Approve" type="object"
-                    context="{'approval_id':""" + str(approval.id) + """}"/>
-            </span>
-        </div>
-        <br/>
-        <table style="width:100%">
-            <thead>
-                <tr>
-                    <th style="width:25%"></th>
-                    """ +\
-                self._get_prepaid_hours()['names'] +\
-                """
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Horas Bolsa</td>""" +\
+            _TABLE += APP_ID + str(approval.id) + PREPAID_NAME + \
+                self._get_prepaid_hours()['names'] + \
+                PREPAID_TIME + \
                 str(self._get_prepaid_hours()['quantity']) +\
                 """
                 </tr>
@@ -246,14 +164,7 @@ class HourApproval(models.Model):
                         <b>SUMA</b>
                         <ul style="list-style-type:none">""" +\
                 str(self._get_approval_lines(0)['hours']) +\
-                """
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </group><br/>
-        """
+                FOOTER
         _TABLE += "</group>"
         return _TABLE
 
