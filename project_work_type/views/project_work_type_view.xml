@@ -2,67 +2,63 @@
 <!-- © 2016 ClearCorp
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 
-<openerp>
-    <data>
+<odoo>
+    <!-- project.task -->
+    <!-- form -->
+    <record id="view_task_form3_inherid" model="ir.ui.view">
+        <field name="name">view.task.form3</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="priority" eval="100" />
+        <field name="arch" type="xml">
+            <!-- Unimplemented feature from an earlier version -->
+            <!--xpath expr="//form/header/field[@name='stage_id']" position="before">
+                <button name="split_task" type="object" string="Split task"
+                    class="oe_highlight" />
+            </xpath-->
+            <xpath expr="//form/sheet/group/group/field[@name='project_id']"
+                position="after">
+                <field name="work_type_id"/>
+            </xpath>
+        </field>
+    </record>
 
-        <!-- project.task -->
-        <!-- form -->
-        <record id="view_task_form3_inherid" model="ir.ui.view">
-            <field name="name">view.task.form3</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2"/>
-            <field name="priority" eval="100" />
-            <field name="arch" type="xml">
-                <!-- Unimplemented feature from an earlier version -->
-                <!--xpath expr="//form/header/field[@name='stage_id']" position="before">
-                    <button name="split_task" type="object" string="Split task"
-                        class="oe_highlight" />
-                </xpath-->
-                <xpath expr="//form/sheet/group/group/field[@name='project_id']"
-                    position="after">
-                    <field name="work_type_id"/>
-                </xpath>
-            </field>
-        </record>
+    <!-- sale.subscription -->
+    <!-- Adds invoice configuration to a client's subscription -->
+    <!-- Form -->
+    <record id="subscription_view_invoice_type_form" model="ir.ui.view">
+        <field name="name">Invoice Configuration</field>
+        <field name="model">sale.subscription</field>
+        <field name="priority" eval="160" />
+        <field name="inherit_id"
+            ref="sale_contract.sale_subscription_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Invoice Configuration">
+                    <div>
+                        <label for="invoice_type_ids" string="Invoice Type" class="oe_inline" />
+                        <field name="invoice_type_ids" string="Invoice Type" class="oe_inline">
+                            <tree editable="bottom">
+                                <field name="name" />
+                                <field name="product_price"/>
+                                <field name="product_id"/>
+                                <field name="price"
+                                    attrs="{'readonly': [('product_price','=',True)]}" />
+                            </tree>
+                        </field>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
 
-        <!-- sale.subscription -->
-        <!-- Adds invoice configuration to a client's subscription -->
-        <!-- Form -->
-        <record id="subscription_view_invoice_type_form" model="ir.ui.view">
-            <field name="name">Invoice Configuration</field>
-            <field name="model">sale.subscription</field>
-            <field name="priority" eval="160" />
-            <field name="inherit_id"
-                ref="sale_contract.sale_subscription_view_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//notebook" position="inside">
-                    <page string="Invoice Configuration">
-                        <div>
-                            <label for="invoice_type_ids" string="Invoice Type" class="oe_inline" />
-                            <field name="invoice_type_ids" string="Invoice Type" class="oe_inline">
-                                <tree editable="bottom">
-                                    <field name="name" />
-                                    <field name="product_price"/>
-                                    <field name="product_id"/>
-                                    <field name="price"
-                                        attrs="{'readonly': [('product_price','=',True)]}" />
-                                </tree>
-                            </field>
-                        </div>
-                    </page>
-                </xpath>
-            </field>
-        </record>
-        
-        <record id="action_work_type" model="ir.actions.act_window">
-            <field name="name">Work Types</field>
-            <field name="res_model">project.work.type</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-        
-        <menuitem name="Task Types" id="task_work_type" sequence="50"
-            parent="project.menu_project_config" action="action_work_type" />
-        
-    </data>
-</openerp>
+    <record id="action_work_type" model="ir.actions.act_window">
+        <field name="name">Work Types</field>
+        <field name="res_model">project.work.type</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Task Types" id="task_work_type" sequence="50"
+        parent="project.menu_project_config" action="action_work_type" />
+</odoo>

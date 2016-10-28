@@ -84,6 +84,9 @@ class ProposedHourValues(models.Model):
     # Total of hours that require approval (this time)
     hours_to_be_approved = fields.Float('Requested Hours Awaiting Approval')
 
+    # Requested hours in this proposal
+    requested_hours = fields.Float('Requested Hours for this Proposal')
+
     # Additional hours not included in the "hour bag"
     # If hours are not obtained from a bag, they are always extra
     extra_hours = fields.Float('Additional Hours Requested')

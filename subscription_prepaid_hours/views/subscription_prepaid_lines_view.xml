@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2016 ClearCorp
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+
+<odoo>
+    <!-- Approval Lines (summary of approvals) can be viewed in the related feature. -->
+    <!-- Tree -->
+    <record id="prepaid_hours_approval_line_view_tree" model="ir.ui.view">
+        <field name="name">Prepaid Hours Approval Line Tree View</field>
+        <field name="model">sale.subscription.prepaid_hours_approval_line</field>
+        <field name="type">tree</field>
+        <field name="priority" eval="16" />
+        <field name="arch" type="xml">
+            <tree string="Approval Lines" name="approval lines">
+                <field name="prepaid_hours_id"/>
+                <field name="work_type_id"/>
+                <field name="approval_id"/>
+                <field name="requested_hours"/>
+                <field name="extra_hours"/>
+                <field name="extra_amount"/>
+            </tree>
+        </field>
+   </record>
+
+   <!-- Proposal values can be viewed in the related issue. -->
+   <!-- Tree -->
+   <record id="view_prepaid_hours_approved_values_tree" model="ir.ui.view">
+        <field name="name">Prepaid Hours Proposal Values</field>
+        <field name="model">sale.subscription.prepaid_hours_approved_values</field>
+        <field name="type">tree</field>
+        <field name="priority" eval="16" />
+        <field name="arch" type="xml">
+            <tree string="Approved Values" name="approved values">
+                <field name="prepaid_hours_id"/>
+                <field name="prepaid_hours"/>
+                <field name="time_already_approved"/>
+                <field name="remaining_hours"/>
+                <field name="hours_to_be_approved"/>
+                <field name="requested_hours"/>
+                <field name="extra_hours"/>
+                <field name="extra_amount"/>
+                <field name="approval_id"/>
+            </tree>
+        </field>
+   </record>
+</odoo>
