@@ -6,7 +6,9 @@
 Project Prepaid Hours
 =====================
 
-This module was written to extend the functionality of project
+This module contains the different classes needed to implement the subscription
+approval method that extends the functionality of project, project issue and
+subscriptions.
 
 Credits
 =======
@@ -14,6 +16,7 @@ Credits
 Contributors
 ------------
 
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 * Lesmed Gutiérrez <lesmed.gutierrez@clearcorp.co.cr>
 
 
