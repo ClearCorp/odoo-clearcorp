@@ -7,7 +7,8 @@
 Project issue approved
 ======================
 
-This module was written to extend the functionality of project
+This module was written to extend the functionality of project, to allow the
+approval of the estimated time to completion in the issue tracking system.
 
 
 Credits
@@ -17,6 +18,7 @@ Contributors
 ------------
 
 * Lesmed Gutiérrez <lesmed.gutierrez@clearcorp.co.cr>
+* Antonio Hidalgo <antonio.hidalgo@clearcorp.co.cr>
 
 
 Maintainer

@@ -119,7 +119,7 @@ class SaleSubscription(models.Model):
         'sale.subscription.prepaid_hours', 'subscription_id')
 
     def create_subscription_prepaid_hours_assigned(self):
-        today = date.today().strftime('%Y-%m-%d')
+        """today = date.today().strftime('%Y-%m-%d')
         contracts = self.env['account.analytic.account'].search([])
         prepaid_hours_id =\
             self.env['sale.subscription.prepaid_hours'].search([])
@@ -133,7 +133,7 @@ class SaleSubscription(models.Model):
                         'quantity': qty_qroup.quantity,
                         'group_id': qty_qroup.id,
                     }
-                    prepaid_hours_assigned.create(vals)
+                    prepaid_hours_assigned.create(vals)"""
         return True
 
     @api.model

@@ -9,15 +9,15 @@
         <record id="view_project_form" model="ir.ui.view">
             <field name="name">view.project.form</field>
             <field name="model">project.project</field>
-            <field name="inherit_id" ref="project.edit_project" />
+            <field name="inherit_id" ref="project.edit_project"/>
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/div/div/div/label[@for='use_tasks']" position="after">
-                    <field name="is_scrum" class="oe_inline" attrs="{'invisible': [('use_tasks','=',False)]}" />
-                    <label for="is_scrum" attrs="{'invisible': [('use_tasks','=',False)]}" />
+                    <field name="is_scrum" class="oe_inline" attrs="{'invisible': [('use_tasks','=',False)]}"/>
+                    <label for="is_scrum" attrs="{'invisible': [('use_tasks','=',False)]}"/>
                 </xpath>
                 <xpath expr="//form/sheet/notebook" position="inside">
                     <page string="Release Backlogs" name="release_backlogs">
-                        <field name="release_backlog_ids" attrs="{'readonly':['!','|',('state','=','open'),('state','=','pending')]}" context="{'project_id': id}" />
+                        <field name="release_backlog_ids" attrs="{'readonly':['!','|',('state','=','open'),('state','=','pending')]}" context="{'project_id': id}"/>
                     </page>
                 </xpath>
             </field>
@@ -39,12 +39,12 @@
 
                 <xpath expr="//field[@name='project_id']"
                     position="after">
-                    <field name="is_scrum" invisible="True" />
+                    <field name="is_scrum" invisible="True"/>
                     <field name="sprint_id"
                         attrs="{'invisible': [('is_scrum','=',False)]}"/>
                     <field name="feature_id"
                         attrs="{'invisible': [('is_scrum','=',False)]}"/>
-                    <field name="feature_type_id" />
+                    <field name="feature_type_id"/>
                 </xpath>
 
                 <!-- Field is not shown in the new form view
@@ -59,12 +59,12 @@
                     expr="//form/sheet/notebook"
                     position="inside">
                     <page string="Sequence" name="sequence">
-                        <separator string="Previous Tasks" />
+                        <separator string="Previous Tasks"/>
                         <field name="previous_task_ids"
-                            attrs="{'readonly': [('state','in',['done','cancelled'])]}" />
-                        <separator string="Next Tasks" />
+                            attrs="{'readonly': [('state','in',['done','cancelled'])]}"/>
+                        <separator string="Next Tasks"/>
                         <field name="next_task_ids"
-                            attrs="{'readonly': [('state','in',['done','cancelled'])]}" />
+                            attrs="{'readonly': [('state','in',['done','cancelled'])]}"/>
                     </page>
                 </xpath>
                 <xpath
@@ -80,11 +80,11 @@
             <field name="name">Task Search</field>
             <field name="model">project.task</field>
             <field name="type">search</field>
-            <field name="priority" eval="60" />
-            <field name="inherit_id" ref="project.view_task_search_form" />
+            <field name="priority" eval="60"/>
+            <field name="inherit_id" ref="project.view_task_search_form"/>
             <field name="arch" type="xml">
                     <xpath expr="//search/field[@name='stage_id']" position="after">
-                    <field name="sprint_id" />
+                    <field name="sprint_id"/>
                     </xpath>
                     <xpath expr="//search/group/filter[@groups='base.group_multi_company']" position="after">
                     <filter name="filter_sprint" string="Sprint" icon="Sprint" 
@@ -98,37 +98,37 @@
             <field name="name">view.release.backlog.form</field>
             <field name="model">project.scrum.release.backlog</field>
             <field name="type">form</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <form string="Release Backlog" version="9.0">
                     <header>
                         <button name="do_done" type="object"
                             string="Done" states="open,pending" class="oe_highlight"
-                            confirm="Are you sure you want to set this release backlog as done?" />
+                            confirm="Are you sure you want to set this release backlog as done?"/>
                         <button name="do_cancel" type="object"
                             string="Cancel" states="open,pending"
-                            confirm="Are you sure you want to cancel this release backlog?" />
+                            confirm="Are you sure you want to cancel this release backlog?"/>
                         <field name="stage_id" widget="statusbar"
-                            clickable="True" />
-                        <field name="state" invisible="True" />
+                            clickable="True"/>
+                        <field name="state" invisible="True"/>
                     </header>
                     <sheet>
-                        <label for="name" class="oe_edit_only" />
+                        <label for="name" class="oe_edit_only"/>
                         <h1>
-                            <field name="name" />
+                            <field name="name"/>
                         </h1>
                         <group>
                             <group>
-                                <field name="project_id" />
-                                <field name="expected_hours" />
-                                <field name="effective_hours" />
-                                <field name="remaining_hours" />
+                                <field name="project_id"/>
+                                <field name="expected_hours"/>
+                                <field name="effective_hours"/>
+                                <field name="remaining_hours"/>
                             </group>
                             <group>
-                                <field name="date_start" />
-                                <field name="date_end" />
-                                <field name="deadline" />
-                                <field name="progress" widget="progressbar" />
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="deadline"/>
+                                <field name="progress" widget="progressbar"/>
                             </group>
                         </group>
                         <notebook>
@@ -148,19 +148,19 @@
             <field name="name">view.release.backlog.tree</field>
             <field name="model">project.scrum.release.backlog</field>
             <field name="type">tree</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <tree string="Release Backlog"
                     colors="grey:state in ('cancelled','done');blue:state == 'pending';
                         red:(deadline&lt;date_end) and (state in ('draft','pending','open'))">
-                    <field name="name" />
-                    <field name="project_id" invisible="True" />
-                    <field name="expected_hours" />
-                    <field name="remaining_hours" />
-                    <field name="date_end" />
-                    <field name="deadline" />
-                    <field name="state" />
-                    <field name="progress" widget="progressbar" />
+                    <field name="name"/>
+                    <field name="project_id" invisible="True"/>
+                    <field name="expected_hours"/>
+                    <field name="remaining_hours"/>
+                    <field name="date_end"/>
+                    <field name="deadline"/>
+                    <field name="state"/>
+                    <field name="progress" widget="progressbar"/>
                 </tree>
             </field>
         </record>
@@ -171,9 +171,9 @@
             <field name="model">project.scrum.release.backlog</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id">
-                    <field name="color" />
-                    <field name="state" />
-                    <field name="remaining_hours" sum="Remaining Hours" />
+                    <field name="color"/>
+                    <field name="state"/>
+                    <field name="remaining_hours" sum="Remaining Hours"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div
@@ -185,22 +185,22 @@
                                         <!-- New editable and deletable setting for kanban views -->
                                         <t t-if="widget.editable"><li><a type="edit">Edit Release Backlog</a></li></t>
                                         <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
-                                        <li><ul class="oe_kanban_colorpicker" data-field="color" /></li>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
                                     </ul>
                                 </div>
                                 <div class="oe_kanban_content">
-                                    <div><b><field name="name" /></b></div>
-                                    <div><field name="project_id" /><br />
+                                    <div><b><field name="name"/></b></div>
+                                    <div><field name="project_id"/><br />
                                         <t t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
                                            t-set="red">oe_kanban_text_red</t>
                                         <span t-attf-class="#{red || ''}">
-                                            <i><field name="deadline" /></i>
+                                            <i><field name="deadline"/></i>
                                         </span>
                                     </div>
                                     <div class="oe_kanban_footer_left">
                                         <span title="Remaining Hours">
                                             <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                            <t t-esc="Math.round(record.remaining_hours.raw_value)" />
+                                            <t t-esc="Math.round(record.remaining_hours.raw_value)"/>
                                         </span>
                                     </div>
                                 </div>
@@ -218,27 +218,27 @@
             <field name="model">project.scrum.release.backlog</field>
             <field name="arch" type="xml">
                 <search string="Project">
-                    <field name="name" />
-                    <field name="project_id" />
+                    <field name="name"/>
+                    <field name="project_id"/>
                     <separator />
                     <filter string="New" name="new"
-                        domain="[('state','=','draft')]" />
+                        domain="[('state','=','draft')]"/>
                     <filter string="In Progress" name="in_progress"
-                        domain="[('state','=','open')]" />
+                        domain="[('state','=','open')]"/>
                     <filter string="Cancelled" name="cancelled"
-                        domain="[('state','=','cancelled')]" />
+                        domain="[('state','=','cancelled')]"/>
                     <filter string="Pending" name="pending"
-                        domain="[('state','=','pending')]" />
+                        domain="[('state','=','pending')]"/>
                     <filter string="Closed" name="closed"
-                        domain="[('state','=','close')]" />
+                        domain="[('state','=','close')]"/>
                     <separator />
                     <group expand="1" string="Group By...">
                         <filter string="Scrum Master" name="group_scrum_master"
-                            domain="[]" context="{'group_by':'user_id'}" />
+                            domain="[]" context="{'group_by':'user_id'}"/>
                         <filter string="Project" name="group_project"
-                            domain="[]" context="{'group_by':'project_id'}" />
+                            domain="[]" context="{'group_by':'project_id'}"/>
                         <filter string="Stage" name="group_stage"
-                            domain="[]" context="{'group_by':'state'}" />
+                            domain="[]" context="{'group_by':'state'}"/>
                     </group>
                     <separator />
                     <filter name="filter_project" string="Project" icon="Project" 
@@ -252,21 +252,21 @@
             <field name="name">view.feature.form</field>
             <field name="model">project.scrum.feature</field>
             <field name="type">form</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <form string="Feature" version="9.0">
                     <header>
                         <button name="set_open" type="object"
                             string="Open" class="oe_highlight"
-                            states="draft,cancelled,done" />
+                            states="draft,cancelled,done"/>
                         <button name="set_done" type="object"
-                            string="Done" class="oe_highlight" states="open" />
+                            string="Done" class="oe_highlight" states="open"/>
                         <button name="set_cancel" type="object"
-                            string="Cancel" states="open" />
-                        <field name="state" widget="statusbar" />
+                            string="Cancel" states="open"/>
+                        <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
-                        <label for="name" class="oe_edit_only" />
+                        <label for="name" class="oe_edit_only"/>
                         <h1>
                             <div style="display: inline-block;">
                                 <div>
@@ -277,39 +277,39 @@
                                     </style>
                                     <field name="code"
                                         class="oe_inline feature_custom"
-                                        width="20px" placeholder="Code..." />
+                                        width="20px" placeholder="Code..."/>
                                 </div>
                             </div>
                             -
                             <field name="name" class="oe_inline"
-                                placeholder="Feature Summary" />
+                                placeholder="Feature Summary"/>
                         </h1>
                         <group>
                             <group>
-                                <field name="project_id" />
+                                <field name="project_id"/>
                                 <field name="release_backlog_id" domain="[('project_id','=',project_id)]"
                                        attrs="{'readonly':[('state','=','open')]}"/>/>
-                                <field name="partner_id" />
-                                <field name="priority" />
-                                <field name="type_id" />
+                                <field name="partner_id"/>
+                                <field name="priority"/>
+                                <field name="type_id"/>
                                 <field name="expected_hours"
-                                    required="True" />
+                                    required="True"/>
                             </group>
                             <group>
-                                <field name="date_start" />
-                                <field name="date_end" />
-                                <field name="deadline" />
-                                <field name="effective_hours" />
-                                <field name="remaining_hours" />
-                                <field name="progress" widget="progressbar" />
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="deadline"/>
+                                <field name="effective_hours"/>
+                                <field name="remaining_hours"/>
+                                <field name="progress" widget="progressbar"/>
                                 <field name="validation_date"/>
                             </group>
                         </group>
                         <notebook>
                             <page string="Description" name="description">
                                 <field name="description"
-                                    placeholder="Add a Description..." />
-                                <field name="task_ids" />
+                                    placeholder="Add a Description..."/>
+                                <field name="task_ids"/>
                             </page>
                             <page string="Acceptance Requirements" name="acceptance_requirements">
                             <label for="acceptance_requirements_client" string="Please describe what you expect of this functionality"/>
@@ -321,8 +321,8 @@
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
-                        <field name="message_ids" widget="mail_thread" />
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>
             </field>
@@ -333,22 +333,22 @@
             <field name="name">view.feature.tree</field>
             <field name="model">project.scrum.feature</field>
             <field name="type">tree</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <tree string="Feature"
                     colors="grey:state in ('cancelled','done');blue:state == 'approved';
                         red:(deadline&lt;date_end) and (state in ('draft','approved','pending','open'))">
-                    <field name="state" invisible="True" />
-                    <field name="code" />
-                    <field name="name" />
-                    <field name="release_backlog_id" />
-                    <field name="priority" />
-                    <field name="partner_id" />
-                    <field name="expected_hours" />
-                    <field name="remaining_hours" />
-                    <field name="date_end" />
-                    <field name="deadline" />
-                    <field name="progress" widget="progressbar" />
+                    <field name="state" invisible="True"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="release_backlog_id"/>
+                    <field name="priority"/>
+                    <field name="partner_id"/>
+                    <field name="expected_hours"/>
+                    <field name="remaining_hours"/>
+                    <field name="date_end"/>
+                    <field name="deadline"/>
+                    <field name="progress" widget="progressbar"/>
                 </tree>
             </field>
         </record>
@@ -359,11 +359,11 @@
             <field name="model">project.scrum.feature</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="state">
-                    <field name="state" />
-                    <field name="color" />
-                    <field name="priority" />
-                    <field name="partner_id" />
-                    <field name="remaining_hours" sum="Remaining Hours" />
+                    <field name="state"/>
+                    <field name="color"/>
+                    <field name="priority"/>
+                    <field name="partner_id"/>
+                    <field name="remaining_hours" sum="Remaining Hours"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div
@@ -374,17 +374,17 @@
                                         <!-- New editable and deletable setting for kanban views -->
                                         <t t-if="widget.editable"><li><a type="edit">Edit Feature</a></li></t>
                                         <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
-                                        <li><ul class="oe_kanban_colorpicker" data-field="color" /></li>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
                                      </ul>
                                 </div>
                                 <div class="oe_kanban_content">
-                                    <div><b><field name="code" />-<field name="name" /></b></div>
+                                    <div><b><field name="code"/>-<field name="name"/></b></div>
                                     <div>
-                                        <!-- <field name="project_id" /> -->
+                                        <!-- <field name="project_id"/> -->
                                         <br />
                                         <t t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
                                            t-set="red">oe_kanban_text_red</t>
-                                        <span t-attf-class="#{red || ''}"><i><field name="deadline" /></i></span>
+                                        <span t-attf-class="#{red || ''}"><i><field name="deadline"/></i></span>
                                     </div>
                                     <div class="oe_kanban_bottom_right">
                                         <div class="oe_bottom_elems">
@@ -418,13 +418,13 @@
                                             <img t-att-src="kanban_image('res.partner', 'image_small', record.partner_id.raw_value)"
                                                  t-att-title="record.partner_id.value"
                                                  width="24" height="24"
-                                                 class="oe_kanban_avatar" />
+                                                 class="oe_kanban_avatar"/>
                                         </div>
                                     </div>
                                     <div class="oe_kanban_footer_left">
                                         <span title="Remaining Hours">
                                             <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                            <t t-esc="Math.round(record.remaining_hours.raw_value)" />
+                                            <t t-esc="Math.round(record.remaining_hours.raw_value)"/>
                                         </span>
                                     </div>
                                 </div>
@@ -443,31 +443,31 @@
             <field name="arch" type="xml">
                 <search string="Feature">
                     <field name="name"
-                        filter_domain="['|',('name','ilike',self),('code','ilike',self)]" />
+                        filter_domain="['|',('name','ilike',self),('code','ilike',self)]"/>
                     <field name="project_id"/>
                     <separator />
                     <filter string="New" name="new"
-                        domain="[('state','=','draft')]" />
+                        domain="[('state','=','draft')]"/>
                     <filter string="Approved" name="approved"
-                        domain="[('state','=','approved')]" />
+                        domain="[('state','=','approved')]"/>
                     <filter string="In Progress" name="in_progress"
-                        domain="[('state','=','open')]" />
+                        domain="[('state','=','open')]"/>
                     <filter string="Cancelled" name="cancelled"
-                        domain="[('state','=','cancelled')]" />
+                        domain="[('state','=','cancelled')]"/>
                     <filter string="Done" name="done"
-                        domain="[('state','=','done')]" />
+                        domain="[('state','=','done')]"/>
                     <separator />
                     <group expand="1" string="Group By...">
                         <filter string="Project" name="group_project"
-                            domain="[]" context="{'group_by':'project_id'}" />
+                            domain="[]" context="{'group_by':'project_id'}"/>
                         <filter string="Release Backlog" name="group_release_backlog"
-                            domain="[]" context="{'group_by':'release_backlog_id'}" />
+                            domain="[]" context="{'group_by':'release_backlog_id'}"/>
                         <filter string="Stage" name="group_stage"
-                            domain="[]" context="{'group_by':'state'}" />
+                            domain="[]" context="{'group_by':'state'}"/>
                         <filter string="Priority" name="group_priority"
-                            domain="[]" context="{'group_by':'priority'}" />
+                            domain="[]" context="{'group_by':'priority'}"/>
                         <filter string="Type" name="group_type"
-                            domain="[]" context="{'group_by':'type_id'}" />
+                            domain="[]" context="{'group_by':'type_id'}"/>
                     </group>
                 </search>
             </field>
@@ -478,39 +478,39 @@
             <field name="name">view.sprint.form</field>
             <field name="model">project.scrum.sprint</field>
             <field name="type">form</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <form string="Sprint" version="9.0">
                     <header>
                         <button name="set_done" type="object"
                             string="Done" states="open,pending"
-                            confirm="Are you sure you want to set this sprint as done?" />
+                            confirm="Are you sure you want to set this sprint as done?"/>
                         <button name="set_cancel" type="object"
                             string="Cancel" states="open,pending"
-                            confirm="Are you sure you want to cancel this sprint?" />
+                            confirm="Are you sure you want to cancel this sprint?"/>
                         <field name="stage_id" widget="statusbar"
-                            clickable="True" />
-                        <field name="state" invisible="True" />
+                            clickable="True"/>
+                        <field name="state" invisible="True"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
-                            <label for="name" class="oe_edit_only" />
+                            <label for="name" class="oe_edit_only"/>
                             <h1>
-                                <field name="name" />
+                                <field name="name"/>
                             </h1>
                         </div>
                         <group>
                             <group>
-                                <field name="partner_id" /> 
-                                <field name="expected_hours" />
-                                <field name="effective_hours" />
-                                <field name="remaining_hours" />
+                                <field name="partner_id"/>
+                                <field name="expected_hours"/>
+                                <field name="effective_hours"/>
+                                <field name="remaining_hours"/>
                             </group>
                             <group>
-                                <field name="date_start" />
-                                <field name="date_end" />
-                                <field name="deadline" />
-                                <field name="progress" widget="progressbar" />
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="deadline"/>
+                                <field name="progress" widget="progressbar"/>
                             </group>
                         </group>
                         <notebook>
@@ -530,20 +530,20 @@
             <field name="name">view.sprint.tree</field>
             <field name="model">project.scrum.sprint</field>
             <field name="type">tree</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <tree string="Sprint"
                     colors="grey:state in ('cancelled','done');blue:state == 'pending';
                         red:(deadline&lt;date_end) and (state in ('draft','pending','open'))">
-                    <field name="name" />
-                    <field name="state" invisible="True" />
-                    <field name="expected_hours" />
-                    <field name="effective_hours" />
-                    <field name="remaining_hours" />
-                    <field name="date_start" />
-                    <field name="date_end" />
-                    <field name="deadline" />
-                    <field name="progress" widget="progressbar" />
+                    <field name="name"/>
+                    <field name="state" invisible="True"/>
+                    <field name="expected_hours"/>
+                    <field name="effective_hours"/>
+                    <field name="remaining_hours"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="deadline"/>
+                    <field name="progress" widget="progressbar"/>
                 </tree>
             </field>
         </record>
@@ -554,9 +554,9 @@
             <field name="model">project.scrum.sprint</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id">
-                    <field name="color" />
-                    <field name="state" />
-                    <field name="remaining_hours" sum="Remaining Hours" />
+                    <field name="color"/>
+                    <field name="state"/>
+                    <field name="remaining_hours" sum="Remaining Hours"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
@@ -566,23 +566,23 @@
                                         <!-- New editable and deletable setting for kanban views -->
                                         <t t-if="widget.editable"><li><a type="edit">Edit Sprint</a></li></t>
                                         <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
-                                        <li><ul class="oe_kanban_colorpicker" data-field="color" /></li>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
                                     </ul>
                                 </div>
                                 <div class="oe_kanban_content">
-                                    <div><b><field name="name" /></b>
+                                    <div><b><field name="name"/></b>
                                     </div>
                                     <div><br />
                                         <t t-if="record.deadline.raw_value and record.deadline.raw_value lt (new Date())"
                                            t-set="red">oe_kanban_text_red</t>
                                         <span t-attf-class="#{red || ''}">
-                                            <i><field name="deadline" /></i>
+                                            <i><field name="deadline"/></i>
                                         </span>
                                     </div>
                                     <div class="oe_kanban_footer_left">
                                         <span title="Remaining Hours">
                                             <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                            <t t-esc="Math.round(record.remaining_hours.raw_value)" />
+                                            <t t-esc="Math.round(record.remaining_hours.raw_value)"/>
                                         </span>
                                     </div>
                                 </div>
@@ -599,11 +599,11 @@
             <field name="name">view.sprint.calendar</field>
             <field name="model">project.scrum.sprint</field>
             <field name="type">calendar</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <calendar string="Sprint" date_start="date_start"
                     date_stop="deadline">
-                    <field name="name" />
+                    <field name="name"/>
                 </calendar>
             </field>
         </record>
@@ -613,13 +613,13 @@
             <field name="name">view.sprint.gantt</field>
             <field name="model">project.scrum.sprint</field>
             <field name="type">gantt</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <gantt string="Sprint" date_start="date_start"
                     date_stop="deadline" color="id">
                     <level object="project.project"
                         link="project_id" domain="[]">
-                        <field name="name" />
+                        <field name="name"/>
                     </level>
                 </gantt>
             </field>
@@ -631,22 +631,22 @@
             <field name="model">project.scrum.sprint</field>
             <field name="arch" type="xml">
                 <search string="Sprint">
-                    <field name="name" />
+                    <field name="name"/>
                     <separator />
                     <filter string="New" name="new"
-                        domain="[('state','=','draft')]" />
+                        domain="[('state','=','draft')]"/>
                     <filter string="In Progress" name="in_progress"
-                        domain="[('state','=','open')]" />
+                        domain="[('state','=','open')]"/>
                     <filter string="Cancelled" name="cancelled"
-                        domain="[('state','=','cancelled')]" />
+                        domain="[('state','=','cancelled')]"/>
                     <filter string="Pending" name="pending"
-                        domain="[('state','=','pending')]" />
+                        domain="[('state','=','pending')]"/>
                     <filter string="Closed" name="closed"
-                        domain="[('state','=','close')]" />
+                        domain="[('state','=','close')]"/>
                     <separator />
                     <group expand="1" string="Group By...">
                         <filter string="User" name="group_user"
-                            domain="[]" context="{'group_by':'partner_id'}" />
+                            domain="[]" context="{'group_by':'partner_id'}"/>
                     </group>
                 </search>
             </field>
@@ -657,16 +657,16 @@
             <field name="name">view.feature.type.form</field>
             <field name="model">project.scrum.feature.type</field>
             <field name="type">form</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <form string="Feature Type" version="9.0">
                     <sheet>
                         <group>
                             <group>
-                                <field name="code" />
+                                <field name="code"/>
                             </group>
                             <group>
-                                <field name="name" />
+                                <field name="name"/>
                             </group>
                         </group>
                     </sheet>
@@ -679,11 +679,11 @@
             <field name="name">view.feature.type.tree</field>
             <field name="model">project.scrum.feature.type</field>
             <field name="type">tree</field>
-            <field name="priority" eval="16" />
+            <field name="priority" eval="16"/>
             <field name="arch" type="xml">
                 <tree string="Feature Type">
-                    <field name="code" />
-                    <field name="name" />
+                    <field name="code"/>
+                    <field name="name"/>
                 </tree>
             </field>
         </record>
@@ -694,7 +694,7 @@
             <field name="res_model">project.scrum.feature</field>
             <field name="view_mode">kanban,tree,form</field>
             <field name="context">{'search_default_group_release_backlog': 1, 'search_default_filter_project': 1}</field>
-            <field name="search_view_id" ref="view_feature_search" />
+            <field name="search_view_id" ref="view_feature_search"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Create new Feature</p>
             </field>
@@ -706,7 +706,7 @@
             <field name="res_model">project.scrum.release.backlog</field>
             <field name="view_mode">kanban,tree,form</field>
             <field name="context">{'search_default_filter_project': 1}</field>
-            <field name="search_view_id" ref="view_release_backlog_search" />
+            <field name="search_view_id" ref="view_release_backlog_search"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Create new Release Backlog</p>
             </field>
@@ -718,7 +718,7 @@
             <field name="res_model">project.scrum.sprint</field>
             <field name="view_mode">kanban,tree,form,calendar,gantt</field>
             <field name="context">{'search_default_in_progress': 1,'search_default_my_sprints': 1}</field>
-            <field name="search_view_id" ref="view_sprint_search" />
+            <field name="search_view_id" ref="view_sprint_search"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Create new Sprint</p>
             </field>

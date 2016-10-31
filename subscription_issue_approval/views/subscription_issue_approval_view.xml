@@ -11,7 +11,7 @@
         <field name="model">sale.subscription.prepaid_hours_approval</field>
         <field name="type">form</field>
         <field name="priority" eval="16"/>
-        <field name="inherit_id" ref="sale_contract.sale_subscription_view_form" />
+        <field name="inherit_id" ref="sale_contract.sale_subscription_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
                 <page string="Issue Approvals">
@@ -51,9 +51,10 @@
                 <button name="set_quoted" type="object"
                     string="Quoted" />
             </xpath>
-            <xpath expr="//page[@name='description']" position="after">
-                <field name="tickets_ids" widget="one2many_list"/>
-            </xpath>
+            <!-- Same view, other model -->
+            <!--xpath expr="//page[@name='description']" position="after">
+                <field name="ticket_id" widget="one2many_list"/>
+            </xpath-->
         </field>
     </record>
 
