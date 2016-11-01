@@ -10,7 +10,7 @@
 		<record id="view_feature_form" model="ir.ui.view">
 			<field name="name">view.feature.form</field>
 			<field name="model">project.scrum.feature</field>
-			<field name="inherit_id" ref="project_scrum_method.view_feature_form" />
+			<field name="inherit_id" ref="project_scrum_method.view_feature_form"/>
 			<field name="arch" type="xml">
 				<xpath expr="//form/sheet/group/group/field[@name='expected_hours']"
 					position="attributes">
@@ -20,13 +20,13 @@
 				<xpath expr="//form/sheet/notebook/page[@name='description']"
 					position="after">
 					<page string="Feature Hours" name="d">
-						<field name="id" invisible="True" />
+						<field name="id" invisible="True"/>
 						<field name="hour_ids" attrs="{'readonly':[('state','=','approved')]}">
 							<tree editable="bottom">
-								<field name="work_type_id" />
-								<field name="expected_hours" sum="Total Planned" />
-								<field name="effective_hours" sum="Total Spent" />
-								<field name="remaining_hours" sum="Total Remaining" />
+								<field name="work_type_id"/>
+								<field name="expected_hours" sum="Total Planned"/>
+								<field name="effective_hours" sum="Total Spent"/>
+								<field name="remaining_hours" sum="Total Remaining"/>
 							</tree>
 						</field>
 					</page>
@@ -39,8 +39,8 @@
 		<record id="view_task_form" model="ir.ui.view">
 			<field name="name">view.task.form</field>
 			<field name="model">project.task</field>
-			<field name="inherit_id" ref="project.view_task_form2" />
-			<field name="priority" eval="100" />
+			<field name="inherit_id" ref="project.view_task_form2"/>
+			<field name="priority" eval="100"/>
 			<field name="arch" type="xml">
 				<xpath expr="//form/sheet/notebook/page[@name='sequence']"
 					position="after">
@@ -48,10 +48,10 @@
                         attrs="{'invisible': [('feature_id','=',False)]}">
 						<field name="feature_hour_ids">
 							<tree>
-								<field name="work_type_id" />
-								<field name="expected_hours" sum="Planned Hour(s)" />
-								<field name="effective_hours" sum="Spent Hour(s)" />
-								<field name="remaining_hours" sum="Remaining Hour(s)" />
+								<field name="work_type_id"/>
+								<field name="expected_hours" sum="Planned Hour(s)"/>
+								<field name="effective_hours" sum="Spent Hour(s)"/>
+								<field name="remaining_hours" sum="Remaining Hour(s)"/>
 							</tree>
 						</field>
 					</page>
@@ -62,8 +62,8 @@
         <record id="view_task_form_user" model="ir.ui.view">
             <field name="name">view.task.form</field>
             <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2" />
-            <field name="priority" eval="50" />
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="priority" eval="50"/>
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/group/group/field[@name='planned_hours']"
                         position="attributes">
@@ -76,8 +76,8 @@
         <record id="view_task_form_teammanager" model="ir.ui.view">
             <field name="name">view.task.form</field>
             <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2" />
-            <field name="priority" eval="100" />
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="priority" eval="100"/>
             <field name="groups_id" eval="[(4, ref('project.group_project_team_manager'))]"/>
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/group/group/field[@name='planned_hours']"

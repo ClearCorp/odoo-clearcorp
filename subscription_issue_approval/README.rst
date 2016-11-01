@@ -3,9 +3,9 @@
    :alt: License: AGPL-3
 
 
-======================
-Project issue approved
-======================
+===========================
+Subscription Issue Approval
+===========================
 
 This module was written to extend the functionality of project, to allow the
 approval of the estimated time to completion in the issue tracking system.

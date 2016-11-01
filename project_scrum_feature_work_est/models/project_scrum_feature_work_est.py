@@ -10,7 +10,9 @@ from openerp.tools.translate import _
 class FeatureHours(models.Model):
     
     _name = 'project.scrum.feature.hours'
+    # TODO migrate both methods to new api
 
+    # @api.multi
     def _effective_hours(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for hour in self.browse(cr, uid, ids, context=context):
@@ -25,9 +27,11 @@ class FeatureHours(models.Model):
                     sum += task.effective_hours
             res[hour.id] = sum
         return res
-    
+
+    @api.multi
     def _remaining_hours(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
+        # tasks =
         for task in self.browse(cr, uid, ids, context=context):
             res[task.id] = task.expected_hours - task.effective_hours
         return res
@@ -39,9 +43,9 @@ class FeatureHours(models.Model):
     work_type_id = fields.Many2one('project.work.type', string='Work Type')
     expected_hours = fields.Float('Planned Hour(s)', required=True)
     effective_hours = fields.Float(
-        'Spent Hour(s)', compute=_effective_hours, store=True)
+        'Spent Hour(s)', )#compute=_effective_hours, store=True)
     remaining_hours = fields.Float(
-        'Remaining Hour(s)', compute=_remaining_hours, store=True)
+        'Remaining Hour(s)',) #compute=_remaining_hours, store=True)
 
 
 class Feature(models.Model):
