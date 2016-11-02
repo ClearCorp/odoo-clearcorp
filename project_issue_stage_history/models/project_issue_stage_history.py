@@ -11,7 +11,7 @@ class ProjectIssueStageHistory(models.Model):
 
     _name = 'project.issue.stage.history'
 
-    @api.one
+    @api.multi
     @api.depends('date', 'issue_id')
     def _compute_elapsed_time(self):
         last_history = self.search([

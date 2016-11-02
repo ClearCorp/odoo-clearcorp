@@ -10,31 +10,25 @@ from openerp.tools.translate import _
 class FeatureHours(models.Model):
     
     _name = 'project.scrum.feature.hours'
-    # TODO migrate both methods to new api
-
-    # @api.multi
-    def _effective_hours(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        for hour in self.browse(cr, uid, ids, context=context):
-            task_obj = self.pool.get('project.task')
-            task_ids = task_obj.search(
-                cr, uid, [('feature_id', '=', hour.feature_id.id)],
-                context=context)
-            tasks = task_obj.browse(cr, uid, task_ids, context=context)
-            sum = 0.0
-            for task in tasks:
-                if task.work_type_id == hour.work_type_id:
-                    sum += task.effective_hours
-            res[hour.id] = sum
-        return res
 
     @api.multi
-    def _remaining_hours(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        # tasks =
-        for task in self.browse(cr, uid, ids, context=context):
-            res[task.id] = task.expected_hours - task.effective_hours
-        return res
+    @api.depends('feature_id', 'work_type_id')
+    def _effective_hours(self):
+        """Calculates the effective hours for features."""
+        for hour in self:
+            tasks = self.env['project.task'].search(
+                [('feature_id', '=', hour.feature_id.id)])
+            for task in tasks:
+                sum = 0.0
+                if task.work_type_id == hour.work_type_id:
+                    sum += task.effective_hours
+                hour.expected_hours = sum
+
+    @api.multi
+    @api.depends('expected_hours', 'effective_hours')
+    def _remaining_hours(self):
+        for hour in self:
+            hour.remaining_hours = hour.expected_hours - hour.effective_hours
 
     feature_id = fields.Many2one(
         'project.scrum.feature', string='Feature', required=True,
@@ -43,9 +37,9 @@ class FeatureHours(models.Model):
     work_type_id = fields.Many2one('project.work.type', string='Work Type')
     expected_hours = fields.Float('Planned Hour(s)', required=True)
     effective_hours = fields.Float(
-        'Spent Hour(s)', )#compute=_effective_hours, store=True)
+        'Spent Hour(s)', compute=_effective_hours, store=True)
     remaining_hours = fields.Float(
-        'Remaining Hour(s)',) #compute=_remaining_hours, store=True)
+        'Remaining Hour(s)', compute=_remaining_hours, store=True)
 
 
 class Feature(models.Model):
@@ -156,34 +150,6 @@ class Task(models.Model):
                         sum += hour[2]['expected_hours']
                     values['planned_hours'] = sum
         return super(Task, self).create(cr, uid, values, context=context)
-
-    def write(self, cr, uid, ids, values, context=None):
-        if not isinstance(ids, list):
-            ids = [ids]
-        for task in self.browse(cr, uid, ids, context=context)[0]:
-            if task.project_id.is_scrum:
-                if 'task_hour_ids' in values:
-                    sum = 0.0
-                    for hour in values['task_hour_ids']:
-                        if hour[0] == 0:
-                            sum += hour[2]['expected_hours']
-                        elif hour[0] == 1:
-                            if 'expected_hours' in hour[2]:
-                                sum += hour[2]['expected_hours']
-                            else:
-                                task_hour_obj = self.pool.get(
-                                    'project.task.hour')
-                                task_hour = task_hour_obj.browse(
-                                    cr, uid, hour[1], context=context)
-                                sum += task_hour.expected_hours
-                        elif hour[0] == 4:
-                            task_hour_obj = self.pool.get('project.task.hour')
-                            task_hour = task_hour_obj.browse(
-                                cr, uid, hour[1], context=context)
-                            sum += task_hour.expected_hours
-                    values['planned_hours'] = sum
-            super(Task, self).write(cr, uid, task.id, values, context)
-        return True
 
     # Relates this variable to project.scrum.feature.hour_ids through
     # project.scrum.feature.hours.feature_id

@@ -31,7 +31,7 @@
             <field name="inherit_id" ref="project_timesheet.view_task_form2_inherited"/>
             <field name="priority" eval="60"/>
             <field name="arch" type="xml">
-                <!-- Changes timesheet_ids attributes, wherever it is -->
+                <!-- Changes timesheet_ids attributes, wherever it may be -->
                 <xpath expr="///field[@name='timesheet_ids']"
                     position="attributes">
                     <attribute name="attrs">{'readonly': ['|',('state','!=','open')]}</attribute>

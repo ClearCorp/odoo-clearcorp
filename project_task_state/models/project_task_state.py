@@ -38,7 +38,7 @@ class Task(models.Model):
 
     _inherit = 'project.task'
 
-    @api.one
+    @api.multi
     @api.depends('stage_id')
     def _compute_state(self):
         if self.stage_id:
