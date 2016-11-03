@@ -2,26 +2,24 @@
 <!-- © 2016 ClearCorp
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 
-<openerp>
-<data>
-<record model="ir.ui.view" id="project_state_history_form_view">
-    <field name="name">Project State History</field>
-    <field name="model">project.project</field>
-    <field name="inherit_id" ref="project.edit_project" />
-    <field name="arch" type="xml">
-        <xpath expr="//form/sheet/notebook" position="inside">
-            <page string="State History">
-                <field name="state_history_ids" >
-                    <tree>
-                        <field name="state_from"/>
-                        <field name="state_to"/>
-                        <field name="date"/>
-                        <field name="value" widget="float_time"/>
-                    </tree>
-                </field>
-            </page>
-        </xpath>
-    </field>
-</record>
-</data>
-</openerp>
+<odoo>
+    <record model="ir.ui.view" id="project_state_history_form_view">
+        <field name="name">Project State History</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook" position="inside">
+                <page string="State History">
+                    <field name="state_history_ids" >
+                        <tree>
+                            <field name="state_from"/>
+                            <field name="state_to"/>
+                            <field name="date"/>
+                            <field name="value" widget="float_time"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

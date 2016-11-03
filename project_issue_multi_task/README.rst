@@ -2,12 +2,12 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=====================
-Project Issue Contact
-=====================
+============================
+Project Issue Multiple Tasks
+============================
 
-[Unnecessary module] This module was written to extend the functionality of project_issue to
-prevent any contact change once the project is assigned.
+This module was written to allow the association of several tasks to an
+issue.
 
 Credits
 =======

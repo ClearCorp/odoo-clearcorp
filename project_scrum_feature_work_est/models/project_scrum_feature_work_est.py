@@ -22,7 +22,7 @@ class FeatureHours(models.Model):
                 sum = 0.0
                 if task.work_type_id == hour.work_type_id:
                     sum += task.effective_hours
-                hour.expected_hours = sum
+                hour.effective_hours = sum
 
     @api.multi
     @api.depends('expected_hours', 'effective_hours')
@@ -120,16 +120,21 @@ class Task(models.Model):
         res = {}
         return res
 
-    def _remaining_hours(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        effective_hours = 0
-        for task in self.browse(cr, uid, ids, context=context):
-            for work in task.work_ids:
-                effective_hours = effective_hours + work.hours
-            remaining = \
-                task.planned_hours - effective_hours + task.reassignment_hour
-            res[task.id] = remaining
-        return res
+    # Project Time Reassignment hasn't been migrated yet, and this computed
+    # field requires it.
+    # project.task.work doesn't exist anymore either.
+    # @api.multi
+    # @api.depends()
+    # def _remaining_hours(self, cr, uid, ids, field_name, arg, context=None):
+    #     res = {}
+    #     effective_hours = 0
+    #     for task in self.browse(cr, uid, ids, context=context):
+    #         for work in task.work_ids:
+    #             effective_hours = effective_hours + work.hours
+    #         remaining = \
+    #             task.planned_hours - effective_hours + task.reassignment_hour
+    #         res[task.id] = remaining
+    #     return res
 
     @api.constrains('planned_hours')
     def _validate_planned_hours(self, cr, uid, ids, context=None):
@@ -137,27 +142,28 @@ class Task(models.Model):
             if task.planned_hours == 0.0:
                 raise ValidationError('Planned hours can\'t be zero')
 
-    def create(self, cr, uid, values, context=None):
-        if 'project_id' in values:
-            project_obj = self.pool.get('project.project')
-            project = project_obj.browse(
-                cr, uid, values['project_id'], context=context)
-            if project.is_scrum:
-                if 'task_hour_ids' in values: 
-                    task_hour_ids = values['task_hour_ids']
-                    sum = 0.0
-                    for hour in task_hour_ids:
-                        sum += hour[2]['expected_hours']
-                    values['planned_hours'] = sum
-        return super(Task, self).create(cr, uid, values, context=context)
+    # This method isn't necessary anymore
+    # def create(self, cr, uid, values, context=None):
+    #     if 'project_id' in values:
+    #         project_obj = self.pool.get('project.project')
+    #         project = project_obj.browse(
+    #             cr, uid, values['project_id'], context=context)
+    #         if project.is_scrum:
+    #             if 'task_hour_ids' in values:
+    #                 task_hour_ids = values['task_hour_ids']
+    #                 sum = 0.0
+    #                 for hour in task_hour_ids:
+    #                     sum += hour[2]['expected_hours']
+    #                 values['planned_hours'] = sum
+    #     return super(Task, self).create(cr, uid, values, context=context)
 
     # Relates this variable to project.scrum.feature.hour_ids through
     # project.scrum.feature.hours.feature_id
     feature_hour_ids = fields.One2many(
         string='Feature Hours',
         related='feature_id.hour_ids', readonly=True)
-    remaining_hours = fields.Float(
-        'Remaining Hour(s)', compute=_remaining_hours, store=True)
+    #remaining_hours = fields.Float(
+    #    'Remaining Hour(s)', compute=_remaining_hours, store=True)
     state = fields.Selection(
         [('draft', 'New'), ('open', 'In Progress'),
          ('cancelled', 'Cancelled'), ('done', 'Done')],

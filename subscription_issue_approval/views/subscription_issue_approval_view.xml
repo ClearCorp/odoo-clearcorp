@@ -4,7 +4,8 @@
 
 <odoo>
     <!-- Summary of approvals for a client's contract (sale.subscription) -->
-    <!-- TODO check if this view should be in the subscription -->
+    <!-- TODO check if this view should be in the subscription
+    Add to menu -->
     <!-- Form -->
     <record id="view_prepaid_hours_approval_form" model="ir.ui.view">
         <field name="name">Prepaid Approvals Form</field>
@@ -270,4 +271,15 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Allows the creation and editing of new issue types
+        <record id="action_issue_type" model="ir.actions.act_window">
+            <field name="name">Issue Types</field>
+            <field name="res_model">ticket.invoice.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        < Adds Issue Type item to menu
+        <menuitem id="issue_work_type" name="Issue Types" parent="project.menu_project_config" sequence="50" action="action_issue_type"/-->
 </odoo>
