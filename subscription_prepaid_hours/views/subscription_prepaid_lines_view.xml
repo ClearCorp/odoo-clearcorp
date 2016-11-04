@@ -3,7 +3,7 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 
 <odoo>
-    <!-- Approval Lines (summary of approvals) can be viewed in the related feature. -->
+    <!-- Approval Lines (summary of approvals) -->
     <!-- Tree -->
     <record id="prepaid_hours_approval_line_view_tree" model="ir.ui.view">
         <field name="name">Prepaid Hours Approval Line Tree View</field>

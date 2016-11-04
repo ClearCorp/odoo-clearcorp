@@ -18,8 +18,8 @@ class HourApproval(models.Model):
         return approval_sequence + 1
 
     ticket_id = fields.Many2one('project.issue', string='Ticket')
-    sequence = fields.Integer('sequence', default=_default_sequence)
-    user_id = fields.Many2one('res.partner', string='User')
+    sequence = fields.Integer('Sequence', default=_default_sequence)
+    user_id = fields.Many2one('res.partner', string='Customer')
     date = fields.Date('Date')
     state = fields.Selection([('2b_approved', 'To be approved'),
                               ('approved', 'Approved'),
@@ -175,7 +175,7 @@ class HourApproval(models.Model):
         if approval_id:
             print "\napproval_id: ", approval_id
 
-    @api.model
+"""    @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False,
                         submenu=False):
 
@@ -194,4 +194,4 @@ class HourApproval(models.Model):
             # print node.tag, type(node)
         # print etree.tostring(doc, pretty_print=True)
         res['arch'] = etree.tostring(doc, pretty_print=True)
-        return res
+        return res"""

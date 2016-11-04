@@ -26,7 +26,7 @@ class ProjectIssue(models.Model):
     # that way.
     feature_id = fields.Many2one('project.scrum.feature', string='Feature')
 
-    def change_proposal_status(self):
+    def change_proposal_status_approved(self):
         # Finishes the creation of approval lines and changes approval's status
         # to 'approved'.
         return
@@ -78,7 +78,8 @@ class ProjectIssue(models.Model):
     def _create_proposed_hour_values(self, approval_id):
         # Fills proposed hour values for a given approval.
         client_id = self.company_id or self.partner_id
-        client_subscription = self.env['sale.subscription'].search(client_id)
+        client_subscription = self.env['sale.subscription'].search(
+            [('partner_id', '=', client_id.id)])
         approval_values_obj = self.env[
             'sale.subscription.prepaid_hours_approved_values']
 
@@ -113,7 +114,8 @@ class ProjectIssue(models.Model):
         approval_line_obj = self.env[
             'sale.subscription.prepaid_hours_approval_line']
         client_id = self.company_id or self.partner_id
-        client_subscription = self.env['sale.subscription'].search(client_id)
+        client_subscription = self.env['sale.subscription'].search(
+            [('partner_id', '=', client_id.id)])
         # Loops over the types of work that have to be done
         for hour_type in self.feature_id.hour_ids:
             print "\n\n", hour_type
@@ -121,7 +123,7 @@ class ProjectIssue(models.Model):
             prepaid_hours_id = False
             wt = hour_type.work_type_id
             # Loops over subscription's issue_type_ids
-            for invoice_type in client_subscription.invoice_type_id:
+            for invoice_type in client_subscription.invoice_type_ids:
                 # Selects the correct type of work and its corresponding
                 # prepaid hours id
                 if wt.id == invoice_type.name.id:
@@ -146,7 +148,8 @@ class ProjectIssue(models.Model):
         self._create_approval_line(approval_id)
         self._create_proposed_hour_values(approval_id)
         current_approval = self.env[
-            'sale.subscription.prepaid_hours_approval'].search(approval_id)
+            'sale.subscription.prepaid_hours_approval'].search(
+            [('approval_id', '=', approval_id)])
         # approval test
         return current_approval._get_table()
 
@@ -163,5 +166,5 @@ class ProjectIssue(models.Model):
             'date': today,
             'state': '2b_approved',
         }
-        res = approval_obj.create(approval_values)
-        return res
+        approval_obj.create(approval_values)
+        return True

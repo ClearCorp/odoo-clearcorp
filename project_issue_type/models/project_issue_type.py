@@ -19,23 +19,26 @@ class TicketInvoiceType (models.Model):
 
     # This relates the client's Subscription (contract) with the different
     # ticket invoice types.
-    # todo check this isn't presented in the view
     contract_type_ids = fields.Many2many('sale.subscription')
 
 
 class ProjectIssue(models.Model):
     _inherit = 'project.issue'
     
-    @api.one
-    @api.depends("project_id")
+    @api.multi
+    @api.depends("project_id", "issue_type")
     def _compute_invoice_ticket(self):
         # Sets invoiced status
         if self.project_id:
-            for ticket_kind in self.project_id.\
-                    analytic_account_id.\
-                    subscription_ids.ticket_invoice_type_ids:
-                if ticket_kind.name == self.issue_type.name:
-                    if ticket_kind.warranty:
+            # Requests the project's client
+            client_id = self.project_id.company_id \
+                        or self.project_id.partner_id
+            # Requests the client's subscription
+            subscription = self.env['sale.subscription'].search(
+                [('partner_id', '=', client_id.id)])
+            for ticket_type in subscription.invoice_type_ids:
+                if ticket_type.name == self.issue_type.name:
+                    if ticket_type.warranty:
                         self.invoiced = 'warranty'
                         return False
                     else:

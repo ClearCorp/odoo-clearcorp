@@ -11,7 +11,7 @@ class ProjectStateHistory(models.Model):
 
     _name = 'project.state.history'
 
-    @api.one
+    @api.multi
     @api.depends('date', 'project_id')
     def _compute_value(self):
         last_history = self.search([

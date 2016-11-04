@@ -40,6 +40,58 @@
                     </field>
                 </page>
             </xpath>
-       </field>
-   </record>
+        </field>
+    </record>
+
+    <!-- Summary of approvals for a client's contract (sale.subscription) -->
+    <!-- Form -->
+    <record id="view_prepaid_hours_approval_form" model="ir.ui.view">
+        <field name="name">Prepaid Approvals Form</field>
+        <field name="model">sale.subscription.prepaid_hours_approval</field>
+        <field name="type">form</field>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Issue Approvals">
+                    <form name="Approvals">
+                        <sheet>
+                            <group>
+                                <group>
+                                    <field name="ticket_id"/>
+                                    <field name="user_id"/>
+                                    <field name="sequence"/>
+                                </group>
+                                <group>
+                                    <field name="date"/>
+                                    <field name="state"/>
+                                </group>
+                            </group>
+                            <notebook>
+                                <page string="Approval Lines" name="approval_lines">
+                                    <field name="approval_line_ids" widget="one2many_list" class="oe_inline"/>
+                                </page>
+                                <page string="Proposals" name="approval_values">
+                                    <field name="approval_values" widget="one2many_list" class="oe_inline"/>
+                                </page>
+                            </notebook>
+                        </sheet>
+                    </form>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Adds form views to prepaid hours approval and values in the subscription app. -->
+    <record id="action_subscription_approvals" model="ir.actions.act_window">
+        <field name="name">Subscription Approvals</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.subscription.prepaid_hours_approval</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Adds Issue Type item to menu -->
+    <menuitem id="menu_subscription_approvals" name="Approvals" parent="sale_contract.menu_sale_subscription_root" sequence="9"/>
+    <menuitem action="action_subscription_approvals" id="subscription_approvals_action" parent="menu_subscription_approvals" sequence="1"/>
+
 </odoo>
