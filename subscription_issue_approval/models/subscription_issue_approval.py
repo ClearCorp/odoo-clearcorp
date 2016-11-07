@@ -2,7 +2,7 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields
+from openerp import models, fields, api
 from datetime import date
 
 
@@ -13,7 +13,7 @@ class ProjectIssue(models.Model):
     # Related approvals.
     prepaid_hours_approval_id = fields.One2many(
         'sale.subscription.prepaid_hours_approval', 'ticket_id',
-        string="Group Approved")
+        string="Approval")
 
     # Approved hours for this issue.
     approved_hours_id = fields.One2many(
@@ -75,37 +75,28 @@ class ProjectIssue(models.Model):
 
         return extra_amount
 
-    def _create_proposed_hour_values(self, approval_id):
+    # This method should be separated and the calls distributed among its
+    # attributes
+    @api.multi
+    def _create_proposed_hour_values(self):
         # Fills proposed hour values for a given approval.
+
+        # Gets the approvals related to this issue
+        approval_id = self.env.context.get('approval_id')
+        approval = self.env['sale.subscription.prepaid_hours_approval'].\
+            search([('ticket_id', '=', self.ticket_id),
+                    ('approval_id', '=', approval_id)])
+
+        # Gets related client's subscription
         client_id = self.company_id or self.partner_id
         client_subscription = self.env['sale.subscription'].search(
             [('partner_id', '=', client_id.id)])
-        approval_values_obj = self.env[
-            'sale.subscription.prepaid_hours_approved_values']
+        vals = {
+            'client_subscription': client_subscription,
+            'approval': approval,
 
-        # Processes the different hour bags a client's subscription has, to
-        # create proposed_hour_values.
-        for hour_bag in client_subscription.prepaid_hours_id:
-            # The hour_bag should be active.
-            if hour_bag.active:
-                issue_values = self._values(hour_bag)
-                expected_hours = self.feature_id.expected_hours
-                extra_hours = issue_values['remaining_time'] - expected_hours
-                proposal_values = {
-                    'prepaid_hours_id': hour_bag,
-                    'prepaid_hours': hour_bag.quantity,
-                    'time_already_approved':
-                        issue_values['time_already_approved'],
-                    'requested_hours': expected_hours,
-                    'extra_hours': extra_hours,
-                    # There is an extra amount to be calculated according to
-                    # the type of (extra) hour that depends on the type of bag.
-                    'extra_amount': self._calculate_extra_amount(
-                        hour_bag, extra_hours),
-                    'approval_id': approval_id,
-                }
-                proposal = approval_values_obj.create(proposal_values)
-                print "\n Proposal values: ", proposal
+        }
+        approval.create_proposal(vals)
 
     def _create_approval_line(self, approval_id):
         # Loops over the types of work needed and compares it to the types

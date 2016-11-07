@@ -32,21 +32,35 @@
         <field name="priority" eval="150" />
         <field name="arch" type="xml">
             <xpath expr="//notebook/page[@name='extra_info']" position="before">
-                <page string="Approvals" name="prepaid_contracts">
+                <page string="Approvals" name="issue_approvals">
                     <field name="prepaid_hours_approval_id" widget="one2many_list" mode="tree"
                         context="{
                             'default_ticket_id': active_id,
-                            'default_user_id': user_id,
+                            'default_user_id': partner_id,
                             }">
                         <tree string="Approvals" name="approvals">
-                            <field name="ticket_id"/>
                             <field name="user_id"/>
                             <field name="date"/>
                             <field name="sequence"/>
                             <field name="state" widget="selection"/>
-                            <field name="approval_values" />
-                            <field name="approval_line_ids"/>
                         </tree>
+
+                        <!--TODO Add numeric fields to fill proposal -->
+
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="user_id"/>
+                                    <field name="date"/>
+                                </group>
+                                <group>
+                                    <field name="sequence"/>
+                                    <field name="state" widget="selection"/>
+                                </group>
+                                <button string="Create Proposal" type="object" name="_create_proposed_hour_values" style="margin-left:16px"/>
+                                <!--field name="approval_values" widget="one2many_list" mode="tree"/-->
+                            </group>
+                        </form>
                     </field>
                     <div style="padding-bottom:16px">
                         <h2 style="display:inline; margin-right:24px">Approval 1</h2>

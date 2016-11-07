@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2016 ClearCorp
+     License AGPL-3.011 or later (http://www.gnu.org/licenses/agpl.html). -->
+
+<odoo>
+<!-- Subscription approval view -->
+    <record model="ir.ui.view" id="subscription_approved_values_form_view">
+        <field name="name">Subscription Proposal Values Form</field>
+        <field name="model">sale.subscription.prepaid_hours_approved_values</field>
+        <field name="type">form</field>
+        <field name="priority" eval="16" />
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="prepaid_hours_id"/>
+                        <field name="requested_hours"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -11,8 +11,7 @@
     'author': 'ClearCorp',
     'website': 'http://clearcorp.cr',
     'depends': [
-                'project_issue',
-                'project_task_state',
+                'project_issue'
                 ],
     'data': ['views/project_issue_multi_task_view.xml'],
     'test': [],
