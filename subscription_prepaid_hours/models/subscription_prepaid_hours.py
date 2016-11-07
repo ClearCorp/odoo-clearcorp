@@ -21,7 +21,7 @@ class PrepaidHours(models.Model):
         _PREPAID_HOURS_META_CLASS, string='Hour Type', required=True)
 
     # Amount of hours of a certain type
-    quantity = fields.Float('Amount of Hours', required=True)
+    quantity = fields.Float('Monthly Amount of Hours', required=True)
 
     # One subscription has several prepaid hours
     subscription_id = fields.Many2one(
@@ -42,7 +42,7 @@ class HourAssignment(models.Model):
     date = fields.Datetime('Date:', required=True)
 
     # Amount of hours assigned
-    quantity = fields.Float('Amount of Hours', required=True)
+    quantity = fields.Float('Amount of Hours Assigned', required=True)
 
     # Hours already spent in this term
     spent_hours = fields.Float('Spent Hours')

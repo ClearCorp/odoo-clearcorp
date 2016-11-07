@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2016 ClearCorp
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+
+<odoo>
+    <!-- Invoice Types view -->
+    <!-- Form -->
+    <record id="invoice_type_view" model="ir.ui.view">
+        <field name="name">Invoice Type View</field>
+        <field name="model">invoice.type</field>
+        <field name="type">form</field>
+        <field name="priority" eval="16" />
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="price"/>
+                        <field name="product_price"/>
+                    </group>
+                    <group>
+                        <field name="prepaid_hours_id"/>
+                        <field name="general_work_type"/>
+                        <field name="is_extra"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+   </record>
+</odoo>

@@ -26,7 +26,6 @@ class InvoiceType (models.Model):
     price = fields.Float('Price')
     # This relates the client's Subscription (contract) with the different
     # invoice types.
-    # todo remove field from the view
     contract_type_ids = fields.Many2many('sale.subscription')
     
     @api.one

@@ -16,6 +16,7 @@
     'data': [
         'views/subscription_prepaid_hours_view.xml',
         'views/subscription_prepaid_lines_view.xml',
+        'views/invoice_type_view.xml',
         'data/subscription_prepaid_hours_data.xml'
     ],
     'auto_install': False,

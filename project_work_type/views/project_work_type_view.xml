@@ -36,7 +36,7 @@
             <xpath expr="//notebook" position="inside">
                 <page string="Invoice Configuration">
                     <div>
-                        <label for="invoice_type_ids" string="Invoice Type" class="oe_inline" />
+                        <!--label for="invoice_type_ids" string="Invoice Type" class="oe_inline" /-->
                         <field name="invoice_type_ids" string="Invoice Type" class="oe_inline">
                             <tree editable="bottom">
                                 <field name="name" />
