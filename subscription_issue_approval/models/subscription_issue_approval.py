@@ -24,7 +24,10 @@ class ProjectIssue(models.Model):
     # related to a unique issue, but there isn't a one to one related field.
     # This relates many issues to one feature, but it's not meant to be used
     # that way.
-    feature_id = fields.Many2one('project.scrum.feature', string='Feature')
+    feature_id = fields.Many2one(
+        'project.scrum.feature',
+        string='Feature',
+        help='The Issue must have a related Feature to add approvals.')
 
     def change_proposal_status_approved(self):
         # Finishes the creation of approval lines and changes approval's status
@@ -33,28 +36,6 @@ class ProjectIssue(models.Model):
 
     def _get_prepaid_hours(self):
         self.feature_id.work_type
-
-    def _values(self, prepaid_hours_id):
-        time_already_approved = 0
-        time_to_be_approved = 0
-        # Gets previously approved lines
-        approval_lines_obj = self.env[
-            'sale.subscription.prepaid_hours_approval_line'].search(
-                [('prepaid_hours_id', '=', prepaid_hours_id)])
-        for approval_line in approval_lines_obj:
-            if approval_line.approval_id.state == 'approved':
-                    time_already_approved = time_already_approved + \
-                                            approval_line.requested_hours
-            else:
-                if approval_line.approval_id.state == '2b_approved':
-                    time_to_be_approved = time_to_be_approved +\
-                        approval_line.requested_hours
-        remaining_time = prepaid_hours_id.quantity - time_already_approved
-        return {
-            'time_already_approved': time_already_approved,
-            'to_be_approved_time': time_to_be_approved,
-            'remaining_time': remaining_time,
-        }
 
     def _calculate_extra_amount(self, prepaid_hours, hours):
         # Calculates the amount the client has to pay for the extra hours
@@ -75,13 +56,12 @@ class ProjectIssue(models.Model):
 
         return extra_amount
 
-    # This method should be separated and the calls distributed among its
-    # attributes
     @api.multi
-    def _create_proposed_hour_values(self):
+    def create_proposed_hour_values(self):
         # Fills proposed hour values for a given approval.
 
         # Gets the approvals related to this issue
+        print self.env.context
         approval_id = self.env.context.get('approval_id')
         approval = self.env['sale.subscription.prepaid_hours_approval'].\
             search([('ticket_id', '=', self.ticket_id),

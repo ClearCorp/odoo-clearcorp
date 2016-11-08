@@ -32,18 +32,40 @@ class HourApproval(models.Model):
         'sale.subscription.prepaid_hours_approved_values', 'approval_id',
         string='Approval Values')
 
+    def check_prepaid_hours(self, prepaid_hours_id):
+        time_already_approved = 0
+        time_to_be_approved = 0
+        # Gets previously approved lines
+        approval_lines_obj = self.env[
+            'sale.subscription.prepaid_hours_approval_line'].search(
+                [('prepaid_hours_id', '=', prepaid_hours_id)])
+        for approval_line in approval_lines_obj:
+            if approval_line.approval_id.state == 'approved':
+                    time_already_approved = time_already_approved + \
+                                            approval_line.requested_hours
+            else:
+                if approval_line.approval_id.state == '2b_approved':
+                    time_to_be_approved = time_to_be_approved +\
+                        approval_line.requested_hours
+        remaining_time = prepaid_hours_id.quantity - time_already_approved
+        return {
+            'time_already_approved': time_already_approved,
+            'to_be_approved_time': time_to_be_approved,
+            'remaining_time': remaining_time,
+        }
+
     def create_proposal(self, vals):
-        approval_values_obj = self.env[
-            'sale.subscription.prepaid_hours_approved_values']
         # Processes the different hour bags a client's subscription has, to
         # create proposed_hour_values.
+        approval_values_obj = self.env[
+            'sale.subscription.prepaid_hours_approved_values']
+        client_subscription = vals.get('client_subscription')
+        # feature_id might not exist
 
-        # TODO Move _values method here (from issue_approval)
-
-        """for hour_bag in client_subscription.prepaid_hours_id:
-            # The hour_bag should be active.
+        for hour_bag in client_subscription.prepaid_hours_id:
+            # The hour_bag should be active and be of the type of issue.
             if hour_bag.active:
-                issue_values = self._values(hour_bag)
+                issue_values = self.check_prepaid_hours(hour_bag)
                 expected_hours = self.feature_id.expected_hours
                 extra_hours = issue_values['remaining_time'] - expected_hours
                 proposal_values = {
@@ -57,11 +79,10 @@ class HourApproval(models.Model):
                     # the type of (extra) hour that depends on the type of bag.
                     'extra_amount': self._calculate_extra_amount(
                         hour_bag, extra_hours),
-                    'approval_id': approval_id,
+                    'approval_id': self.id
                 }
                 proposal = approval_values_obj.create(proposal_values)
                 print "\n Proposal values: ", proposal
-        """
 
     def _get_approval_line_by_prepaid_hours(self, ticket):
         # Gets work_type ids from ticket
