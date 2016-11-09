@@ -3,19 +3,19 @@
    :alt: License: AGPL-3
 
 ========================
-Merge duplicate partners
+Merge Duplicate Partners
 ========================
 
-This module was written to extend the functionality of OCA base_partner_merge
-module to support merge duplicate partners as supersuser
+This module was written to extend the functionality of CRM partner merge
+module to support merge duplicate partners as administrator
 
 Credits
 =======
 
-
 Contributors
 ------------
 
+* Glen Sojo <glen.sojo@clearcorp.co.cr>
 * Lesmed Gutiérrez <lesmed.gutierrez@clearcorp.co.cr>
 
 

@@ -5,8 +5,8 @@
 {
     'name': 'Merge Duplicate Partners',
     'summary': 'Merge duplcate partners as superuser',
-    'version': '8.0.1.0',
-    'category': 'Ganeric Modules',
+    'version': '9.0.1.0',
+    'category': 'Extra Tools',
     'website': 'http://clearcorp.cr',
     'author': 'ClearCorp',
     'license': 'AGPL-3',
