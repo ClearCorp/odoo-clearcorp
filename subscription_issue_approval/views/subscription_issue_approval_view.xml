@@ -47,7 +47,8 @@
                             <field name="state" widget="selection"/>
                         </tree>
 
-                        <!--TODO Add numeric fields to fill proposal -->
+                        <!--TODO Add numeric fields to fill proposal
+                            TODO Add custom feature view -->
 
                         <form>
                             <group>

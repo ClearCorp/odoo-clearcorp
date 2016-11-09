@@ -27,6 +27,6 @@ class ProjectScrumFeature(models.Model):
         print "\nset quoted"
         for feature in self:
             feature.write({'state': 'quoted'})
-            for ticket in self.tickets_ids:
+            for ticket in self.ticket_ids:
                 appr = ticket._create_approvals()
                 print "\n approva create: ", appr
