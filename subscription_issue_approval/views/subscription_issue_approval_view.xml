@@ -34,11 +34,16 @@
             <xpath expr="//notebook/page[@name='extra_info']" position="before">
                 <page string="Approvals" name="issue_approvals">
                     <h3><label for="feature_id" string="Related Feature" class="oe_inline"/></h3>
-                    <field name="feature_id" string="Feature" required="1"/>
+                    <field name="feature_id" string="Feature" required="1"
+                           context="{
+                            'default_project_id': project_id,
+                            'default_partner_id': partner_id,
+                            'default_state': 'draft'
+                           }"/>
                     <field name="prepaid_hours_approval_id" widget="one2many_list" mode="tree" attrs="{'readonly': [('feature_id', '=', False)]}"
                            context="{
                             'default_ticket_id': active_id,
-                            'default_user_id': partner_id,
+                            'default_user_id': partner_id
                             }">
                         <tree string="Approvals" name="approvals">
                             <field name="user_id"/>
@@ -46,10 +51,6 @@
                             <field name="sequence"/>
                             <field name="state" widget="selection"/>
                         </tree>
-
-                        <!--TODO Add numeric fields to fill proposal
-                            TODO Add custom feature view -->
-
                         <form>
                             <group>
                                 <group>
@@ -63,11 +64,22 @@
                                 <group>
                                     <button string="Create Proposal" type="object" name="create_proposed_hour_values"/>
                                 </group>
-                                <field name="approval_values" widget="one2many_list" mode="tree"/>
+                                <field name="approval_values" widget="one2many_list" mode="tree">
+                                    <tree string="Approval Values" editable="bottom">
+                                        <field name="prepaid_hours_id"/>
+                                        <field name="prepaid_hours" readonly="1"/>
+                                        <field name="time_already_approved" readonly="1"/>
+                                        <field name="remaining_hours" readonly="1"/>
+                                        <field name="hours_to_be_approved" readonly="1"/>
+                                        <field name="requested_hours" readonly="1"/>
+                                        <field name="extra_hours" readonly="1"/>
+                                        <field name="extra_amount" readonly="1"/>
+                                    </tree>
+                                </field>
                             </group>
                         </form>
                     </field>
-                    <div style="padding-bottom:16px">
+                    <!--div style="padding-bottom:16px">
                         <h2 style="display:inline; margin-right:24px">Approval 1</h2>
                         <span>
                             Estado
@@ -249,7 +261,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table-->
                 </page>
             </xpath>
         </field>

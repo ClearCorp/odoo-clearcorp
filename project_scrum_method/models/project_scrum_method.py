@@ -207,7 +207,8 @@ class Feature(models.Model):
     expected_hours = fields.Float(
         'Initially Planned Hour(s)', help='Total'
         'planned hours for the development of this feature.'
-        '\nRecommended values are:\n 1 h, 2 h, 4 h, or 8 h.')
+        '\nRecommended values are:\n 1 h, 2 h, 4 h, or 8 h.'
+        '\n This are calculated from Feature Hours.')
     effective_hours = fields.Float(
         'Hour(s) Spent', help='Total effective '
         'hours spent on tasks related to this feature.',

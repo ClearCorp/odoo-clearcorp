@@ -5,9 +5,9 @@
 from openerp import models, fields, api
 from datetime import date
 
-_PREPAID_HOURS_META_CLASS = [('dev', 'Development Hours'),
-                             ('sup', 'Support Hours'),
-                             ('tra', 'Training Hours')
+_PREPAID_HOURS_META_CLASS = [('Development', 'Development Hours'),
+                             ('Support', 'Support Hours'),
+                             ('Training', 'Training Hours')
                              ]
 
 

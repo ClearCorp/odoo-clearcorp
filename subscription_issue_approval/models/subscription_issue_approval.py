@@ -37,47 +37,6 @@ class ProjectIssue(models.Model):
     def _get_prepaid_hours(self):
         self.feature_id.work_type
 
-    def _calculate_extra_amount(self, prepaid_hours, hours):
-        # Calculates the amount the client has to pay for the extra hours
-        # required to attend an issue. The extra amount will be 0 if there
-        # isn't a related (development, support or training) invoice type.
-        extra_amount = 0.0
-
-        # The unit cost is obtained through the client's subscription.
-        invoice_types = prepaid_hours.subscription_id.invoice_type_ids
-
-        # Only if invoice_type.is_extra is true its price is taken into
-        # account. If there is more than 1 invoice_type labeled as 'extra'
-        # for a general_work_type, the calculation could be wrong.
-        for product in invoice_types:
-            if product.is_extra and \
-                            prepaid_hours.name == product.general_work_type:
-                extra_amount += product.price * hours
-
-        return extra_amount
-
-    @api.multi
-    def create_proposed_hour_values(self):
-        # Fills proposed hour values for a given approval.
-
-        # Gets the approvals related to this issue
-        print self.env.context
-        approval_id = self.env.context.get('approval_id')
-        approval = self.env['sale.subscription.prepaid_hours_approval'].\
-            search([('ticket_id', '=', self.ticket_id),
-                    ('approval_id', '=', approval_id)])
-
-        # Gets related client's subscription
-        client_id = self.company_id or self.partner_id
-        client_subscription = self.env['sale.subscription'].search(
-            [('partner_id', '=', client_id.id)])
-        vals = {
-            'client_subscription': client_subscription,
-            'approval': approval,
-
-        }
-        approval.create_proposal(vals)
-
     def _create_approval_line(self, approval_id):
         # Loops over the types of work needed and compares it to the types
         # in a client's subscription. It has to check the correct client's
