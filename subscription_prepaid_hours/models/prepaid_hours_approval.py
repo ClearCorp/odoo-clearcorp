@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api
-from lxml import etree
+#from lxml import etree
 from table_format import APP_ID, PREPAID_NAME, PREPAID_TIME, FOOTER
 from openerp.exceptions import ValidationError
 
@@ -134,7 +134,7 @@ class HourApproval(models.Model):
             self, hour_type, extra_hours, extra_amount):
         return
 
-    # TODO define unique constraint for prepaid_hours_id for approval_lines
+    # TODO define unique constraint prepaid_hours_id for approval_lines
 
     def _calculate_extra_amount(self, prepaid_hour_name, hours):
         # Calculates the amount the client has to pay for the extra hours
