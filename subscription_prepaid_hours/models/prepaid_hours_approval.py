@@ -11,11 +11,12 @@ class HourApproval(models.Model):
     _name = 'sale.subscription.prepaid_hours_approval'
 
     @api.model
-    #@api.depends('ticket_id')
     def _default_sequence(self):
         approval_sequence =\
             self.env['sale.subscription.prepaid_hours_approval'].search_count(
-                [('ticket_id', '=', self.ticket_id.id)])
+                [('ticket_id', '=', self.ticket_id.id),
+                 ('user_id', '=', self.user_id.id)
+                ])
         return int(approval_sequence) + 1
 
     ticket_id = fields.Many2one('project.issue', string='Ticket')
