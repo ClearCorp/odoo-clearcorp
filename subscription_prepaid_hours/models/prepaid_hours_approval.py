@@ -5,6 +5,7 @@
 from openerp import models, fields, api
 from lxml import etree
 from table_format import APP_ID, PREPAID_NAME, PREPAID_TIME, FOOTER
+from openerp.exceptions import ValidationError
 
 
 class HourApproval(models.Model):
@@ -12,12 +13,15 @@ class HourApproval(models.Model):
 
     @api.model
     def _default_sequence(self):
+        #print self.env.context
         approval_sequence =\
             self.env['sale.subscription.prepaid_hours_approval'].search_count(
-                [('ticket_id', '=', self.ticket_id.id),
-                 ('user_id', '=', self.user_id.id)
-                ])
-        return int(approval_sequence) + 1
+                [('ticket_id', '=',
+                  self.env.context.get('default_ticket_id')),
+                 ('user_id', '=',
+                  self.env.context.get('user_id'))
+                 ])
+        return approval_sequence + 1
 
     ticket_id = fields.Many2one('project.issue', string='Ticket')
     sequence = fields.Integer('Sequence', default=_default_sequence)
@@ -34,82 +38,152 @@ class HourApproval(models.Model):
         'sale.subscription.prepaid_hours_approved_values', 'approval_id',
         string='Approval Values')
 
-    def check_prepaid_hours(self, prepaid_hours_id):
+    def _check_prepaid_hours(self, prepaid_hours_id):
+        times = self._check_approved_lines()
+        time_already_approved = times.get('time_already_approved')
+        remaining_time = prepaid_hours_id.quantity - time_already_approved
+        times['remaining_time'] = remaining_time
+        return times
+
+    def _check_approval_lines(self):
         time_already_approved = 0
         time_to_be_approved = 0
-        # Gets previously approved lines
+        # Gets previously approved lines for the current approval (in an issue)
         for approval_line in self.approval_line_ids:
             if approval_line.approval_id.state == 'approved':
-                    time_already_approved = time_already_approved + \
-                                            approval_line.requested_hours
+                time_already_approved = time_already_approved + \
+                                        approval_line.requested_hours
             else:
                 if approval_line.approval_id.state == '2b_approved':
-                    time_to_be_approved = time_to_be_approved +\
-                        approval_line.requested_hours
-        remaining_time = prepaid_hours_id.quantity - time_already_approved
+                    time_to_be_approved = time_to_be_approved + \
+                                          approval_line.requested_hours
         return {
             'time_already_approved': time_already_approved,
-            'to_be_approved_time': time_to_be_approved,
-            'remaining_time': remaining_time,
+            'time_to_be_approved': time_to_be_approved,
         }
 
     @api.multi
     @api.depends('user_id')
-    def create_proposed_hour_values(self):
+    def fill_proposed_hour_values(self):
         # Fills proposed hour values for a given approval.
         # Gets related client's subscription.
         client_id = self.user_id
         client_subscription = self.env['sale.subscription'].search(
             [('partner_id', '=', client_id.id)])
 
+        # Adds all of the prepaid hours to a list
+        hour_bags = []
+        # And the bags to a dict
+        prepaid_hours = {}
+        for hour_bag in client_subscription.prepaid_hours_id:
+            hour_bags.append(hour_bag.name)
+            prepaid_hours[hour_bag.name] = hour_bag
+
         # Processes the different hour bags a client's subscription has, to
-        # create proposed_hour_values.
+        # fill proposed_hour_values.
         for proposed_values in self.approval_values:
-            for hour_bag in client_subscription.prepaid_hours_id:
-                # The hour_bag should be active and be of the same
-                # general work type.
-                if hour_bag.active and \
-                                hour_bag.name == \
-                                proposed_values.prepaid_hours_id.name:
-                    issue_values = self.check_prepaid_hours(hour_bag)
-                    expected_hours = self.ticket_id.feature_id.expected_hours
-                    extra_hours = issue_values['remaining_time'] - \
-                        expected_hours
-                    if extra_hours < 0:
-                        extra_hours = 0
+            hour_type = proposed_values.prepaid_hours_id.name
+
+            if hour_type in hour_bags:
+                current_bag = prepaid_hours[hour_type]
+                if current_bag.active:
+                    current_bag_values = self._check_prepaid_hours(current_bag)
+                    extra_hours = abs(current_bag_values['remaining_time'] -
+                                      proposed_values.requested_hours)
+                    extra_amount = 0.0
+                    if extra_hours > 0.0:
+                        extra_amount = self._calculate_extra_amount(
+                            hour_type, extra_hours)
                     proposal_values = {
-                        'prepaid_hours': hour_bag.quantity,
+                        'prepaid_hours': current_bag.quantity,
                         'time_already_approved':
-                            issue_values['time_already_approved'],
-                        'requested_hours': expected_hours,
+                            current_bag_values['time_already_approved'],
+                        'remaining_hours': current_bag_values['remaining_time'],
+                        'hours_to_be_approved':
+                            current_bag_values['time_to_be_approved'],
                         'extra_hours': extra_hours,
                         # There is an extra amount to be calculated according
                         # to the type of (extra) hour that depends on the type
                         # of bag.
-                        'extra_amount': self._calculate_extra_amount(
-                            hour_bag, extra_hours)
+                        'extra_amount': extra_amount
                     }
-                    proposed_values.update(proposal_values)
-                    #print "\n Proposal values: ", proposal_values
+            else:
+                extra_hours = proposed_values.requested_hours
+                approval_line_times = self._check_approval_lines()
+                proposal_values = {
+                    'prepaid_hours': 0.0,
+                    'time_already_approved':
+                        approval_line_times['time_already_approved'],
+                    'remaining_hours': 0.0,
+                    'hours_to_be_approved':
+                        approval_line_times['time_to_be_approved'],
+                    'extra_hours': extra_hours,
+                    # There is an extra amount to be calculated according
+                    # to the type of (extra) hour that depends on the type
+                    # of bag.
+                    'extra_amount': self._calculate_extra_amount(
+                        hour_type, extra_hours)
+                }
 
-    def _calculate_extra_amount(self, prepaid_hours, hours):
+            proposed_values.update(proposal_values)
+            print "\n Proposal values: ", proposal_values
+            self._fill_extra_values_approval_line(
+                hour_type, extra_hours, extra_amount)
+
+    def _fill_extra_values_approval_line(
+            self, hour_type, extra_hours, extra_amount):
+        return
+
+    # TODO define unique constraint for prepaid_hours_id for approval_lines
+
+    def _calculate_extra_amount(self, prepaid_hour_name, hours):
         # Calculates the amount the client has to pay for the extra hours
-        # required to attend an issue. The extra amount will be 0 if there
-        # isn't a related (development, support or training) invoice type.
+        # required to attend an issue.
         extra_amount = 0.0
+        validation_error = "There was an error calculating the extra amount." \
+                           "There must be a related invoice type of the " \
+                           "same general work hours type as the prepaid " \
+                           "hours types."
 
         # The unit cost is obtained through the client's subscription.
-        invoice_types = prepaid_hours.subscription_id.invoice_type_ids
+        client_id = self.user_id
+        client_subscription = self.env['sale.subscription'].search(
+            [('partner_id', '=', client_id.id)])
+        invoice_types = client_subscription.invoice_type_ids
 
         # Only if invoice_type.is_extra is true its price is taken into
         # account. If there is more than 1 invoice_type labeled as 'extra'
         # for a general_work_type, the calculation could be wrong.
         for product in invoice_types:
             if product.is_extra and \
-                            prepaid_hours.name == product.general_work_type:
+                            prepaid_hour_name == product.general_work_type:
                 extra_amount += product.price * hours
-
+        # The hours can't be zero when this is called, so
+        if extra_amount == 0.0:
+            raise ValidationError(validation_error)
         return extra_amount
+
+    def create_approval_line(self):
+        # Fills approval line data and creates basic data for related
+        # proposal.
+        # Gets the hours needed to complete the feature / fix the issue.
+        expected_hours = self.ticket_id.feature_id.expected_hours
+        validation_error = "There was an error checking the expected hours " \
+                           "of the related feature and the requested hours. " \
+                           "The requested hours must be less than the " \
+                           "expected hours in the feature."
+
+        # Checks if the requested time is less than the total time allowed.
+        for approval_line in self.approval_line_ids:
+            if approval_line.requested_hours > expected_hours:
+                raise ValidationError(validation_error)
+            # Creates a proposal for each line
+            vals = {
+                'prepaid_hour_id': approval_line.prepaid_hours_id,
+                'requested_hours': approval_line.requested_hours,
+                'approval_id': approval_line.approval_id
+            }
+            self.approval_values = [(0, 0, vals)]
 
     def _get_approval_line_by_prepaid_hours(self, ticket):
         # Gets work_type ids from ticket
@@ -158,8 +232,8 @@ class HourApproval(models.Model):
 
         self._cr.execute(query2)
 
-        approvals = self.env['sale.subscription.prepaid_hours_approval'].browse(
-            [ids['id'] for ids in self._cr.dictfetchall()])
+        approvals = self.env['sale.subscription.prepaid_hours_approval'].\
+            browse([ids['id'] for ids in self._cr.dictfetchall()])
 
         print "-----", date, prepaid_hours, approvals, "--------"
         self._get_approval_line_by_prepaid_hours(ticket_id)

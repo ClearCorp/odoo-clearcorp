@@ -136,10 +136,6 @@ class SaleSubscription(models.Model):
                     prepaid_hours_assigned.create(vals)
         return True
 
-    @api.model
-    def create_account_analytic_prepaid_hours_assigned_api7(self):
-        self.create_subscription_prepaid_hours_assigned()
-
 
 class InvoiceType(models.Model):
     _inherit = 'invoice.type'
