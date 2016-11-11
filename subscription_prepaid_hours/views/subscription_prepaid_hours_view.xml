@@ -12,9 +12,14 @@
         <field name="inherit_id"
             ref="project_work_type.subscription_view_invoice_type_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//notebook/page/div/field[@name='invoice_type_ids']"
+                position="attributes">
+                <attribute name="context">{'default_contract_type_ids': [(4, active_id)]}</attribute>
+            </xpath>
             <xpath expr="//notebook/page/div/field/tree/field[@name='price']"
                 position="after">
                 <field name="prepaid_hours_id"/>
+                <field name="is_extra"/>
             </xpath>
         </field>
     </record>

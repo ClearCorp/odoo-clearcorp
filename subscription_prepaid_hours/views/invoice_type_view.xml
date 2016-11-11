@@ -14,6 +14,7 @@
             <form>
                 <group>
                     <group>
+                        <field name="name"/>
                         <field name="product_id"/>
                         <field name="price"/>
                         <field name="product_price"/>
@@ -23,6 +24,7 @@
                         <field name="general_work_type"/>
                         <field name="is_extra"/>
                     </group>
+                    <!--field name="contract_type_ids"/-->
                 </group>
             </form>
         </field>

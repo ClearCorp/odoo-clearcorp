@@ -34,6 +34,11 @@ class InvoiceType (models.Model):
         self.product_id = self.name.product_id
         return True
 
+    @api.onchange('product_price')
+    def onchange_product_price(self):
+        if self.product_price:
+            self.price = self.product_id.lst_price
+
 
 class Task(models.Model):
     

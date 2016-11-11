@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api, _
-#from lxml import etree
+# from lxml import etree
 from table_format import APP_ID, PREPAID_NAME, PREPAID_TIME, FOOTER
 from openerp.exceptions import ValidationError
 
@@ -13,7 +13,6 @@ class HourApproval(models.Model):
 
     @api.model
     def _default_sequence(self):
-        #print self.env.context
         approval_sequence =\
             self.env['sale.subscription.prepaid_hours_approval'].search_count(
                 [('ticket_id', '=',
@@ -39,9 +38,11 @@ class HourApproval(models.Model):
         string='Approval Values')
 
     def _check_prepaid_hours(self, prepaid_hours_id):
-        times = self._check_approved_lines()
+        times = self._check_approval_lines()
         time_already_approved = times.get('time_already_approved')
         remaining_time = prepaid_hours_id.quantity - time_already_approved
+        if remaining_time < 0.0:
+            remaining_time = 0.0
         times['remaining_time'] = remaining_time
         return times
 
@@ -49,18 +50,18 @@ class HourApproval(models.Model):
         # Checks the remaining time in the hour bags. It should check the
         # hour assignments first, if none exist it should check the client's
         # subscription.
-        # TODO check the hour assignments
         time_already_approved = 0
         time_to_be_approved = 0
         # Gets previously approved lines for the current approval (in an issue)
+
         for approval_line in self.approval_line_ids:
             if approval_line.approval_id.state == 'approved':
                 time_already_approved = time_already_approved + \
-                                        approval_line.requested_hours
+                                    approval_line.requested_hours
             else:
                 if approval_line.approval_id.state == '2b_approved':
                     time_to_be_approved = time_to_be_approved + \
-                                          approval_line.requested_hours
+                                      approval_line.requested_hours
         return {
             'time_already_approved': time_already_approved,
             'time_to_be_approved': time_to_be_approved,
@@ -92,17 +93,21 @@ class HourApproval(models.Model):
                 current_bag = prepaid_hours[hour_type]
                 if current_bag.active:
                     current_bag_values = self._check_prepaid_hours(current_bag)
-                    extra_hours = abs(current_bag_values['remaining_time'] -
-                                      proposed_values.requested_hours)
+                    extra_hours = current_bag_values['remaining_time'] -\
+                        proposed_values.requested_hours
                     extra_amount = 0.0
-                    if extra_hours > 0.0:
+                    if extra_hours < 0.0:
+                        extra_hours = abs(extra_hours)
                         extra_amount = self._calculate_extra_amount(
                             hour_type, extra_hours)
+                    else:
+                        extra_hours = 0.0
                     proposal_values = {
                         'prepaid_hours': current_bag.quantity,
                         'time_already_approved':
                             current_bag_values['time_already_approved'],
-                        'remaining_hours': current_bag_values['remaining_time'],
+                        'remaining_hours':
+                            current_bag_values['remaining_time'],
                         'hours_to_be_approved':
                             current_bag_values['time_to_be_approved'],
                         'extra_hours': extra_hours,
@@ -133,6 +138,7 @@ class HourApproval(models.Model):
             print "\n Proposal values: ", proposal_values
             self._fill_extra_values_approval_line(
                 hour_type, extra_hours, extra_amount)
+        self.ticket_id.feature_id.state = 'quoted'
 
     def _fill_extra_values_approval_line(
             self, hour_type, extra_hours, extra_amount):
@@ -144,14 +150,26 @@ class HourApproval(models.Model):
     @api.constrains('approval_line_ids')
     def _check_unique_approval_line_prepaid_hour_name(self):
         approval_lines = self.approval_line_ids
-        names = {}
+        ids = []
         for line in approval_lines:
-            name = line.prepaid_hours_id.name
-            if name in names:
+            id = line.prepaid_hours_id.id
+            if id in ids:
                 raise ValidationError(_(
-                    'Prepaid Hours must be unique in each approval line'))
+                    'Prepaid Hours must be unique in each approval line.'))
             else:
-                names.update(name)
+                ids.append(id)
+
+    @api.constrains('approval_values')
+    def _check_unique_proposal_prepaid_hour_name(self):
+        approval_values = self.approval_values
+        ids = []
+        for value in approval_values:
+            id = value.prepaid_hours_id.id
+            if id in ids:
+                raise ValidationError(_(
+                    'Prepaid Hours must be unique in each approval line.'))
+            else:
+                ids.append(id)
 
     def _calculate_extra_amount(self, prepaid_hour_name, hours):
         # Calculates the amount the client has to pay for the extra hours
@@ -160,7 +178,7 @@ class HourApproval(models.Model):
         validation_error = "There was an error calculating the extra amount." \
                            "There must be a related invoice type of the " \
                            "same general work hours type as the prepaid " \
-                           "hour types."
+                           "hour types, with the 'Outside of contract' flag."
 
         # The unit cost is obtained through the client's subscription.
         client_id = self.user_id
@@ -180,10 +198,12 @@ class HourApproval(models.Model):
             raise ValidationError(_(validation_error))
         return extra_amount
 
+    @api.multi
     def create_approval_line(self):
         # Fills approval line data and creates basic data for related
         # proposal.
         # Gets the hours needed to complete the feature / fix the issue.
+        self.ensure_one()
         expected_hours = self.ticket_id.feature_id.expected_hours
         validation_error = "There was an error checking the expected hours " \
                            "of the related feature and the requested hours. " \
@@ -191,16 +211,37 @@ class HourApproval(models.Model):
                            "expected hours in the feature."
 
         # Checks if the requested time is less than the total time allowed.
+        approval_values = []
         for approval_line in self.approval_line_ids:
             if approval_line.requested_hours > expected_hours:
                 raise ValidationError(_(validation_error))
             # Creates a proposal for each line
             vals = {
-                'prepaid_hour_id': approval_line.prepaid_hours_id,
+                'prepaid_hours_id': approval_line.prepaid_hours_id,
                 'requested_hours': approval_line.requested_hours,
                 'approval_id': approval_line.approval_id
             }
-            self.approval_values = [(0, 0, vals)]
+            approval_values.append((0, 0, vals))
+        self.approval_values = approval_values
+
+    @api.onchange('state')
+    def _onchange_state(self):
+        if self.state == 'approved':
+            # Creates hour assignments related to this approval
+            issue_id = self.ticket_id
+            hour_assignment_obj = \
+                self.env['sale.subscription.prepaid_hours_assigned']
+            vals = {}
+            for values in self.approval_values:
+                vals.update({
+                    'assigned_hours_id': issue_id,
+                    'prepaid_hours_id': values.prepaid_hours_id,
+                    'remaining_hours': values.remaining_hours,
+                    'spent_hours': values.time_already_approved,
+                    'quantity': values.requested_hours,
+                    'date': fields.Date.today()
+                })
+                hour_assignment_obj.create(vals)
 
     def _get_approval_line_by_prepaid_hours(self, ticket):
         # Gets work_type ids from ticket

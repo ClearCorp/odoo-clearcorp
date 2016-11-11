@@ -42,8 +42,8 @@
                                 <field name="name" />
                                 <field name="product_price"/>
                                 <field name="product_id"/>
-                                <field name="price"
-                                    attrs="{'readonly': [('product_price','=',True)]}" />
+                                <field name="price"/>
+                                    <!--attrs="{'readonly': [('product_price','=',True)]}" /-->
                             </tree>
                         </field>
                     </div>

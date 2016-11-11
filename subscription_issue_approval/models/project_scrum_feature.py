@@ -15,18 +15,3 @@ class ProjectScrumFeature(models.Model):
                              ('quote_pending', 'Quote Pending'),
                              ('quoted', 'Quoted')],
                              'Status', required=True)
-
-    @api.multi
-    def set_quote_pending(self):
-        print "set quote pending"
-        for feature in self:
-            feature.write({'state': 'quote_pending'})
-
-    @api.multi
-    def set_quoted(self):
-        print "\nset quoted"
-        for feature in self:
-            feature.write({'state': 'quoted'})
-            for ticket in self.ticket_ids:
-                appr = ticket._create_approvals()
-                print "\n approva create: ", appr
