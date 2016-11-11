@@ -29,7 +29,7 @@ class ProjectIssueStageHistory(models.Model):
 
     stage_from_id = fields.Many2one('project.task.type', 'Previous Stage',
                                     select=True, copy=False)
-    stage_to_id = fields.Many2one('project.task.type', 'Succeding Stage',
+    stage_to_id = fields.Many2one('project.task.type', 'Succeeding Stage',
                                   select=True, copy=False)
     date = fields.Datetime(
         'Date', default=lambda self: fields.Datetime.now(), required=True)

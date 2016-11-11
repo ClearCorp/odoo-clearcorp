@@ -7,7 +7,7 @@ Project Task Priority
 =====================
 
 This module extends the priority of task. Instead of the default two levels,
-it allows up to six levels of priorization.
+it allows up to six levels of prioritization.
 
 Credits
 =======

@@ -7,7 +7,8 @@
     "version": '9.0.1.0',
     "author": 'ClearCorp',
     'complexity': 'easy',
-    "description": """Adds a red tag if the task is about to reach its deadline.""",
+    "description": """Adds a red tag if the task is about to reach its
+    deadline.""",
     'category': 'Project Management',
     'sequence': 4,
     'website': 'http://clearcorp.co.cr',

@@ -126,12 +126,12 @@ class SaleSubscription(models.Model):
         prepaid_hours_assigned =\
             self.env['sale.subscription.prepaid_hours_assigned']
         for contract in contracts:
-            for qty_qroup in prepaid_hours_id:
-                if qty_qroup.analitic_account_id.id == contract.id:
+            for qty_group in prepaid_hours_id:
+                if qty_group.analitic_account_id.id == contract.id:
                     vals = {
                         'date': today,
-                        'quantity': qty_qroup.quantity,
-                        'group_id': qty_qroup.id,
+                        'quantity': qty_group.quantity,
+                        'group_id': qty_group.id,
                     }
                     prepaid_hours_assigned.create(vals)
         return True

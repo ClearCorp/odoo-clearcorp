@@ -10,7 +10,8 @@
     'category': 'Projects',
     'sequence': 10,
     'website': 'http://clearcorp.cr',
-    'depends': ['base', 'subscription_issue_approval', 'project_issue_multi_task'
+    'depends': ['base', 'subscription_issue_approval',
+                'project_issue_multi_task'
                 'account'],
     'data': ['views/subscription_issue_approval_invoice_view.xml'],
     'auto_install': False,

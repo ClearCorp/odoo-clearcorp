@@ -6,8 +6,8 @@
 Project Issue Contact
 =====================
 
-[Unnecessary module] This module was written to extend the functionality of project_issue to
-prevent any contact change once the project is assigned.
+[Unnecessary module] This module was written to extend the functionality
+of project_issue to prevent any contact change once the project is assigned.
 
 Credits
 =======

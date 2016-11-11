@@ -11,7 +11,9 @@
     'author': 'ClearCorp',
     'website': 'http://clearcorp.cr',
     'depends': ['project'],
-    'data': ['views/project_state_history.xml', 'security/ir.model.access.csv'],
+    'data': [
+        'views/project_state_history.xml',
+        'security/ir.model.access.csv'],
     'test': [],
     'demo': [],
     'installable': True,

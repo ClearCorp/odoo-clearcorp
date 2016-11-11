@@ -49,7 +49,7 @@ class ProjectIssue(models.Model):
     invoiced = fields.Selection(
         [('invoice', 'Invoice'),
          ('warranty', 'Warranty'),
-         ('2beinvoice', 'To be Invoiced'),
+         ('2beinvoiced', 'To be Invoiced'),
          ('invoiced', 'Invoiced')],
         string="Invoice", help="Task Invoice Status",
         compute='_compute_invoice_ticket', store=True)

@@ -45,8 +45,8 @@ class SaleSubscription(models.Model):
                     account_analytic_id:
                 prepaid_line =\
                     self.env[
-                        'sale.subscription.prepaid_hours_approval_line'].search(
-                            [('approval_id', '=', approval.id)])
+                        'sale.subscription.prepaid_hours_approval_line'].\
+                    search([('approval_id', '=', approval.id)])
                 for line in prepaid_line:
                     invoice_line_vals = {
                         'invoice_id': invoice_id,

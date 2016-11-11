@@ -8,7 +8,6 @@ from openerp.tools.translate import _
 
 
 class FeatureHours(models.Model):
-    
     _name = 'project.scrum.feature.hours'
 
     @api.multi
@@ -43,13 +42,12 @@ class FeatureHours(models.Model):
 
 
 class Feature(models.Model):
-    
     _inherit = 'project.scrum.feature'
 
     hour_ids = fields.One2many(
         'project.scrum.feature.hours', 'feature_id',
         string='Feature Hours')
-    
+
     def create_tasks(self, cr, uid, context):
         active_ids = context.get('active_ids', [])
         feature_obj = self.pool.get('project.scrum.feature')
@@ -83,7 +81,7 @@ class Feature(models.Model):
             for hour in hours:
                 id = hour[1]
                 vals = hour[2]
-                if vals: 
+                if vals:
                     if 'expected_hours' in vals:
                         sum += vals['expected_hours']
                 else:
@@ -101,7 +99,7 @@ class Feature(models.Model):
             for hour in hours:
                 id = hour[1]
                 vals = hour[2]
-                if vals: 
+                if vals:
                     if 'expected_hours' in vals:
                         sum += vals['expected_hours']
                 else:
@@ -113,7 +111,6 @@ class Feature(models.Model):
 
 
 class Task(models.Model):
-    
     _inherit = 'project.task'
 
     def onchange_sprint(self, cr, uid, ids, sprint_id, context=None):
@@ -162,7 +159,7 @@ class Task(models.Model):
     feature_hour_ids = fields.One2many(
         string='Feature Hours',
         related='feature_id.hour_ids', readonly=True)
-    #remaining_hours = fields.Float(
+    # remaining_hours = fields.Float(
     #    'Remaining Hour(s)', compute=_remaining_hours, store=True)
     state = fields.Selection(
         [('draft', 'New'), ('open', 'In Progress'),
