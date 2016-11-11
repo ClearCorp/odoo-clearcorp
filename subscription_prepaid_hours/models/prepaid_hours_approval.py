@@ -2,7 +2,7 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 #from lxml import etree
 from table_format import APP_ID, PREPAID_NAME, PREPAID_TIME, FOOTER
 from openerp.exceptions import ValidationError
@@ -46,6 +46,10 @@ class HourApproval(models.Model):
         return times
 
     def _check_approval_lines(self):
+        # Checks the remaining time in the hour bags. It should check the
+        # hour assignments first, if none exist it should check the client's
+        # subscription.
+        # TODO check the hour assignments
         time_already_approved = 0
         time_to_be_approved = 0
         # Gets previously approved lines for the current approval (in an issue)
@@ -132,9 +136,22 @@ class HourApproval(models.Model):
 
     def _fill_extra_values_approval_line(
             self, hour_type, extra_hours, extra_amount):
-        return
+        for line in self.approval_line_ids:
+            if line.prepaid_hours_id.name == hour_type:
+                line.extra_hours = extra_hours
+                line.extra_amount = extra_amount
 
-    # TODO define unique constraint prepaid_hours_id for approval_lines
+    @api.constrains('approval_line_ids')
+    def _check_unique_approval_line_prepaid_hour_name(self):
+        approval_lines = self.approval_line_ids
+        names = {}
+        for line in approval_lines:
+            name = line.prepaid_hours_id.name
+            if name in names:
+                raise ValidationError(_(
+                    'Prepaid Hours must be unique in each approval line'))
+            else:
+                names.update(name)
 
     def _calculate_extra_amount(self, prepaid_hour_name, hours):
         # Calculates the amount the client has to pay for the extra hours
@@ -143,7 +160,7 @@ class HourApproval(models.Model):
         validation_error = "There was an error calculating the extra amount." \
                            "There must be a related invoice type of the " \
                            "same general work hours type as the prepaid " \
-                           "hours types."
+                           "hour types."
 
         # The unit cost is obtained through the client's subscription.
         client_id = self.user_id
@@ -160,7 +177,7 @@ class HourApproval(models.Model):
                 extra_amount += product.price * hours
         # The hours can't be zero when this is called, so
         if extra_amount == 0.0:
-            raise ValidationError(validation_error)
+            raise ValidationError(_(validation_error))
         return extra_amount
 
     def create_approval_line(self):
@@ -176,7 +193,7 @@ class HourApproval(models.Model):
         # Checks if the requested time is less than the total time allowed.
         for approval_line in self.approval_line_ids:
             if approval_line.requested_hours > expected_hours:
-                raise ValidationError(validation_error)
+                raise ValidationError(_(validation_error))
             # Creates a proposal for each line
             vals = {
                 'prepaid_hour_id': approval_line.prepaid_hours_id,
