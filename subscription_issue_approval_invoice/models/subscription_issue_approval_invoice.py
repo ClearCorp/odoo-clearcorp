@@ -9,28 +9,24 @@ import datetime
 
 
 class SaleSubscription(models.Model):
-
     _inherit = 'sale.subscription'
 
-    invoice_journal = fields.Many2one('account.journal')
-    invoice_currency = fields.Many2one('res.currency')
-
     def get_product(self, work_type):
-            product = self.invoice_type_id.search([('name', '=', work_type)])
-            return product.product_id.id
+        product = self.invoice_type_ids.search([('name', '=', work_type)])
+        return product.product_id.id
 
     def get_product_price(self, work_type):
-            product_price = self.invoice_type_id.search(
-                [('name', '=', work_type), ('product_price', '=', True)])
-            return product_price.product_price
+        product_price = self.invoice_type_ids.search(
+            [('name', '=', work_type), ('product_price', '=', True)])
+        return product_price.product_price
 
-    def get_price_hour(self, work_type):
-            price_hour = self.invoice_type_id.search(
-                [('name', '=', work_type)])
-            return price_hour.price
+    def get_hour_price(self, work_type):
+        hour_price = self.invoice_type_ids.search(
+            [('name', '=', work_type)])
+        return hour_price.price
 
     def get_contract_price(self, work_type, hours):
-        cost = self.invoice_type_id.search([('name', '=', work_type)])
+        cost = self.invoice_type_ids.search([('name', '=', work_type)])
         cost = cost.price * hours
         return cost
 
@@ -38,15 +34,16 @@ class SaleSubscription(models.Model):
     def action_invoice_lines_approvals_create(
             self, invoice_id, account_invoice_id, account_analytic_id):
         invoice_line_obj = self.env['account.invoice.line']
-        prepaid = self.env['sale.subscription.prepaid_hours_approval'].search(
-            [('state', '=', 'approved')])
-        for approval in prepaid:
-            if approval.ticket_id.project_id.analytic_account_id.id ==\
+        approvals = self.env['sale.subscription.prepaid_hours_approval']. \
+            search([('state', '=', 'approved')])
+
+        for approval in approvals:
+            if approval.ticket_id.project_id.analytic_account_id.id == \
                     account_analytic_id:
-                prepaid_line =\
+                prepaid_line = \
                     self.env[
-                        'sale.subscription.prepaid_hours_approval_line'].\
-                    search([('approval_id', '=', approval.id)])
+                        'sale.subscription.prepaid_hours_approval_line']. \
+                        search([('approval_id', '=', approval.id)])
                 for line in prepaid_line:
                     invoice_line_vals = {
                         'invoice_id': invoice_id,
@@ -60,7 +57,7 @@ class SaleSubscription(models.Model):
                         'price_subtotal': line.extra_amount,
                     }
                     invoice_line_obj.create(invoice_line_vals)
-            return True
+        return True
 
     @api.multi
     def action_invoice_create_lines(self, invoice_create_id,
@@ -79,49 +76,43 @@ class SaleSubscription(models.Model):
                 'price_subtotal': line_invoice.price_subtotal,
             }
             invoice_line_obj.create(invoice_line_vals)
-            return True
+        return True
 
     @api.multi
     def action_invoice_create(self):
         today = date.today().strftime('%Y-%m-%d')
         invoice_obj = self.env['account.invoice']
-        for account in self.env['sale.subscription.account'].search(
-                [('state', 'in', ['open', 'pending']),
-                 ('recurring_invoices', '=', True),
-                 ('recurring_next_date', '<=',  today)]):
-            while account.recurring_next_date <= today:
-                    account_invoice_id =\
-                        account.partner_id.property_account_receivable.id
-                    invoice_vals = {
-                        'partner_id':  account.partner_id.id,
-                        'journal_id': account.journal_invoice.id,
-                        'account_id': account_invoice_id,
-                        'currency_id': account.currency_invoice.id,
-                        'date_invoice': today,
-                    }
-                    invoice_create_id = invoice_obj.create(invoice_vals)
-                    self.action_invoice_create_lines(
-                        invoice_create_id.id, account_invoice_id, account)
-                    self.action_invoice_lines_approvals_create(
-                        invoice_create_id.id, account_invoice_id, account.id)
-                    # The new date to invoicing
-                    next_date = datetime.datetime.strptime(
-                        account.recurring_next_date or today, "%Y-%m-%d")
-                    interval = account.recurring_interval
-                    if account.recurring_rule_type == 'daily':
-                        new_date = next_date+relativedelta(days=+interval)
-                    elif account.recurring_rule_type == 'weekly':
-                        new_date = next_date+relativedelta(weeks=+interval)
-                    elif account.recurring_rule_type == 'monthly':
-                        new_date = next_date+relativedelta(months=+interval)
-                    else:
-                        new_date = next_date+relativedelta(years=+interval)
-                        account.write(
-                            {'recurring_next_date':
-                             new_date.strftime('%Y-%m-%d')
-                             })
-        return True
 
-    @api.model
-    def action_invoice_create_api7(self):
-        self.action_invoice_create()
+        for account in self.env['sale.subscription'].search(
+                [('state', 'in', ['open', 'pending']),
+                 ('recurring_next_date', '<=', today)]):
+            while account.recurring_next_date <= today:
+                account_invoice_id = \
+                    account.partner_id.property_account_receivable.id
+                invoice_vals = {
+                    'partner_id': account.partner_id.id,
+                    'journal_id': account.journal_invoice.id,
+                    'account_id': account_invoice_id,
+                    'currency_id': account.currency_invoice.id,
+                    'date_invoice': today,
+                }
+                invoice_create_id = invoice_obj.create(invoice_vals)
+                self.action_invoice_create_lines(
+                    invoice_create_id.id, account_invoice_id, account)
+                self.action_invoice_lines_approvals_create(
+                    invoice_create_id.id, account_invoice_id, account.id)
+                # The new date to invoicing
+                next_date = datetime.datetime.strptime(
+                    account.recurring_next_date or today, "%Y-%m-%d")
+                interval = account.recurring_interval
+                if account.recurring_rule_type == 'daily':
+                    new_date = next_date + relativedelta(days=+interval)
+                elif account.recurring_rule_type == 'weekly':
+                    new_date = next_date + relativedelta(weeks=+interval)
+                elif account.recurring_rule_type == 'monthly':
+                    new_date = next_date + relativedelta(months=+interval)
+                else:
+                    new_date = next_date + relativedelta(years=+interval)
+                account.write(
+                    {'recurring_next_date': new_date.strftime('%Y-%m-%d')})
+        return True

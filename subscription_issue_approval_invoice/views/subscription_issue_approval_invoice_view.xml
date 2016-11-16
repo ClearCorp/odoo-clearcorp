@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-<data>
+<!-- © 2016 ClearCorp
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 
-
+<odoo>
     <record id="account_analytic_account_invoice_form_inherit2" model="ir.ui.view">
             <field name="name">account.analytic.account.invoice.form.inherit2</field>
             <field name="model">account.analytic.account</field>
@@ -19,7 +19,4 @@
                 </xpath>
            </field>
        </record>
-       
-
-</data>
-</openerp>
+</odoo>
