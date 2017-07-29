@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2016 ClearCorp
+# © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class InputValue(models.Model):
@@ -43,6 +44,5 @@ class Input(models.Model):
         else:
             self.code = ''
 
-    input_code = fields.Many2one(
-        'hr.payroll.extended.input.value', string='Code',
+    input_code = fields.Many2one('hr.payroll.extended.input.value', string='Code',
         ondelete='restrict', domain=[('type', '=', 'other_inputs')])

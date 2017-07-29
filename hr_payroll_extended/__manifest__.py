@@ -4,16 +4,13 @@
 
 {
     'name': 'Payroll Extended',
-    'version': '9.0.1.0',
+    'version': '10.0',
     'author': 'ClearCorp',
     'website': 'http://clearcorp.cr',
     'category': 'Human Resources',
     'summary': 'Extend functionality to HR Payroll',
     'sequence': 10,
-    'license': 'AGPL-3',
     'application': False,
-    'installable': True,
-    'active': False,
     'depends': [
         'hr_payroll',
         'account',
@@ -24,7 +21,7 @@
         'data/hr_payroll_extended_data.xml',
         'security/ir.model.access.csv',
     ],
-    'active': False,
+    'active': True,
     'installable': True,
     'license': 'AGPL-3',
 }

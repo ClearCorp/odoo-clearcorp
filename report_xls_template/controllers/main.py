@@ -5,10 +5,10 @@
 
 import json
 from werkzeug import exceptions, url_decode
-from openerp.addons.web.http import Controller, route, request
-from openerp.addons.web.controllers.main import _serialize_exception
-from openerp.addons.web.controllers.main import content_disposition
-from openerp.tools import html_escape
+from odoo.http import Controller, route, request
+from odoo.addons.web.controllers.main import _serialize_exception
+from odoo.addons.web.controllers.main import _serialize_exception, content_disposition
+from odoo.tools import html_escape
 
 
 class ReportXLSController(Controller):
@@ -18,13 +18,16 @@ class ReportXLSController(Controller):
         '/reportxlstemplate/<path:converter>/<reportname>/<docids>',
     ], type='http', auth='user', website=True)
     def report_routes(self, reportname, docids=None, converter=None, **data):
-        report_obj = request.registry['report']
+        report_obj = request.env['report']
         cr, uid, context = request.cr, request.uid, request.context
 
         if docids:
             docids = [int(i) for i in docids.split(',')]
         if data.get('options'):
             data.update(json.loads(data.pop('options')))
+
+        new_context = dict(context)
+
         if data.get('context'):
             # Ignore 'lang' here, because the context in data is the
             # one from the webclient *but* if the user explicitely
@@ -32,11 +35,10 @@ class ReportXLSController(Controller):
             data['context'] = json.loads(data['context'])
             if data['context'].get('lang'):
                 del data['context']['lang']
-            context.update(data['context'])
+            new_context.update(data['context'])
 
         if converter == 'xls':
-            xls = report_obj.get_xls(
-                cr, uid, docids, reportname, data=data, context=context)
+            xls = report_obj.with_context(new_context).get_xls(docids, reportname, data=data)
             xlsxhttpheaders = [
                 ('Content-Type',
                  'application/vnd.openxmlformats-officedocument.'
@@ -44,8 +46,7 @@ class ReportXLSController(Controller):
                 ('Content-Length', len(xls))]
             return request.make_response(xls, headers=xlsxhttpheaders)
         elif converter == 'ods':
-            ods = report_obj.get_ods(
-                cr, uid, docids, reportname, data=data, context=context)
+            ods = report_obj.with_context(new_context).get_ods(docids, reportname, data=data)
             odshttpheaders = [
                 ('Content-Type',
                  'application/vnd.oasis.opendocument.spreadsheet'),
@@ -85,8 +86,7 @@ class ReportXLSController(Controller):
                         reportname, converter='xls', **dict(data))
 
                 cr, uid = request.cr, request.uid
-                report = request.registry['report']._get_xls_report_from_name(
-                    cr, uid, reportname)
+                report = request.env['report']._get_xls_report_from_name(reportname)
                 filename = "%s.%s" % (report.name, "xlsx")
                 response.headers.add(
                     'Content-Disposition',

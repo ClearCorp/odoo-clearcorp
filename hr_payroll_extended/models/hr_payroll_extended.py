@@ -2,50 +2,42 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp.osv import fields, osv
+from odoo import fields, models, api
 from datetime import datetime
-from openerp.tools.translate import _
+from odoo.tools.translate import _
 
 
-class Company(osv.Model):
+class Company(models.Model):
 
     _inherit = 'res.company'
 
-    _columns = {
-        'payslip_footer': fields.text('Payslip footer'),
-    }
+
+    payslip_footer = fields.Text('Payslip footer')
 
 
-class SalaryRule(osv.Model):
+
+class SalaryRule(models.Model):
 
     _inherit = 'hr.salary.rule'
 
-    _columns = {
-        'appears_on_report': fields.boolean(
+    appears_on_report = fields.Boolean(
             'Appears on Report',
-            help='Used to display the rule on reports'),
-    }
+            help='Used to display the rule on reports', default=True)
 
-    _defaults = {
-        'appears_on_report': True,
-    }
-
-
-class Job(osv.Model):
+class Job(models.Model):
 
     _inherit = 'hr.job'
 
-    _columns = {
-        'code': fields.char('Code', size=128, required=False),
-    }
+
+    code = fields.Char('Code', size=128, required=False)
 
 
-class PayslipRun(osv.Model):
+
+class PayslipRun(models.Model):
 
     _inherit = 'hr.payslip.run'
 
-    _columns = {
-        'schedule_pay': fields.selection([
+    schedule_pay = fields.Selection([
             ('monthly', 'Monthly'),
             ('quarterly', 'Quarterly'),
             ('semi-annually', 'Semi-annually'),
@@ -53,83 +45,62 @@ class PayslipRun(osv.Model):
             ('weekly', 'Weekly'),
             ('bi-weekly', 'Bi-weekly'),
             ('bi-monthly', 'Bi-monthly'),
-            ], 'Scheduled Pay', select=True, readonly=True,
-            states={'draft': [('readonly', False)]}),
-    }
+            ], 'Scheduled Pay', index=True, readonly=True,
+            states={'draft': [('readonly', False)]})
 
-    def close_payslip_run(self, cr, uid, ids, context=None):
-        result = self.write(cr, uid, ids, {'state': 'close'}, context=context)
-        payslip_obj = self.pool.get('hr.payslip')
-        for batches in self.browse(cr, uid, ids, context=context):
-            payslip_ids = map(lambda x: x.id, batches.slip_ids)
-            for payslip in payslip_obj.browse(cr, uid, payslip_ids):
+
+    def close_payslip_run(self):
+        result = self.write({'state': 'close'})
+        for batches in self:
+            for payslip in batches.slip_ids:
                     if payslip.state == 'draft':
-                        raise osv.except_osv(
+                        raise UserError(
                             _('Warning !'),
                             _('You did not confirm a payslip'))
                         break
         return result
 
-    def confirm_payslips(self, cr, uid, ids, context=None):
-        payslip_obj = self.pool.get('hr.payslip')
-        for batches in self.browse(cr, uid, ids, context=context):
-            payslip_ids = map(lambda x: x.id, batches.slip_ids)
-            for payslip in payslip_obj.browse(cr, uid, payslip_ids):
+    def confirm_payslips(self):
+        for batches in self:
+            for payslip in batches.slip_ids:
                     if payslip.state == 'draft':
-                        payslip_obj.compute_sheet(
-                            cr, uid, [payslip.id], context=context)
-                        payslip_obj.process_sheet(
-                            cr, uid, [payslip.id], context=context)
+                        payslip.compute_sheet()
+                        payslip.process_sheet()
         return True
 
-    def compute_payslips(self, cr, uid, ids, context=None):
-        payslip_obj = self.pool.get('hr.payslip')
-        for batches in self.browse(cr, uid, ids, context=context):
-            payslip_ids = map(lambda x: x.id, batches.slip_ids)
-            for payslip in payslip_obj.browse(cr, uid, payslip_ids):
+    def compute_payslips(self):
+        for batches in self:
+            for payslip in batches.slip_ids:
                 if payslip.state == 'draft':
-                    payslip_obj.compute_sheet(
-                        cr, uid, [payslip.id], context=context)
+                    payslip.compute_sheet()
         return True
 
 
-class Payslip(osv.osv):
+class Payslip(models.Model):
 
     _inherit = 'hr.payslip'
 
-    _columns = {
-        'name': fields.char(
-            'Description', size=256, required=False,
-            readonly=True, states={'draft': [('readonly', False)]}),
-    }
+    name = fields.Char('Description', size=256, required=False,
+            readonly=True, states={'draft': [('readonly', False)]})
 
-    def onchange_employee_id(
-            self, cr, uid, ids, date_from, date_to,
-            employee_id=False, contract_id=False, context=None):
-
-        res = super(Payslip, self).onchange_employee_id(
-            cr, uid, ids, date_from, date_to, employee_id=employee_id,
-            contract_id=contract_id, context=context)
-
-        contract = []
+    @api.multi
+    def onchange_employee_id(self, date_from, date_to, employee_id=False, contract_id=False):
+        res = super(Payslip, self).onchange_employee_id(date_from, date_to, employee_id=employee_id,
+                                                        contract_id=contract_id)
 
         if (not employee_id) or (not date_from) or (not date_to):
             return res
 
-        employee_obj = self.pool.get('hr.employee')
-        contract_obj = self.pool.get('hr.contract')
+        employee_obj = self.env['hr.employee']
 
-        employee = employee_obj.browse(cr, uid, employee_id, context=context)
+        employee = employee_obj.browse(employee_id)
 
-        if (not contract_id):
-            contract_id = contract_obj.search(
-                cr, uid, [('employee_id', '=', employee_id)], context=context)
-        else:
-            contract_id = [contract_id]
+        if (not employee.contract_id):
+            raise UserError(
+                _('Warning !'),
+                _('Contract not found for %s' % (employee.name,)))
 
-        contracts = contract_obj.browse(cr, uid, contract_id, context=context)
-        if len(contracts) > 0 and len(contracts) >= 2:
-            contract = contracts[0]
+        contract = employee.contract_id
         schedule_pay = ''
         if contract and contract.schedule_pay:
             # This is to translate the terms
@@ -156,12 +127,8 @@ class Payslip(osv.osv):
                 if worked_days_line['code'] == 'HR':
                     has_hr = True
             # Change lines where code == WORK100
-            _model, code_id = self.pool.get(
-                'ir.model.data').get_object_reference(
-                    cr, uid, 'hr_payroll_extended', 'data_input_value_1')
-            input_value = self.pool.get(
-                'hr.payroll.extended.input.value').browse(
-                    cr, uid, code_id, context=context)
+
+            input_value = self.env.ref('hr_payroll_extended.data_input_value_1')
             for worked_days_line in day_lines:
                 if worked_days_line['code'] == 'WORK100':
                     # Change it if there is no HN
@@ -180,12 +147,10 @@ class Payslip(osv.osv):
         })
         return res
 
-    def get_worked_day_lines(
-            self, cr, uid, contract_ids,
-            date_from, date_to, context=None):
+    @api.model
+    def get_worked_day_lines(self, contract_ids, date_from, date_to):
         res = []
-        for contract in self.pool.get('hr.contract').browse(
-                cr, uid, contract_ids, context=context):
+        for contract in self.env['hr.contract'].browse(contract_ids):
             # Check if the contract uses fixed working hours
             if not contract.use_fixed_working_hours:
                 continue
@@ -199,6 +164,5 @@ class Payslip(osv.osv):
                  'contract_id': contract.id,
             }
             res += [attendances]
-        res += super(Payslip, self).get_worked_day_lines(
-            cr, uid, contract_ids, date_from, date_to, context=context)
+        res += super(Payslip, self).get_worked_day_lines(contract_ids, date_from, date_to)
         return res

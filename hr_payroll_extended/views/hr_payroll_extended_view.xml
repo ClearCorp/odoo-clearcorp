@@ -184,11 +184,13 @@
             <field name="priority">24</field>
             <field name="inherit_id" ref="base.view_company_form"/>
             <field name="arch" type="xml">
-                 <page name="report" position="inside">
-                        <group name="payslip_footer" string="Payslip footer">
-                            <field name="payslip_footer" groups="base.group_no_one" nolabel="1"/>
-                        </group>
-                </page>
+                 <notebook position="inside">
+                     <page string="Payslip footer">
+                         <group name="payslip_footer">
+                             <field name="payslip_footer" groups="base.group_no_one" nolabel="1"/>
+                         </group>
+                     </page>
+                </notebook>
             </field>
         </record>
         <!-- hr.salary.rule.list-->
