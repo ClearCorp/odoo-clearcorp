@@ -28,22 +28,28 @@ class InvoiceLine(models.Model):
 
     _inherit = 'account.invoice.line'
 
-    @api.multi
-    @api.depends('price_unit', 'quantity')
+    @api.one
+    @api.depends('price_unit', 'quantity', 'discount')
     def _compute_amount_line_no_discount(self):
-        for line in self:
-            if line.invoice_id and line.invoice_id.currency_id:
-                cur = line.invoice_id.currency_id
-                line.price_subtotal_not_discounted = cur.round(
-                    line.price_unit * line.quantity)
-            else:
-                line.price_subtotal_not_discounted = \
-                    line.price_unit * line.quantity
+        if self.invoice_id and self.invoice_id.currency_id:
+            cur = self.invoice_id.currency_id
+            self.price_subtotal_not_discounted = cur.round(
+                self.price_unit * self.quantity)
+            self.amount_discounted = cur.round(
+                self.price_unit * self.quantity * self.discount / 100)
+        else:
+            self.price_subtotal_not_discounted = \
+                self.price_unit * self.quantity
+            self.amount_discounted = \
+                self.price_unit * self.quantity * self.discount / 100
 
     price_subtotal = fields.Float(string='Subtotal (discounted)')
     price_subtotal_not_discounted = fields.Float(
         compute='_compute_amount_line_no_discount',
         store=True, string='Subtotal')
+    amount_discounted = fields.Float(
+        compute='_compute_amount_line_no_discount',
+        store=True, readonly=True, string='Line Discount')
 
 
 class account_invoice_ccorp(models.Model):
@@ -52,26 +58,24 @@ class account_invoice_ccorp(models.Model):
 
     _inherit = 'account.invoice'
 
-    @api.multi
-    @api.depends('invoice_line.price_subtotal')
+    @api.one
+    @api.depends('invoice_line.price_subtotal', 'tax_line.amount')
     def _compute_amount_all(self):
-        for invoice in self:
-            amount_untaxed_not_discounted = 0.0
-            amount_discounted = 0.0
-            invoice_discount = 0.0
+        amount_untaxed_not_discounted = 0.0
+        amount_discounted = 0.0
+        invoice_discount = 0.0
 
-            for line in invoice.invoice_line:
-                amount_untaxed_not_discounted += \
-                    line.price_subtotal_not_discounted
-                amount_discounted += line.price_subtotal_not_discounted - \
-                    line.price_subtotal
-            if amount_untaxed_not_discounted:
-                invoice_discount = 100 * amount_discounted / \
-                    amount_untaxed_not_discounted
-            invoice.amount_untaxed_not_discounted = \
+        for line in self.invoice_line:
+            amount_untaxed_not_discounted += \
+                line.price_subtotal_not_discounted
+            amount_discounted += line.amount_discounted
+            
+        if amount_discounted:
+            self.invoice_discount = 100 * amount_discounted / \
                 amount_untaxed_not_discounted
-            invoice.amount_discounted = amount_discounted
-            invoice.invoice_discount = invoice_discount
+        self.amount_untaxed_not_discounted = \
+            amount_untaxed_not_discounted
+        self.amount_discounted = amount_discounted
 
     invoice_discount = fields.Float(
         compute='_compute_amount_all',
