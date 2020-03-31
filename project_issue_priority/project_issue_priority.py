@@ -19,7 +19,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class ProjectIssue(models.Model):
@@ -29,3 +29,17 @@ class ProjectIssue(models.Model):
     priority = fields.Selection(
         selection_add=[('0', 'None'), ('1', 'Very low'), ('2', 'Low'),
                        ('3', 'Normal'), ('4', 'High'), ('6', 'Very high')])
+
+    @api.multi
+    def write(self, vals):
+        self.env['bus.bus'].create(
+            {
+                'message': '{"create_date":"2016-03-02 18:10:15","to_id":[6,"808c863d-a0a1-436c-b371-28fbb11dc6e5"],"message":"project.issue","type":"message","id":246,"from_id":[1,"Administrator"]}',
+                'channel': '["cc_notificaciones","im_chat.session",5]'
+            })
+        self.env['bus.bus'].create(
+            {
+                'message': '{"create_date":"2016-03-02 18:10:15","to_id":[6,"108c863d-a0a1-436c-b371-28fbb11dc6e5"],"message":"project.issue","type":"message","id":246,"from_id":[1,"Administrator"]}',
+                'channel': '["cc_notificaciones","im_chat.session",4]'
+            })
+        return models.Model.write(self, vals)
