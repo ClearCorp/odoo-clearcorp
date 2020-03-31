@@ -1,0 +1,70 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* login_recaptcha
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-04 21:24+0000\n"
+"PO-Revision-Date: 2016-04-04 21:24+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: login_recaptcha
+#: field:website,login_recaptcha_private_key:0
+msgid "Login Google reCAPTCHA Private Key"
+msgstr "Google reCAPTCHA clave privada"
+
+#. module: login_recaptcha
+#: field:website,login_recaptcha_site_key:0
+msgid "Login Google reCAPTCHA site Key"
+msgstr "Google reCAPTCHA clave pública"
+
+#. module: login_recaptcha
+#: view:website.config.settings:login_recaptcha.view_website_config_settings
+msgid "Login reCAPTCHA"
+msgstr "Login reCAPTCHA"
+
+#. module: login_recaptcha
+#: view:website.config.settings:login_recaptcha.view_website_config_settings
+msgid "Social Media"
+msgstr "Medios sociales"
+
+#. module: login_recaptcha
+#: code:addons/login_recaptcha/controllers/web.py:48
+#, python-format
+msgid "The amount of login attemps have exceeded the\n"
+"                        restriction.\n"
+"                        A password reset link has been sent to the user's\n"
+"                        email.\n"
+"                        "
+msgstr "Los intentos de inicio de sesión han superado el límite restringido."
+"		Un enlace para reestablecer la contraseña ha sido enviado al email del usuario"
+
+
+#. module: login_recaptcha
+#: model:ir.model,name:login_recaptcha.model_website
+msgid "Website"
+msgstr "Sitio web"
+
+#. module: login_recaptcha
+#: code:addons/login_recaptcha/controllers/web.py:58
+#, python-format
+msgid "Wrong Captcha"
+msgstr "Captcha inválido"
+
+#. module: login_recaptcha
+#: view:website.config.settings:login_recaptcha.view_website_config_settings
+msgid "Your reCAPTCHA private key"
+msgstr "Su Google reCAPTCHA clave privada"
+
+#. module: login_recaptcha
+#: view:website.config.settings:login_recaptcha.view_website_config_settings
+msgid "Your reCAPTCHA site key"
+msgstr "Su Google reCAPTCHA clave pública"
+

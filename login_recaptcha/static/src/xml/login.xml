@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="login_recaptcha" name="LoginReC" inherit_id="website.layout">
+            <xpath expr="//body" position="inside">
+              <script src="https://www.google.com/recaptcha/api.js"></script>
+            </xpath>
+        </template>
+        <template id="web_login_extended" inherit_id="web.login">
+                <xpath expr="//button/.." position="before">
+                    <div t-if="login_attemps &gt;= 3" class="g-recaptcha" t-att-data-sitekey="website.login_recaptcha_site_key" >
+                    </div>
+                    <br/>
+            </xpath>
+        </template>
+    </data>
+</openerp>

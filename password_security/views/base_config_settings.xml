@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- © <YEAR(S)> ClearCorp License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+
+<openerp>
+    <data>
+        <record id="password_security_configuration" model="ir.ui.view">
+            <field name="name">Password Security Settings</field>
+            <field name="model">base.config.settings</field>
+            <field name="inherit_id" ref="base_setup.view_general_configuration" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='email']/.." position="after">
+                    <group>
+                        <label for="id" string="Password Security" />
+                        <div>
+                            <div>
+                                <field name="password_security_validate" class="oe_inline" />
+                                <label for="password_security_validate" />
+                            </div>
+                            <div attrs="{'invisible': [('password_security_validate','!=', True)]}">
+                                <div> ---
+                                    <label for="password_security_length" />
+                                    <field name="password_security_length" class="oe_inline" />
+                                </div>
+                                <div> ---
+                                    <field name="password_security_include_letters" class="oe_inline" />
+                                    <label for="password_security_include_letters" />
+                                </div>
+                                <div attrs="{'invisible': [('password_security_include_letters','!=', True)]}">
+                                    <div> ------
+                                        <field name="password_security_include_uppercase" class="oe_inline" />
+                                        <label for="password_security_include_uppercase" />
+                                    </div>
+                                    <div attrs="{'invisible': [('password_security_include_uppercase','!=', True)]}">---------
+                                        <label for="password_security_uppercase_length" />
+                                        <field name="password_security_uppercase_length" class="oe_inline" />
+                                    </div>
+                                    <div>------
+                                        <field name="password_security_include_lowercase" class="oe_inline" />
+                                        <label for="password_security_include_lowercase" />
+                                    </div>
+                                    <div attrs="{'invisible': [('password_security_include_lowercase','!=', True)]}">---------
+                                        <label for="password_security_lowercase_length" />
+                                        <field name="password_security_lowercase_length" class="oe_inline" />
+                                    </div>
+                                </div>
+                                <div>---
+                                    <field name="password_security_include_numbers" class="oe_inline" />
+                                    <label for="password_security_include_numbers" />
+                                </div>
+                                <div attrs="{'invisible': [('password_security_include_numbers','!=', True)]}">---------
+                                    <label for="password_security_numbers_length" />
+                                    <field name="password_security_numbers_length" class="oe_inline" />
+                                </div>
+                                <div>---
+                                    <field name="password_security_include_special" class="oe_inline" />
+                                    <label for="password_security_include_special" />
+                                </div>
+                                <div
+                                    attrs="{'invisible': [('password_security_include_special','!=', True)]}">---------
+                                    <label for="password_security_special_length" />
+                                    <field name="password_security_special_length" class="oe_inline" />
+                                </div>
+                            </div>
+                        </div>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
